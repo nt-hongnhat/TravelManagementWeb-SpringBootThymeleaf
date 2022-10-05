@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoGeneratorSettingsState">
+    <option name="addSchemaNameToTableName" value="true" />
+    <option name="generateDatetimeDefaultValue" value="true" />
+    <option name="generateDefaultValue" value="true" />
+    <option name="ignoredFields">
+      <set>
+        <option value="" />
+      </set>
+    </option>
+    <option name="moduleName" value="TravelMangement" />
+    <option name="moduleNameToSettings">
+      <map>
+        <entry key="TravelMangement">
+          <value>
+            <ModuleSettings>
+              <option name="controllerPackageName" value="com.nthn.springbootthymeleaf.controller" />
+              <option name="controllerParentDirectory" value="$PROJECT_DIR$/src/main/java" />
+              <option name="dtoPackageName" value="com.nthn.springbootthymeleaf.DTO" />
+              <option name="dtoParentDirectory" value="$PROJECT_DIR$/src/main/java" />
+              <option name="entityPackageName" value="com.nthn.springbootthymeleaf.model" />
+              <option name="entityParentDirectory" value="$PROJECT_DIR$/src/main/java" />
+              <option name="generateController" value="true" />
+              <option name="generateDTO" value="true" />
+              <option name="generateService" value="true" />
+              <option name="generateVO" value="true" />
+              <option name="mapperXmlParentDirectory" value="D:\TAI-LIEU-CNTT-KHOA-19\DO AN\TravelManagementWeb-SpringBootThymeleaf\TravelMangement\src\main\resources" />
+              <option name="repositoryPackageName" value="com.nthn.springbootthymeleaf.repository" />
+              <option name="repositoryParentDirectory" value="$PROJECT_DIR$/src/main/java" />
+              <option name="servicePackageName" value="com.nthn.springbootthymeleaf.service" />
+              <option name="serviceParentDirectory" value="$PROJECT_DIR$/src/main/java" />
+              <option name="voPackageName" value="com.nthn.springbootthymeleaf.VO" />
+              <option name="voParentDirectory" value="$PROJECT_DIR$/src/main/java" />
+            </ModuleSettings>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="useFluidProgrammingStyle" value="true" />
+    <option name="useJava8DateType" value="true" />
+  </component>
+</project>
