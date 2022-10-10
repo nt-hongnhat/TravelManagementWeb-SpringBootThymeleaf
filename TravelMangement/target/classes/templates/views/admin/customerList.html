@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout-table}">
+<head>
+    <title>Customer</title>
+</head>
+<body>
+<h1 class="mt-4" layout:fragment="page-heading">Customer</h1>
+<ol class="breadcrumb" layout:fragment="breadcrumb">
+    <li class="breadcrumb-item"><a href="#">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Customer</li>
+</ol>
+<h6 class="m-0 font-weight-bold text-primary" layout:fragment="card-hearder">Customer profile</h6>
+<div class="table-responsive" layout:fragment="data-table">
+    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+        <thead>
+        <tr>
+            <th>Mã KH</th>
+            <th>Họ và tên</th>
+            <th>Giới tính</th>
+            <th>CMND/CCCD</th>
+            <th>Quốc tịch</th>
+            <th>Điện thoại</th>
+            <th>Địa chỉ</th>
+            <th>Tài khoản</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="customer:${customers}">
+            <td th:text="${customer.getId()}"></td>
+            <td th:text="${customer.getFullname()}"></td>
+            <td th:text="${customer.getGender()}"></td>
+            <td th:text="${customer.getIdentifiedcard()}"></td>
+            <td th:text="${customer.getNationality()}"></td>
+            <td th:text="${customer.getPhone()}"></td>
+            <td th:text="${customer.getAddress()}"></td>
+            <td th:text="${customer.getAccountId()}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+
+</html>

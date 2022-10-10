@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title></title>
+</head>
+<body>
+<div layout:fragment="logout" class="modal fade" id="logoutModal" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary" th:href="@{/logout}">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div layout:fragment="cta-section" class="py-5 cta-section">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-12">
+                <h2 class="mb-2 text-white">Lets you Explore the Best. Contact Us Now</h2>
+                <p class="mb-4 lead text-white text-white-opacity">Lorem ipsum dolor sit amet, consectetur adipisicing
+                                                                   elit. Excepturi, fugit?</p>
+                <p class="mb-0"><a href="booking.html" class="btn btn-outline-white text-white btn-md font-weight-bold">Get
+                                                                                                                        in
+                                                                                                                        touch</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+

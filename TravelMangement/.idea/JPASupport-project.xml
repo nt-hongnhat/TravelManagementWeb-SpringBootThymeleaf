@@ -19,12 +19,12 @@
               <option name="controllerParentDirectory" value="$PROJECT_DIR$/src/main/java" />
               <option name="dtoPackageName" value="com.nthn.springbootthymeleaf.DTO" />
               <option name="dtoParentDirectory" value="$PROJECT_DIR$/src/main/java" />
-              <option name="entityPackageName" value="com.nthn.springbootthymeleaf.model" />
+              <option name="entityPackageName" value="com.nthn.springbootthymeleaf.pojo" />
               <option name="entityParentDirectory" value="$PROJECT_DIR$/src/main/java" />
-              <option name="generateController" value="true" />
               <option name="generateDTO" value="true" />
+              <option name="generateEntity" value="false" />
+              <option name="generateRepository" value="false" />
               <option name="generateService" value="true" />
-              <option name="generateVO" value="true" />
               <option name="mapperXmlParentDirectory" value="D:\TAI-LIEU-CNTT-KHOA-19\DO AN\TravelManagementWeb-SpringBootThymeleaf\TravelMangement\src\main\resources" />
               <option name="repositoryPackageName" value="com.nthn.springbootthymeleaf.repository" />
               <option name="repositoryParentDirectory" value="$PROJECT_DIR$/src/main/java" />

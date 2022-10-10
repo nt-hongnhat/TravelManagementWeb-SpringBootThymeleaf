@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout-admin}">
+<head>
+
+    <title>SB Admin 2 - Tables</title>
+
+    <!--    <th:block layout:fragment="style">-->
+    <!--        -->
+    <!--    </th:block>-->
+    <!-- Custom fonts for this template -->
+    <th:block layout:fragment="style">
+        <!-- Custom styles for this page -->
+        <link th:href="@{/vendor/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet">
+    </th:block>
+</head>
+
+<body>
+
+<div layout:fragment="page-content" class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="mt-4" layout:fragment="page-heading"></h1>
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb" layout:fragment="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page"></li>
+        </ol>
+    </nav>
+
+    <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below. For more
+                    information about DataTables, please visit the.
+    </p>
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary" layout:fragment="card-hearder">DataTables Example</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive" layout:fragment="data-table">
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<th:block layout:fragment="script">
+    <!-- Page level plugins -->
+    <script th:src="@{/vendor/datatables/jquery.dataTables.min.js}"></script>
+    <script th:src="@{/vendor/datatables/dataTables.bootstrap4.min.js}"></script>
+
+    <!-- Page level custom scripts -->
+    <script th:src="@{/js/demo/datatables-demo.js}"></script>
+
+</th:block>
+
+</body>
+
+</html>

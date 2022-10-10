@@ -1,17 +1,13 @@
 package com.nthn.springbootthymeleaf.service;
 
-import com.nthn.springbootthymeleaf.DTO.AgencyDTO;
-import com.nthn.springbootthymeleaf.VO.AgencyQueryVO;
-import com.nthn.springbootthymeleaf.VO.AgencyUpdateVO;
-import com.nthn.springbootthymeleaf.VO.AgencyVO;
-import com.nthn.springbootthymeleaf.model.Agency;
+import com.nthn.springbootthymeleaf.pojo.Agency;
 import com.nthn.springbootthymeleaf.repository.AgencyRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import java.util.NoSuchElementException;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AgencyService {
@@ -19,40 +15,39 @@ public class AgencyService {
     @Autowired
     private AgencyRepository agencyRepository;
 
-    public Integer save(AgencyVO vO) {
-        Agency bean = new Agency();
-        BeanUtils.copyProperties(vO, bean);
-        bean = agencyRepository.save(bean);
-        return bean.getId();
+    // CREATE
+    public Agency create(Agency agency) {
+        return agencyRepository.save(agency);
     }
 
+    // READ
+    public Agency read(Integer id) {
+        Optional<Agency> agency = agencyRepository.findById(id);
+        return agency.orElse(null);
+    }
+
+    public List<Agency> read(String keyword) {
+        if (keyword == null)
+            return agencyRepository.findAll();
+        return agencyRepository.findByNameContainingIgnoreCaseOrderByName(keyword);
+    }
+
+//    public List<Agency> getAgencyPage(int page, int size) {
+//        Pageable pageable = PageRequest.of(page, size);
+//        return agencyRepository.findAll(pageable).getContent();
+//    }
+
+    // UPDATE
+    public Agency update(Integer id, Agency agency) {
+        Agency original = this.read(id);
+        BeanUtils.copyProperties(agency, original);
+        return agencyRepository.save(original);
+    }
+
+    // DELETE
     public void delete(Integer id) {
         agencyRepository.deleteById(id);
     }
 
-    public void update(Integer id, AgencyUpdateVO vO) {
-        Agency bean = requireOne(id);
-        BeanUtils.copyProperties(vO, bean);
-        agencyRepository.save(bean);
-    }
 
-    public AgencyDTO getById(Integer id) {
-        Agency original = requireOne(id);
-        return toDTO(original);
-    }
-
-    public Page<AgencyDTO> query(AgencyQueryVO vO) {
-        throw new UnsupportedOperationException();
-    }
-
-    private AgencyDTO toDTO(Agency original) {
-        AgencyDTO bean = new AgencyDTO();
-        BeanUtils.copyProperties(original, bean);
-        return bean;
-    }
-
-    private Agency requireOne(Integer id) {
-        return agencyRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Resource not found: " + id));
-    }
 }

@@ -1,10 +1,6 @@
 package com.nthn.springbootthymeleaf.service;
 
-import com.nthn.springbootthymeleaf.DTO.SurchargeDTO;
-import com.nthn.springbootthymeleaf.VO.SurchargeQueryVO;
-import com.nthn.springbootthymeleaf.VO.SurchargeUpdateVO;
-import com.nthn.springbootthymeleaf.VO.SurchargeVO;
-import com.nthn.springbootthymeleaf.model.Surcharge;
+import com.nthn.springbootthymeleaf.pojo.Surcharge;
 import com.nthn.springbootthymeleaf.repository.SurchargeRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +15,9 @@ public class SurchargeService {
     @Autowired
     private SurchargeRepository surchargeRepository;
 
-    public Integer save(SurchargeVO vO) {
+    public Integer save(Surcharge surcharge) {
         Surcharge bean = new Surcharge();
-        BeanUtils.copyProperties(vO, bean);
+        BeanUtils.copyProperties(surcharge, bean);
         bean = surchargeRepository.save(bean);
         return bean.getId();
     }
@@ -30,29 +26,29 @@ public class SurchargeService {
         surchargeRepository.deleteById(id);
     }
 
-    public void update(Integer id, SurchargeUpdateVO vO) {
+    public void update(Integer id, Surcharge surcharge) {
         Surcharge bean = requireOne(id);
-        BeanUtils.copyProperties(vO, bean);
+        BeanUtils.copyProperties(surcharge, bean);
         surchargeRepository.save(bean);
     }
 
-    public SurchargeDTO getById(Integer id) {
-        Surcharge original = requireOne(id);
-        return toDTO(original);
+    public Surcharge getById(Integer id) {
+        return (requireOne(id));
     }
 
-    public Page<SurchargeDTO> query(SurchargeQueryVO vO) {
-        throw new UnsupportedOperationException();
-    }
-
-    private SurchargeDTO toDTO(Surcharge original) {
-        SurchargeDTO bean = new SurchargeDTO();
-        BeanUtils.copyProperties(original, bean);
-        return bean;
-    }
 
     private Surcharge requireOne(Integer id) {
         return surchargeRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Resource not found: " + id));
     }
+
+//    public Page<SurchargeDTO> query(SurchargeQueryVO vO) {
+//        throw new UnsupportedOperationException();
+//    }
+//
+//    private SurchargeDTO toDTO(Surcharge original) {
+//        SurchargeDTO bean = new SurchargeDTO();
+//        BeanUtils.copyProperties(original, bean);
+//        return bean;
+//    }
 }

@@ -1,56 +1,40 @@
 package com.nthn.springbootthymeleaf.controller;
 
-import com.nthn.springbootthymeleaf.DTO.NewsDTO;
-import com.nthn.springbootthymeleaf.VO.NewsQueryVO;
-import com.nthn.springbootthymeleaf.VO.NewsUpdateVO;
-import com.nthn.springbootthymeleaf.VO.NewsVO;
+import com.nthn.springbootthymeleaf.pojo.Comment;
 import com.nthn.springbootthymeleaf.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
-@Validated
 @Controller
 @RequestMapping("/news")
 public class NewsController {
-
     @Autowired
     private NewsService newsService;
 
+    // Hiển thị trang tin tức
+    // GET: /news
     @GetMapping
     public String index(Model model) {
-        return "views/news";
+        model.addAttribute("news", newsService.getNews(""));
+        return "views/newsList";
     }
 
-    @PostMapping
-    public String save(@Valid @RequestBody NewsVO vO) {
-        return newsService.save(vO).toString();
-    }
-
-    @DeleteMapping("/{id}")
-    public void delete(@Valid @NotNull @PathVariable("id") Integer id) {
-        newsService.delete(id);
-    }
-
-    @PutMapping("/{id}")
-    public void update(@Valid @NotNull @PathVariable("id") Integer id,
-                       @Valid @RequestBody NewsUpdateVO vO) {
-        newsService.update(id, vO);
-    }
-
+    // Xem chi tiết tin tức
+    // GET: /news/{id}
     @GetMapping("/{id}")
-    public NewsDTO getById(@Valid @NotNull @PathVariable("id") Integer id) {
-        return newsService.getById(id);
+    public String detail(@PathVariable("id") Integer id, Model model) {
+        model.addAttribute("news", newsService.getById(id));
+        return "views/newsDetails";
     }
-//
-//    @GetMapping
-//    public Page<NewsDTO> query(@Valid NewsQueryVO vO) {
-//        return newsService.query(vO);
-//    }
+
+    // POST: /news/{id}
+    @PostMapping("/{id}")
+    public String comment(@PathVariable("id") Integer id, Comment comment) {
+        return null;
+    }
 }

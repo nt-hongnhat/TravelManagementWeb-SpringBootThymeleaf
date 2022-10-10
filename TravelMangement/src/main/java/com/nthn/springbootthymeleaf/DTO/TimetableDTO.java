@@ -21,4 +21,5 @@ public class TimetableDTO implements Serializable {
 
     private String activities;
 
+
 }

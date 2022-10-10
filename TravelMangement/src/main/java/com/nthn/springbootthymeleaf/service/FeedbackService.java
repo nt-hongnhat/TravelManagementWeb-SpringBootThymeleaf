@@ -1,10 +1,6 @@
 package com.nthn.springbootthymeleaf.service;
 
-import com.nthn.springbootthymeleaf.DTO.FeedbackDTO;
-import com.nthn.springbootthymeleaf.VO.FeedbackQueryVO;
-import com.nthn.springbootthymeleaf.VO.FeedbackUpdateVO;
-import com.nthn.springbootthymeleaf.VO.FeedbackVO;
-import com.nthn.springbootthymeleaf.model.Feedback;
+import com.nthn.springbootthymeleaf.pojo.Feedback;
 import com.nthn.springbootthymeleaf.repository.FeedbackRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +15,9 @@ public class FeedbackService {
     @Autowired
     private FeedbackRepository feedbackRepository;
 
-    public Integer save(FeedbackVO vO) {
+    public Integer save(Feedback feedback) {
         Feedback bean = new Feedback();
-        BeanUtils.copyProperties(vO, bean);
+        BeanUtils.copyProperties(feedback, bean);
         bean = feedbackRepository.save(bean);
         return bean.getId();
     }
@@ -30,29 +26,28 @@ public class FeedbackService {
         feedbackRepository.deleteById(id);
     }
 
-    public void update(Integer id, FeedbackUpdateVO vO) {
+    public void update(Integer id, Feedback feedback) {
         Feedback bean = requireOne(id);
-        BeanUtils.copyProperties(vO, bean);
+        BeanUtils.copyProperties(feedback, bean);
         feedbackRepository.save(bean);
     }
 
-    public FeedbackDTO getById(Integer id) {
-        Feedback original = requireOne(id);
-        return toDTO(original);
-    }
-
-    public Page<FeedbackDTO> query(FeedbackQueryVO vO) {
-        throw new UnsupportedOperationException();
-    }
-
-    private FeedbackDTO toDTO(Feedback original) {
-        FeedbackDTO bean = new FeedbackDTO();
-        BeanUtils.copyProperties(original, bean);
-        return bean;
+    public Feedback getById(Integer id) {
+        return (requireOne(id));
     }
 
     private Feedback requireOne(Integer id) {
         return feedbackRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Resource not found: " + id));
     }
+
+//    public Page<FeedbackDTO> query(FeedbackQueryVO vO) {
+//        throw new UnsupportedOperationException();
+//    }
+//
+//    private FeedbackDTO toDTO(Feedback original) {
+//        FeedbackDTO bean = new FeedbackDTO();
+//        BeanUtils.copyProperties(original, bean);
+//        return bean;
+//    }
 }

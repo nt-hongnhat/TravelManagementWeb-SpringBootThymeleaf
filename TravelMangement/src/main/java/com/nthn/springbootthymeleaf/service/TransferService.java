@@ -1,10 +1,6 @@
 package com.nthn.springbootthymeleaf.service;
 
-import com.nthn.springbootthymeleaf.DTO.TransferDTO;
-import com.nthn.springbootthymeleaf.VO.TransferQueryVO;
-import com.nthn.springbootthymeleaf.VO.TransferUpdateVO;
-import com.nthn.springbootthymeleaf.VO.TransferVO;
-import com.nthn.springbootthymeleaf.model.Transfer;
+import com.nthn.springbootthymeleaf.pojo.Transfer;
 import com.nthn.springbootthymeleaf.repository.TransferRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +15,9 @@ public class TransferService {
     @Autowired
     private TransferRepository transferRepository;
 
-    public Integer save(TransferVO vO) {
+    public Integer save(Transfer transfer) {
         Transfer bean = new Transfer();
-        BeanUtils.copyProperties(vO, bean);
+        BeanUtils.copyProperties(transfer, bean);
         bean = transferRepository.save(bean);
         return bean.getId();
     }
@@ -30,29 +26,33 @@ public class TransferService {
         transferRepository.deleteById(id);
     }
 
-    public void update(Integer id, TransferUpdateVO vO) {
+    public void update(Integer id, Transfer transfer) {
         Transfer bean = requireOne(id);
-        BeanUtils.copyProperties(vO, bean);
+        BeanUtils.copyProperties(transfer, bean);
         transferRepository.save(bean);
     }
 
-    public TransferDTO getById(Integer id) {
-        Transfer original = requireOne(id);
-        return toDTO(original);
+    public Transfer getById(Integer id) {
+        return (requireOne(id));
     }
 
-    public Page<TransferDTO> query(TransferQueryVO vO) {
-        throw new UnsupportedOperationException();
-    }
+//    public Page<TransferDTO> query(TransferQueryVO vO) {
+//        throw new UnsupportedOperationException();
+//    }
 
-    private TransferDTO toDTO(Transfer original) {
-        TransferDTO bean = new TransferDTO();
-        BeanUtils.copyProperties(original, bean);
-        return bean;
-    }
 
     private Transfer requireOne(Integer id) {
         return transferRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Resource not found: " + id));
     }
+
+//    public Page<TransferDTO> query(TransferQueryVO vO) {
+//        throw new UnsupportedOperationException();
+//    }
+//
+//    private TransferDTO toDTO(Transfer original) {
+//        TransferDTO bean = new TransferDTO();
+//        BeanUtils.copyProperties(original, bean);
+//        return bean;
+//    }
 }

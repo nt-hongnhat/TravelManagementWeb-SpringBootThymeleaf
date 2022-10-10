@@ -1,10 +1,6 @@
 package com.nthn.springbootthymeleaf.service;
 
-import com.nthn.springbootthymeleaf.DTO.TourDTO;
-import com.nthn.springbootthymeleaf.VO.TourQueryVO;
-import com.nthn.springbootthymeleaf.VO.TourUpdateVO;
-import com.nthn.springbootthymeleaf.VO.TourVO;
-import com.nthn.springbootthymeleaf.model.Tour;
+import com.nthn.springbootthymeleaf.pojo.Tour;
 import com.nthn.springbootthymeleaf.repository.TourRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +15,9 @@ public class TourService {
     @Autowired
     private TourRepository tourRepository;
 
-    public Integer save(TourVO vO) {
+    public Integer save(Tour tour) {
         Tour bean = new Tour();
-        BeanUtils.copyProperties(vO, bean);
+        BeanUtils.copyProperties(tour, bean);
         bean = tourRepository.save(bean);
         return bean.getId();
     }
@@ -30,29 +26,29 @@ public class TourService {
         tourRepository.deleteById(id);
     }
 
-    public void update(Integer id, TourUpdateVO vO) {
+    public void update(Integer id, Tour tour) {
         Tour bean = requireOne(id);
-        BeanUtils.copyProperties(vO, bean);
+        BeanUtils.copyProperties(tour, bean);
         tourRepository.save(bean);
     }
 
-    public TourDTO getById(Integer id) {
-        Tour original = requireOne(id);
-        return toDTO(original);
+    public Tour getById(Integer id) {
+        return requireOne(id);
     }
 
-    public Page<TourDTO> query(TourQueryVO vO) {
-        throw new UnsupportedOperationException();
-    }
-
-    private TourDTO toDTO(Tour original) {
-        TourDTO bean = new TourDTO();
-        BeanUtils.copyProperties(original, bean);
-        return bean;
-    }
 
     private Tour requireOne(Integer id) {
         return tourRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Resource not found: " + id));
     }
+
+//    public Page<TourDTO> query(TourQueryVO vO) {
+//        throw new UnsupportedOperationException();
+//    }
+//
+//    private TourDTO toDTO(Tour original) {
+//        TourDTO bean = new TourDTO();
+//        BeanUtils.copyProperties(original, bean);
+//        return bean;
+//    }
 }

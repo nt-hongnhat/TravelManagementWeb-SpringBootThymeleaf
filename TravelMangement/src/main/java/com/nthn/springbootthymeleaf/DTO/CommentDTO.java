@@ -18,4 +18,5 @@ public class CommentDTO implements Serializable {
 
     private String content;
 
+
 }

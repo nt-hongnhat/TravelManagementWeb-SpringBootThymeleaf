@@ -1,10 +1,7 @@
 package com.nthn.springbootthymeleaf.service;
 
-import com.nthn.springbootthymeleaf.DTO.EmployeeDTO;
-import com.nthn.springbootthymeleaf.VO.EmployeeQueryVO;
-import com.nthn.springbootthymeleaf.VO.EmployeeUpdateVO;
-import com.nthn.springbootthymeleaf.VO.EmployeeVO;
-import com.nthn.springbootthymeleaf.model.Employee;
+
+import com.nthn.springbootthymeleaf.pojo.Employee;
 import com.nthn.springbootthymeleaf.repository.EmployeeRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +16,9 @@ public class EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    public Integer save(EmployeeVO vO) {
+    public Integer save(Employee employee) {
         Employee bean = new Employee();
-        BeanUtils.copyProperties(vO, bean);
+        BeanUtils.copyProperties(employee, bean);
         bean = employeeRepository.save(bean);
         return bean.getId();
     }
@@ -30,29 +27,33 @@ public class EmployeeService {
         employeeRepository.deleteById(id);
     }
 
-    public void update(Integer id, EmployeeUpdateVO vO) {
+    public void update(Integer id, Employee vO) {
         Employee bean = requireOne(id);
         BeanUtils.copyProperties(vO, bean);
         employeeRepository.save(bean);
     }
 
-    public EmployeeDTO getById(Integer id) {
-        Employee original = requireOne(id);
-        return toDTO(original);
+    public Employee getById(Integer id) {
+        return (requireOne(id));
     }
 
-    public Page<EmployeeDTO> query(EmployeeQueryVO vO) {
-        throw new UnsupportedOperationException();
-    }
+//    public Page<EmployeeDTO> query(EmployeeQueryVO vO) {
+//        throw new UnsupportedOperationException();
+//    }
 
-    private EmployeeDTO toDTO(Employee original) {
-        EmployeeDTO bean = new EmployeeDTO();
-        BeanUtils.copyProperties(original, bean);
-        return bean;
-    }
 
     private Employee requireOne(Integer id) {
         return employeeRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Resource not found: " + id));
     }
+
+//    public Page<EmployeeDTO> query(EmployeeQueryVO vO) {
+//        throw new UnsupportedOperationException();
+//    }
+//
+//    private EmployeeDTO toDTO(Employee original) {
+//        EmployeeDTO bean = new EmployeeDTO();
+//        BeanUtils.copyProperties(original, bean);
+//        return bean;
+//    }
 }

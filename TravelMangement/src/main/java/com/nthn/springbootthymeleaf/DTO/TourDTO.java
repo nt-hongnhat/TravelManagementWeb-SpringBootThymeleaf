@@ -4,15 +4,18 @@ package com.nthn.springbootthymeleaf.DTO;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Data
 public class TourDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     private Integer id;
 
+    private Integer categoryId;
+
     private String name;
 
-    private Integer categoryId;
+    private BigDecimal price;
 
 
     /**

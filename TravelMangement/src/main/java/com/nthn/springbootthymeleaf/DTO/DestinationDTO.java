@@ -10,14 +10,20 @@ public class DestinationDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     private Integer id;
 
+    private String provinceId;
+
     private String name;
 
-    private String address;
+    private String features;
 
     private String description;
 
-    private String provinceId;
+    private String address;
 
-    private String province;
+    private String phone;
+
+    private String email;
+
+    private String website;
 
 }

@@ -5,5 +5,7 @@
     <option name="renamerInitialized" value="true" />
     <option name="reverseEngineeringLastDbConnectionId" value="c50a4bb0-2c00-48c9-874e-282df6c4d74b" />
     <option name="reLastEntityCreationPackage" value="src/main/java/com/nthn/springbootthymeleaf/model" />
+    <option name="newEntityIdType" value="UUID" />
+    <option name="newEntityIdStrategy" value="Auto" />
   </component>
 </project>

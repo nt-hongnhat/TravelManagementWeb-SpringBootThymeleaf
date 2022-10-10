@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout-admin}">
+<head>
+    <title>Create an account</title>
+</head>
+<body class="bg-gradient-primary">
+<div layout:fragment="page-content" class="container-fluid">
+    <div class="container">
+        <div class="card o-hidden border-0 shadow-lg my-5">
+            <div class="card-body p-0">
+                <!-- Nested Row within Card Body -->
+                <div class="row">
+                    <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
+                    <div class="col-lg-7">
+                        <div class="p-5">
+                            <div class="text-center">
+                                <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
+                            </div>
+                            <div class="text-danger" th:text="${errorMessage}"></div>
+                            <form action="" class="user" method="post" th:action="@{/account/save}"
+                                  th:object="${account}">
+                                <fieldset class="form-group row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <label for="firstName">First Name</label>
+                                        <input type="text"
+                                               class="form-control "
+                                               id="firstName"
+                                               placeholder="First Name" th:field="*{firstName}">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="lastName">Last Name</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="lastName"
+                                               placeholder="Last Name" th:field="*{lastName}">
+                                    </div>
+                                </fieldset>
+                                <fieldset class="form-group">
+                                    <label for="email">Email Address</label>
+                                    <input type="email"
+                                           class="form-control"
+                                           id="email"
+                                           placeholder="Email Address" th:field="*{email}">
+                                </fieldset>
+                                <fieldset class="form-group">
+                                    <label for="username">Username</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="username"
+                                           placeholder="Username" th:field="*{username}">
+                                </fieldset>
+
+                                <fieldset class="form-group row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <label for="password">Password</label>
+                                        <input type="password"
+                                               class="form-control "
+                                               id="password"
+                                               placeholder="Password" th:field="*{password}">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="confirm">Confirm Password</label>
+                                        <input type="password"
+                                               class="form-control "
+                                               id="confirm"
+                                               placeholder="Confirm Password" th:field="*{confirm}">
+                                    </div>
+                                </fieldset>
+                                <fieldset class="form-group">
+                                    <label for="permission">Permission</label>
+                                    <select name="permission" id="permission"
+                                            class="form-control " th:field="*{permissionId}">
+                                        <option value="Permission" disabled>Select permission</option>
+                                        <option th:each="permission:${permissions}"
+                                                th:text="${permission.name}"
+                                                th:value="${permission.id}"
+                                                th:selected="${account.permissionId==permission.id}"></option>
+                                    </select>
+                                </fieldset>
+                                <fieldset class="form-group">
+                                    <button type="submit" class="btn btn-primary btn-user btn-block">
+                                        Register Account
+                                    </button>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

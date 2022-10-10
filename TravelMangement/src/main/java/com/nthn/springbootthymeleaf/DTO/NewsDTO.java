@@ -29,4 +29,5 @@ public class NewsDTO implements Serializable {
 
     private Boolean access;
 
+
 }
