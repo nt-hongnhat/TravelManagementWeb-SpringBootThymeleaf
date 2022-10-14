@@ -6,6 +6,8 @@ import org.hibernate.Hibernate;
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @AllArgsConstructor
@@ -30,7 +32,13 @@ public class Category implements Serializable {
 
     @Column(name = "description")
     private String description;
+    
+    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
+    private List<Tour> tours = new ArrayList<>();
 
+    public List<Tour> getTours() {
+        return tours;
+    }
 
     @Override
     public boolean equals(Object o) {

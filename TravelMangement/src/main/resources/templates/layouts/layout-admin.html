@@ -17,6 +17,8 @@
 
     <!-- Custom styles for this template-->
     <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet">
+    <link th:href="@{/vendor/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet">
+
     <th:block layout:fragment="style"></th:block>
 
 </head>
@@ -41,8 +43,17 @@
             <!-- End of Topbar -->
 
             <!-- Begin Page Content -->
-            <div layout:fragment="page-content">
-                THIS PAGE CONTENT
+            <div class="container-fluid">
+                <h1 class="mt-4" layout:fragment="page-heading"></h1>
+
+                <nav aria-label="breadcrumb">
+                    <th:block layout:fragment="breadcrumb"></th:block>
+                </nav>
+                <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below. For
+                                more
+                                information about DataTables, please visit the.
+                </p>
+                <th:block layout:fragment="page-content">THIS PAGE CONTENT</th:block>
             </div>
             <!-- /.container-fluid -->
 
@@ -83,6 +94,13 @@
 <!-- Page level custom scripts -->
 <script th:src="@{/js/demo/chart-area-demo.js}"></script>
 <script th:src="@{/js/demo/chart-pie-demo.js}"></script>
+
+<!-- Page level plugins -->
+<script th:src="@{/vendor/datatables/jquery.dataTables.min.js}"></script>
+<script th:src="@{/vendor/datatables/dataTables.bootstrap4.min.js}"></script>
+
+<!-- Page level custom scripts -->
+<script th:src="@{/js/demo/datatables-demo.js}"></script>
 <th:block layout:fragment="script">
 
 </th:block>

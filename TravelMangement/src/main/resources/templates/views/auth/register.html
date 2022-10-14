@@ -34,56 +34,51 @@
                 <div class="col-lg-7">
                     <div class="p-5">
                         <div class="text-center">
-                            <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
+                            <h1 class="h4 text-gray-900 mb-4">Register an Account!</h1>
                         </div>
-                        <div class="text-danger" th:text="${errorMessage}"></div>
-                        <form action="" class="user" method="post" th:action="@{/register}"
-                              th:object="${account}">
+                        <div th:if="${param.confirm}">
+                            <div class="alert alert-danger">The password confirmation does not match.</div>
+                        </div>
+                        <div th:if="${param.username}">
+                            <div class="alert alert-info">Username is exists.</div>
+                        </div>
+                        <div th:if="${param.success}">
+                            <div class="alert alert-info">Register an account successfull!</div>
+                        </div>
+                        <form th:action="@{/register}" th:object="${accountRegistration}" method="post" class="user">
                             <fieldset class="form-group row">
                                 <div class="col-sm-6 mb-3 mb-sm-0">
                                     <label for="firstName">First Name</label>
-                                    <input type="text"
-                                           class="form-control "
-                                           id="firstName"
-                                           placeholder="First Name" th:field="*{firstName}">
+                                    <input type="text" class="form-control " id="firstName" placeholder="First Name"
+                                           th:field="*{firstName}" required>
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="lastName">Last Name</label>
-                                    <input type="text"
-                                           class="form-control"
-                                           id="lastName"
-                                           placeholder="Last Name" th:field="*{lastName}">
+                                    <input type="text" class="form-control" id="lastName" placeholder="Last Name"
+                                           th:field="*{lastName}" required>
                                 </div>
                             </fieldset>
                             <fieldset class="form-group">
                                 <label for="email">Email Address</label>
-                                <input type="email"
-                                       class="form-control"
-                                       id="email"
-                                       placeholder="Email Address" th:field="*{email}">
+                                <input type="email" class="form-control" id="email" placeholder="Email Address"
+                                       th:field="*{email}" required>
                             </fieldset>
                             <fieldset class="form-group">
                                 <label for="username">Username</label>
-                                <input type="text"
-                                       class="form-control"
-                                       id="username"
-                                       placeholder="Username" th:field="*{username}">
+                                <input type="text" class="form-control" id="username" placeholder="Username"
+                                       th:field="*{username}" required>
                             </fieldset>
 
                             <fieldset class="form-group row">
                                 <div class="col-sm-6 mb-3 mb-sm-0">
                                     <label for="password">Password</label>
-                                    <input type="password"
-                                           class="form-control "
-                                           id="password"
-                                           placeholder="Password" th:field="*{password}">
+                                    <input type="password" class="form-control " id="password" placeholder="Password"
+                                           th:field="*{password}" required>
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="confirm">Confirm Password</label>
-                                    <input type="password"
-                                           class="form-control "
-                                           id="confirm"
-                                           placeholder="Confirm Password" th:field="*{confirm}">
+                                    <input type="password" class="form-control" id="confirm"
+                                           placeholder="Confirm Password" th:field="*{confirm}" required>
                                 </div>
                             </fieldset>
                             <fieldset class="form-group">
@@ -94,7 +89,7 @@
                         </form>
                         <hr>
                         <div class="text-center">
-                            <a class="small" href="forgot-password.html">Forgot Password?</a>
+                            <a class="small" href="../forgot-password.html">Forgot Password?</a>
                         </div>
                         <div class="text-center">
                             <a class="small" th:href="@{/login}">Already have an account? Login!</a>

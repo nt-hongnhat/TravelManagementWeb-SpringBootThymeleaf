@@ -2,12 +2,13 @@ package com.nthn.springbootthymeleaf.pojo;
 
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Objects;
+import java.util.*;
 
 
 @Getter
@@ -25,9 +26,9 @@ public class Tour implements Serializable {
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @Column(name = "category_id")
-    private Integer categoryId;
+//
+//    @Column(name = "category_id")
+//    private Integer categoryId;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -55,6 +56,15 @@ public class Tour implements Serializable {
 
     @Column(name = "destination", nullable = false)
     private String destination;
+
+    private Category category;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, optional = false)
+    @JoinColumn(name = "category_id", nullable = false)
+    public Category getCategory() {
+        return category;
+    }
+
 
     @Override
     public boolean equals(Object o) {

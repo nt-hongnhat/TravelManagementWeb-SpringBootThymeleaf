@@ -6,90 +6,130 @@
 </head>
 <body class="bg-gradient-primary">
 <div layout:fragment="page-content" class="container-fluid">
-    <div class="container">
-        <div class="card o-hidden border-0 shadow-lg my-5">
-            <div class="card-body p-0">
-                <!-- Nested Row within Card Body -->
-                <div class="row">
-                    <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
-                    <div class="col-lg-7">
-                        <div class="p-5">
-                            <div class="text-center">
-                                <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
-                            </div>
-                            <div class="text-danger" th:text="${errorMessage}"></div>
-                            <form action="" class="user" method="post" th:action="@{/account/save}"
-                                  th:object="${account}">
-                                <fieldset class="form-group row">
-                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <label for="firstName">First Name</label>
-                                        <input type="text"
-                                               class="form-control "
-                                               id="firstName"
-                                               placeholder="First Name" th:field="*{firstName}">
+    <main>
+        <header class="page-header page-header-compact page-header-light border-bottom bg-white mb-4">
+            <div class="container-xl px-4">
+                <div class="page-header-content">
+                    <div class="row align-items-center justify-content-between pt-3">
+                        <div class="col-auto mb-3">
+                            <h1 class="page-header-title">
+                                <div class="page-header-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                         stroke-linejoin="round" class="feather feather-user-plus">
+                                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="8.5" cy="7" r="4"></circle>
+                                        <line x1="20" y1="8" x2="20" y2="14"></line>
+                                        <line x1="23" y1="11" x2="17" y2="11"></line>
+                                    </svg>
+                                </div>
+                                Add User
+                            </h1>
+                        </div>
+                        <div class="col-12 col-xl-auto mb-3">
+                            <a class="btn btn-sm btn-light text-primary" href="user-management-list.html">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                     stroke-linejoin="round" class="feather feather-arrow-left me-1">
+                                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                                    <polyline points="12 19 5 12 12 5"></polyline>
+                                </svg>
+                                Back to Users List
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- Main page content-->
+        <div class="container-xl px-4 mt-4">
+            <div class="row">
+                <div class="col-xl-4">
+                    <!-- Profile picture card-->
+                    <div class="card mb-4 mb-xl-0">
+                        <div class="card-header">Profile Picture</div>
+                        <div class="card-body text-center">
+                            <!-- Profile picture image-->
+                            <img class="img-account-profile rounded-circle mb-2"
+                                 src="assets/img/demo/user-placeholder.svg" alt="">
+                            <!-- Profile picture help block-->
+                            <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
+                            <!-- Profile picture upload button-->
+                            <button class="btn btn-primary" type="button">Upload new image</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-8">
+                    <!-- Account details card-->
+                    <div class="card mb-4">
+                        <div class="card-header">Account Details</div>
+                        <div class="card-body">
+                            <form>
+                                <!-- Form Row-->
+                                <div class="row gx-3 mb-3">
+                                    <!-- Form Group (first name)-->
+                                    <div class="col-md-6">
+                                        <label class="small mb-1" for="inputFirstName">First name</label>
+                                        <input class="form-control" id="inputFirstName" type="text"
+                                               placeholder="Enter your first name" value="">
                                     </div>
-                                    <div class="col-sm-6">
-                                        <label for="lastName">Last Name</label>
-                                        <input type="text"
-                                               class="form-control"
-                                               id="lastName"
-                                               placeholder="Last Name" th:field="*{lastName}">
+                                    <!-- Form Group (last name)-->
+                                    <div class="col-md-6">
+                                        <label class="small mb-1" for="inputLastName">Last name</label>
+                                        <input class="form-control" id="inputLastName" type="text"
+                                               placeholder="Enter your last name" value="">
                                     </div>
-                                </fieldset>
-                                <fieldset class="form-group">
-                                    <label for="email">Email Address</label>
-                                    <input type="email"
-                                           class="form-control"
-                                           id="email"
-                                           placeholder="Email Address" th:field="*{email}">
-                                </fieldset>
-                                <fieldset class="form-group">
-                                    <label for="username">Username</label>
-                                    <input type="text"
-                                           class="form-control"
-                                           id="username"
-                                           placeholder="Username" th:field="*{username}">
-                                </fieldset>
-
-                                <fieldset class="form-group row">
-                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <label for="password">Password</label>
-                                        <input type="password"
-                                               class="form-control "
-                                               id="password"
-                                               placeholder="Password" th:field="*{password}">
+                                </div>
+                                <!-- Form Group (email address)-->
+                                <div class="mb-3">
+                                    <label class="small mb-1" for="inputEmailAddress">Email address</label>
+                                    <input class="form-control" id="inputEmailAddress" type="email"
+                                           placeholder="Enter your email address" value="">
+                                </div>
+                                <!-- Form Group (Group Selection Checkboxes)-->
+                                <div class="mb-3">
+                                    <label class="small mb-1">Group(s)</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" id="groupSales" type="checkbox" value="">
+                                        <label class="form-check-label" for="groupSales">Sales</label>
                                     </div>
-                                    <div class="col-sm-6">
-                                        <label for="confirm">Confirm Password</label>
-                                        <input type="password"
-                                               class="form-control "
-                                               id="confirm"
-                                               placeholder="Confirm Password" th:field="*{confirm}">
+                                    <div class="form-check">
+                                        <input class="form-check-input" id="groupDevs" type="checkbox" value="">
+                                        <label class="form-check-label" for="groupDevs">Developers</label>
                                     </div>
-                                </fieldset>
-                                <fieldset class="form-group">
-                                    <label for="permission">Permission</label>
-                                    <select name="permission" id="permission"
-                                            class="form-control " th:field="*{permissionId}">
-                                        <option value="Permission" disabled>Select permission</option>
-                                        <option th:each="permission:${permissions}"
-                                                th:text="${permission.name}"
-                                                th:value="${permission.id}"
-                                                th:selected="${account.permissionId==permission.id}"></option>
+                                    <div class="form-check">
+                                        <input class="form-check-input" id="groupMarketing" type="checkbox" value="">
+                                        <label class="form-check-label" for="groupMarketing">Marketing</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" id="groupManagers" type="checkbox" value="">
+                                        <label class="form-check-label" for="groupManagers">Managers</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" id="groupCustomer" type="checkbox" value="">
+                                        <label class="form-check-label" for="groupCustomer">Customer</label>
+                                    </div>
+                                </div>
+                                <!-- Form Group (Roles)-->
+                                <div class="mb-3">
+                                    <label class="small mb-1">Role</label>
+                                    <select class="form-select" aria-label="Default select example">
+                                        <option selected="" disabled="">Select a role:</option>
+                                        <option value="administrator">Administrator</option>
+                                        <option value="registered">Registered</option>
+                                        <option value="edtior">Editor</option>
+                                        <option value="guest">Guest</option>
                                     </select>
-                                </fieldset>
-                                <fieldset class="form-group">
-                                    <button type="submit" class="btn btn-primary btn-user btn-block">
-                                        Register Account
-                                    </button>
-                                </fieldset>
+                                </div>
+                                <!-- Submit button-->
+                                <button class="btn btn-primary" type="button">Add user</button>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 </div>
 
 </body>

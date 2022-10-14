@@ -20,7 +20,7 @@ import java.util.Map;
 
 @Validated
 @Controller
-@RequestMapping("/customer")
+@RequestMapping("/{locale:en|vi}/admin/customer")
 public class CustomerController {
 
     @Autowired

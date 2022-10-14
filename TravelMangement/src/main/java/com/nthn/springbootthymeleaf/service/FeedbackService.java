@@ -2,11 +2,15 @@ package com.nthn.springbootthymeleaf.service;
 
 import com.nthn.springbootthymeleaf.pojo.Feedback;
 import com.nthn.springbootthymeleaf.repository.FeedbackRepository;
+import com.nthn.springbootthymeleaf.repository.TourRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 @Service
@@ -14,6 +18,9 @@ public class FeedbackService {
 
     @Autowired
     private FeedbackRepository feedbackRepository;
+
+    @Autowired
+    private TourRepository tourRepository;
 
     public Integer save(Feedback feedback) {
         Feedback bean = new Feedback();
@@ -34,6 +41,33 @@ public class FeedbackService {
 
     public Feedback getById(Integer id) {
         return (requireOne(id));
+    }
+
+    public List<Feedback> getFeedbacks(double rating) {
+        return feedbackRepository.findByRatingGreaterThanEqual(rating);
+    }
+
+    public List<Feedback> getFeedbacks(Map<String, String> params) {
+        Sort sort = Sort.by("id");
+        if (params.isEmpty()) {
+            return feedbackRepository.findAll(sort);
+        } else {
+            // Tìm kiếm theo rating
+            double minRating = Double.parseDouble(params.get("minRating"));
+            double maxRating = Double.parseDouble(params.get("maxRating"));
+
+            // Tìm kiếm theo tour
+            int tourId = Integer.parseInt(params.get("tourId"));
+            if (tourRepository.existsById(tourId))
+                feedbackRepository.findByTourId(tourId);
+
+            // Tìm kiếm theo nội dung
+            String keyword = params.get("keyword");
+            if (keyword.isEmpty())
+                feedbackRepository.findByDescriptionContainingIgnoreCase(keyword);
+        }
+
+        return null;
     }
 
     private Feedback requireOne(Integer id) {

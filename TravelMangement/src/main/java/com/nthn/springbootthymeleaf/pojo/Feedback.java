@@ -26,33 +26,20 @@ public class Feedback implements Serializable {
     private Integer id;
 
 
-    @Column(name = "tour_id", nullable = false)
-    private Integer tourId;
+    @ManyToOne
+    @JoinColumn(name = "tour_id", nullable = false)
+    private Tour tour;
 
-
-    @Column(name = "user_id", nullable = false)
-    private Integer userId;
+    @ManyToOne
+    @JoinColumn(name = "account_id", nullable = false)
+    private Account account;
 
     @Column(name = "description")
     private String description;
 
     @Column(name = "rating", nullable = false)
     private Double rating;
-    private Tour tour;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tour_id")
-    public Tour getTour() {
-        return tour;
-    }
-
-    private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    public User getUser() {
-        return user;
-    }
 
     @Override
     public boolean equals(Object o) {

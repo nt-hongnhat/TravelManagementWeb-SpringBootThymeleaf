@@ -1,15 +1,18 @@
 package com.nthn.springbootthymeleaf.config;
 
-import com.nthn.springbootthymeleaf.service.UserDetailsService;
+import com.nthn.springbootthymeleaf.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.sql.DataSource;
 
@@ -18,36 +21,56 @@ import javax.sql.DataSource;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private AccountService accountService;
 
     @Autowired
     private DataSource dataSource;
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-//    @Autowired
-//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//
-//        // Sét đặt dịch vụ để tìm kiếm User trong Database.
-//        // Và sét đặt PasswordEncoder.
-//        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-//
-//    }
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(accountService);
+        authenticationProvider.setPasswordEncoder(bCryptPasswordEncoder());
+        return authenticationProvider;
+    }
 
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(authenticationProvider());
+    }
+
+    // Phân quyền truy cập
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+//        http.authorizeRequests().antMatchers("/", "/login", "/logout", "/register", "/tours", "/news", "/static/**")
+//                .permitAll()
+//                .antMatchers("/profile", "/booking", "/comment")
+//                .access("hasAnyRole('CUSTOMER', 'EMPLOYEE', 'ADMIN')")
+//                .and()
+//                .authorizeRequests().antMatchers("/admin").access("hasRole('ADMIN')")
+//                .formLogin()
+//                .loginPage("/login")
+//                .defaultSuccessUrl("/")
+//                .permitAll()
+//                .and()
+//                .logout()
+//                .invalidateHttpSession(true)
+//                .clearAuthentication(true)
+//                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+//                .logoutSuccessUrl(("/login")).permitAll();
 
         http.csrf().disable();
 
         // Các trang không yêu cầu login
         http.authorizeRequests().antMatchers("/", "/login", "/logout", "/register", "/tours", "/news").permitAll();
-
         // Trang /profile yêu cầu phải login với vai trò CUSTOMER, EMPLOYEE hoặc ADMIN.
         // Nếu chưa login, nó sẽ redirect tới trang /login.
-        http.authorizeRequests().antMatchers("/profile").access("hasAnyRole('CUSTOMER', 'EMPLOYEE', 'ADMIN')");
+        http.authorizeRequests().antMatchers("/profile", "/booking", "/comment").access("hasAnyRole('CUSTOMER', 'EMPLOYEE', 'ADMIN')");
 
         // Trang chỉ dành cho ADMIN
         http.authorizeRequests().antMatchers("/admin").access("hasRole('ADMIN')");
@@ -55,7 +78,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // Khi người dùng đã login, với vai trò XX.
         // Nhưng truy cập vào trang yêu cầu vai trò YY,
         // Ngoại lệ AccessDeniedException sẽ ném ra.
-        http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/403");
+//        http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/403");
 
         // Cấu hình cho Login Form.
         http.authorizeRequests().and().formLogin()//
@@ -63,11 +86,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/login") // Submit URL
                 .loginPage("/login")//
                 .defaultSuccessUrl("/")//
-                .failureUrl("/login?error=true")//
                 .usernameParameter("username")//
                 .passwordParameter("password")
                 // Cấu hình cho Logout Page.
-                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/");
+                .and().logout()
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl(("/login?logout")).permitAll();
 
         // Cấu hình Remember Me.
         http.authorizeRequests().and() //

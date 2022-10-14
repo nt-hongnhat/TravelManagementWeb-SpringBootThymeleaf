@@ -41,30 +41,32 @@
                                 <div class="text-center">
                                     <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                                 </div>
-                                <form action="" class="user" method="post" th:action="@{/login}"
-                                      th:object="${account}">
+                                <div th:if="${param.error}">
+                                    <div class="alert alert-danger">Invalid username and password.</div>
+                                </div>
+                                <div th:if="${param.logout}">
+                                    <div class="alert alert-info">You have been logged out.</div>
+                                </div>
+                                <form action="" class="user" method="post" th:action="@{/login}">
                                     <div class="form-group">
-                                        <label for="username">Username</label>
+                                        <label for="username" th:text="#{label.username}"></label>
                                         <input type="text" class="form-control form-control-user"
-                                               id="username" placeholder="Username" th:field="*{username}">
+                                               id="username" name="username" placeholder="Username">
                                     </div>
                                     <div class="form-group">
                                         <label for="password">Password</label>
                                         <input type="password" class="form-control form-control-user"
-                                               id="password" placeholder="Password" th:field="*{password}">
+                                               id="password" name="password" placeholder="Password">
                                     </div>
                                     <div class="form-group">
                                         <div class="custom-control custom-checkbox small">
                                             <input type="checkbox" class="custom-control-input" id="customCheck">
-                                            <label class="custom-control-label" for="customCheck">Remember
-                                                                                                  Me</label>
+                                            <label class="custom-control-label" for="customCheck">Remember Me</label>
                                         </div>
                                     </div>
-                                    <button type="submit" class="btn btn-primary btn-user btn-block">
-                                        Register Account
-                                    </button>
+                                    <button type="submit" class="btn btn-primary btn-user btn-block">Login</button>
                                     <hr>
-                                    <a href="index.html" class="btn btn-google btn-user btn-block">
+                                    <a href="../index.html" class="btn btn-google btn-user btn-block">
                                         <i class="fab fa-google fa-fw"></i> Login with Google
                                     </a>
                                     <a href="https://www.facebook.com/" class="btn btn-facebook btn-user btn-block">
@@ -73,7 +75,7 @@
                                 </form>
                                 <hr>
                                 <div class="text-center">
-                                    <a class="small" href="forgot-password.html">Forgot Password?</a>
+                                    <a class="small" href="../forgot-password.html">Forgot Password?</a>
                                 </div>
                                 <div class="text-center">
                                     <a class="small" th:href="@{/register}">Create an Account!</a>

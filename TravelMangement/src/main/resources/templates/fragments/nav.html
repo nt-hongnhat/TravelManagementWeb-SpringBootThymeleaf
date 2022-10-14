@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
 </head>
@@ -7,29 +8,30 @@
 <nav layout:fragment="user-site-nav" class="site-nav">
     <div class="container">
         <div class="site-navigation">
-            <a th:href="@{/}" class="logo m-0">Tour <span class="text-primary">.</span></a>
+            <a th:href="@{/{lang}/(lang=${#locale.language})}" class="logo m-0">Tour <span class="text-primary">.</span></a>
 
             <ul class="js-clone-nav d-none d-lg-inline-block text-left site-menu float-right">
-                <li class="active"><a th:href="@{/}">Home</a></li>
+                <li class="active"><a th:href="@{/{lang}/(lang=${#locale.language})}" th:text="#{messages.home}"></a>
+                </li>
                 <li class="has-children">
-                    <a href="#">Tours</a>
+                    <a th:href="@{/{lang}/tours(lang=${#locale.language})}" th:text="#{messages.categories}"></a>
                     <ul class="dropdown">
-                        <li><a href="elements.html">Elements</a></li>
-                        <li><a href="#">Menu One</a></li>
-                        <li class="has-children">
-                            <a href="#">Menu Two</a>
-                            <ul class="dropdown">
-                                <li><a href="#">Sub Menu One</a></li>
-                                <li><a href="#">Sub Menu Two</a></li>
-                                <li><a href="#">Sub Menu Three</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#">Menu Three</a></li>
+                        <th:block th:each="category:${categories}">
+                            <li>
+                                <a th:href="@{/{lang}/{name}/{id}(lang=${#locale.language}, name=${category.name},id=${category.id})}"
+                                   th:text="${category.name}"></a>
+                            </li>
+                        </th:block>
                     </ul>
                 </li>
-                <li><a th:href="@{/services}">Services</a></li>
-                <li><a th:href="@{/about}">About</a></li>
-                <li><a th:href="@{/contact}">Contact Us</a></li>
+                <li><a th:href="@{/{lang}/news(lang=${#locale.language})}" th:text="#{messages.news}"></a></li>
+                <li><a th:href="@{/{lang}/about(lang=${#locale.language})}" th:text="#{messages.about}"></a></li>
+                <li><a th:href="@{/{lang}/contact(lang=${#locale.language})}" th:text="#{messages.contact}"></a></li>
+                <li>
+                    <a class="text-uppercase text-white" th:href="@{/{lang}/(lang=${#locale.language}?'vi':'en')}"
+                       th:text="${#locale.language}"></a>
+                </li>
+                <li><a th:href="@{/{lang}/login(lang=${#locale.language})}" th:text="#{messages.login}"></a></li>
             </ul>
 
             <a href="#"
@@ -37,16 +39,17 @@
                data-toggle="collapse" data-target="#main-navbar">
                 <span></span>
             </a>
-
         </div>
     </div>
 </nav>
+
 <ul layout:fragment="admin-sidebar" class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled"
     id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
     <li>
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" th:href="@{/}">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center"
+           th:href="@{/{lang}/admin(lang=${#locale.language})}">
                 <span class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </span>
@@ -61,7 +64,7 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item active">
-        <a class="nav-link" th:href="@{/}">
+        <a class="nav-link" th:href="@{/{lang}/admin(lang=${#locale.language})}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
@@ -73,44 +76,59 @@
 
     <!-- Heading -->
     <li>
-        <div class="sidebar-heading text-center">
-            Interface
-        </div>
+        <div class="sidebar-heading text-center" th:text="#{messages.management}"></div>
     </li>
 
-    <!-- Nav Item - Pages Collapse Menu -->
+    <!-- Nav Item - Categories Collapse Menu -->
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse"
-           data-target="#collapseTwo"
+           data-target="#collapseCategories"
            aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-fw fa-list-alt"></i>
-            <span>Danh mục</span>
+            <span th:text="#{messages.tours}"></span>
         </a>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div id="collapseCategories" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" th:href="@{/tour}">Danh mục tour</a>
-                <a class="collapse-item" th:href="@{/news}">Danh mục tin tức</a>
+                <a class="collapse-item" th:href="@{/tours}" th:text="#{messages.allList}"></a>
+                <a class="collapse-item" th:href="@{/tours/create}">Create Tour</a>
+                <a class="collapse-item" th:href="@{/categories}">Categories List</a>
             </div>
         </div>
     </li>
 
-    <!-- Nav Item - Utilities Collapse Menu -->
+    <!-- Nav Item - User Management Collapse Menu -->
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUserManagement"
            aria-expanded="true" aria-controls="collapseUtilities">
             <i class="fas fa-fw fa-users"></i>
-            <span>Quản lý người dùng</span>
+            <span th:text="#{messages.user}"></span>
         </a>
-        <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+        <div id="collapseUserManagement" class="collapse" aria-labelledby="headingUtilities"
              data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" th:href="@{/account}">Quản lý Tài khoản</a>
-                <a class="collapse-item" th:href="@{/customer}">Quản lý Khách hàng</a>
-                <a class="collapse-item" th:href="@{/employee}">Quản lý Nhân viên</a>
+                <a class="collapse-item" th:href="@{/admin/account}">Accounts List</a>
+                <a class="collapse-item" th:href="@{/admin/customer}">Customers List</a>
+                <a class="collapse-item" th:href="@{/admin/employee}">Employees List</a>
+                <a class="collapse-item" th:href="@{/admin/permission}">Permissions List</a>
             </div>
         </div>
     </li>
 
+    <!-- Nav Item - News Management Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseNews"
+           aria-expanded="true" aria-controls="collapseUtilities">
+            <i class="fas fa-fw fa-users"></i>
+            <span th:text="#{messages.postManagement}"></span>
+        </a>
+        <div id="collapseNews" class="collapse" aria-labelledby="headingUtilities"
+             data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item" th:href="@{/news}" th:text="#{messages.allList}"></a>
+                <a class="collapse-item" th:href="@{/news/create}" th:text="#{messages.createPosts}"></a>
+            </div>
+        </div>
+    </li>
     <!-- Divider -->
     <li>
         <hr class="sidebar-divider">
@@ -133,9 +151,9 @@
         <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Login Screens:</h6>
-                <a class="collapse-item" th:href="@{/login}">Login</a>
-                <a class="collapse-item" th:href="@{/register}">Register</a>
-                <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
+                <a class="collapse-item" th:href="@{/{lang}/login(lang=locale:en|vi)}">Login</a>
+                <a class="collapse-item" th:href="@{/{locale:en|vi}/register}">Register</a>
+                <a class="collapse-item" th:href="@{/{locale:en|vi}/}">Forgot Password</a>
                 <div class="collapse-divider"></div>
                 <h6 class="collapse-header">Other Pages:</h6>
                 <a class="collapse-item" href="404.html">404 Page</a>
@@ -180,14 +198,6 @@
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
     </div>
 
-    <!-- Sidebar Message -->
-    <div class="sidebar-card d-none d-lg-flex">
-        <img class="sidebar-card-illustration mb-2" src="" alt="..." th:src="@{/img/undraw_rocket.svg}">
-        <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and
-                                                                  more!</p>
-        <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>
-    </div>
-
 </ul>
 <nav layout:fragment="admin-topbar" class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
@@ -211,7 +221,20 @@
 
     <!-- Topbar Navbar -->
     <ul class="navbar-nav ml-auto">
-
+        <div class="lang-switcher-wrapper">
+            <button class="lang-switcher transparent-btn" type="button">
+                EN
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                     class="feather feather-chevron-down" aria-hidden="true">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button>
+            <ul class="lang-menu dropdown">
+                <li><a th:href="@{/en/}">English</a></li>
+                <li><a th:href="@{/en/}">Vietnamese</a></li>
+            </ul>
+        </div>
         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
         <li class="nav-item dropdown no-arrow d-sm-none">
             <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
@@ -361,7 +384,8 @@
         <li class="nav-item dropdown no-arrow">
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small"
+                      sec:authentication="principal.username"></span>
                 <img alt="" class="img-profile rounded-circle" th:src="@{/img/undraw_profile.svg}" src="">
             </a>
             <!-- Dropdown - User Information -->
@@ -380,15 +404,14 @@
                     Activity Log
                 </a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                <a class="dropdown-item" href="" th:href="@{/logout}" sec:authorize="isAuthenticated()"
+                   data-toggle="modal" data-target="#logoutModal">
                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                     Logout
                 </a>
             </div>
         </li>
-
     </ul>
-
 </nav>
 </body>
 </html>

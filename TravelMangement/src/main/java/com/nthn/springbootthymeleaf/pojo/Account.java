@@ -30,12 +30,18 @@ public class Account implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @ManyToOne
+    @JoinColumn(name = "permission_id")
+    private Permission permission;
+
     @Column(name = "username", nullable = false)
     private String username;
 
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Transient
+    private String confirm = getPassword();
 
     @NotBlank
     @Column(name = "first_name", nullable = false)
@@ -52,13 +58,17 @@ public class Account implements Serializable {
     @Column(name = "create_time", nullable = false)
     private LocalDateTime createTime = LocalDateTime.now();
 
+    @Column(name = "last_login", nullable = true)
+    private LocalDateTime lastLogin;
+
+    @Column(name = "active")
+    private Boolean active = true;
+
     @Column(name = "avatar_url")
     private String avatarUrl;
 
-    @ManyToOne
-    @JoinColumn(name = "permission_id")
-    private Permission permission;
-
+    @Column(name = "reset_token")
+    private String resetToken;
 
     @Override
     public boolean equals(Object o) {
