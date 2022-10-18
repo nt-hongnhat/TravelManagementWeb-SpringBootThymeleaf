@@ -1,23 +1,21 @@
 package com.nthn.springbootthymeleaf.controller;
 
-import com.nthn.springbootthymeleaf.pojo.Category;
 import com.nthn.springbootthymeleaf.pojo.Tour;
+import com.nthn.springbootthymeleaf.pojo.TourGroup;
+import com.nthn.springbootthymeleaf.pojo.TourSchedule;
 import com.nthn.springbootthymeleaf.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Controller
-@RequestMapping("/{locale:en|vi}/tours")
+@RequestMapping("/")
 public class TourController {
     @Autowired
     private TourService tourService;
@@ -31,23 +29,55 @@ public class TourController {
     private BookingService bookingService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private TourGroupService tourGroupService;
+    @Autowired
+    private AccountService accountService;
+    @Autowired
+    private PermissionService permissionService;
 
-    @GetMapping
-    public String index(Model model) {
-        model.addAttribute("tours", tourService.getTours());
+    @Autowired
+    private NewsService newsService;
+    @Autowired
+    private MessageSource messageSource;
+    @Autowired
+    private TourScheduleService tourScheduleService;
+    @Autowired
+    private PlacesService placesService;
+
+    @ModelAttribute
+    public void commonAttributes(Model model) {
+        model.addAttribute("tourGroups", this.tourGroupService.getTourGroups(""));
+        model.addAttribute("provinces", this.provinceService.getProvinces(""));
+        model.addAttribute("feedbacks", this.feedbackService.getFeedbacks(4.0));
+        model.addAttribute("places", this.placesService.getPlaces());
+        model.addAttribute("durations", this.tourService.getDurations());
+    }
+
+    @GetMapping("/{linkStatic}")
+    public String getToursByTourGroup(@PathVariable("linkStatic") String linkStatic, Model model) {
+        TourGroup tourGroup = tourGroupService.getTourGroup(linkStatic);
+        Set<Tour> tours = tourGroup.getTours();
+        model.addAttribute("tourGroup", tourGroup);
+        model.addAttribute("tours", tours);
         return "views/tour";
     }
 
-    @GetMapping("/{categoryId}")
-    public String tours(@PathVariable("categoryId") String categoryId, @RequestParam(required = false) Map<String, String> params, Model model) {
+    @GetMapping("/tour/{id}")
+    public String detail(@PathVariable("id") Integer id, Model model) {
+        Tour tour = tourService.getById(id);
+        Set<TourSchedule> tourSchedules = tour.getTourSchedules();
 
-        Category category = categoryService.getCategoryById(Integer.valueOf(categoryId));
-        int page = Integer.parseInt(params.getOrDefault("page", "1"));
-        int size = Integer.parseInt(params.getOrDefault("size", "10"));
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Tour> tourPage = tourService.getTours(Integer.valueOf(categoryId), pageable);
-        model.addAttribute("tours", tourPage.getContent());
-        model.addAttribute("provinces", provinceService.getProvinces(""));
-        return "views/tour";
+        model.addAttribute("tour", tour);
+        model.addAttribute("tourSchedules", tourSchedules);
+
+        return "views/tourDetails";
+    }
+
+    @GetMapping("/tours")
+    public String searchTours(@RequestParam(required = false) Map<String, String> params, Model model) {
+        String departure = params.getOrDefault("departure", "");
+
+        return "views/tourList";
     }
 }

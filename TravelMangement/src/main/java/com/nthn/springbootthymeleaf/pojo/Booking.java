@@ -8,7 +8,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Objects;
+import java.util.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,6 +19,7 @@ import java.util.Objects;
 @Table(name = "booking")
 public class Booking implements Serializable {
 
+
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -27,32 +28,28 @@ public class Booking implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Tour tour;
-
-    private Customer customer;
-
-    @Column(name = "tour_id")
-    private Integer tourId;
-
-    @Column(name = "customer_id")
-    private Integer customerId;
-
-    private Employee employee;
-
-    @Column(name = "employee_id")
-    private Integer employeeId;
-
     @Column(name = "booking_date", nullable = false)
     private LocalDateTime bookingDate = LocalDateTime.now();
 
     @Column(name = "total", nullable = false)
     private BigDecimal total;
+    private Customer customer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "employee_id")
-    public Employee getEmployee() {
-        return employee;
-    }
+    @ManyToMany
+    @JoinTable(name = "booking_detail",
+            joinColumns = @JoinColumn(name = "booking_id"),
+            inverseJoinColumns = @JoinColumn(name = "ticket_id"))
+    private List<BookingDetail> bookingDetails = new ArrayList<>();
+
+    @Transient
+    private Integer adult;
+    @Transient
+    private Integer children;
+    @Transient
+    private Integer youngChildren;
+    @Transient
+    private Integer infants;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
@@ -60,11 +57,6 @@ public class Booking implements Serializable {
         return customer;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tour_id")
-    public Tour getTour() {
-        return tour;
-    }
 
     @Override
     public boolean equals(Object o) {

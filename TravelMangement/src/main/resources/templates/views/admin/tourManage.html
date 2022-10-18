@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout-admin}">
+<head>
+    <title th:text="#{label.tourManagement}"></title>
+</head>
+<body>
+<h1 class="mt-4" layout:fragment="page-heading" th:text="#{label.tourManagement}"></h1>
+
+<ol class="breadcrumb" layout:fragment="breadcrumb">
+    <li class="breadcrumb-item"><a href="#" th:text="#{label.home}">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page" th:text="#{label.tourManagement}">Tour Management</li>
+</ol>
+
+<div class="card shadow mb-4" layout:fragment="page-content">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Tour Datatables</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                <tr>
+                    <th th:text="#{tour.id}"></th>
+                    <th th:text="#{tour.name}"></th>
+                    <th th:text="#{tour.departureDate}"></th>
+                    <th th:text="#{label.createDate}"></th>
+                    <th th:text="#{label.active}"></th>
+                    <th th:text="#{label.action}"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="tour:${tours}">
+                    <td th:text="${tour.id}"></td>
+                    <td th:text="${tour.name}"></td>
+                    <td th:text="${tour.departure}"></td>
+                    <!--                    <td th:text="${tour.createDate}"></td>-->
+                    <!--                    <td th:text="${tour.active}"></td>-->
+                    <td>
+                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                data-target="#deleteTourModal">
+                            <span th:text="#{label.delete}"></span>
+                        </button>
+                        <div class="modal fade" id="deleteTourModal" tabindex="-1" role="dialog"
+                             aria-labelledby="deleteModal" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteModal">Ready to Delete?</h5>
+                                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Select "Delete" below if you are ready to delete this tour.
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-secondary" type="button" data-dismiss="modal">
+                                            Cancel
+                                        </button>
+                                        <a class="btn btn-primary"
+                                           th:href="@{tours/{id}/delete( id=${tour.id})}">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>

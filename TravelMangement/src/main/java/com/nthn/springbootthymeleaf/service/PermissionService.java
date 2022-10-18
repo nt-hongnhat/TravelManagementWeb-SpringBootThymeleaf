@@ -17,29 +17,17 @@ public class PermissionService {
     @Autowired
     private PermissionRepository permissionRepository;
 
-    public Integer save(Permission permission) {
-        Permission bean = new Permission();
-        BeanUtils.copyProperties(permission, bean);
-        bean = permissionRepository.save(bean);
-        return bean.getId();
-    }
-
-    public void delete(Integer id) {
-        permissionRepository.deleteById(id);
-    }
-
-    public void update(Integer id, Permission permission) {
-        Permission bean = requireOne(id);
-        BeanUtils.copyProperties(permission, bean);
-        permissionRepository.save(bean);
-    }
 
     public Permission getById(Integer id) {
         return (requireOne(id));
     }
 
     public List<Permission> getPermissions() {
-        return permissionRepository.findAll(Sort.by("id").ascending());
+        List<Permission> permissions = permissionRepository.findAll(Sort.by("id").ascending());
+        permissions.forEach(permission -> {
+            permission.setCountAccount(permission.getAccounts().size());
+        });
+        return permissions;
     }
 
     private Permission requireOne(Integer id) {

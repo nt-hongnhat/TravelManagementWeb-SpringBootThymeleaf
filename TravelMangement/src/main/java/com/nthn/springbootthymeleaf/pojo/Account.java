@@ -3,6 +3,7 @@ package com.nthn.springbootthymeleaf.pojo;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.hibernate.Hibernate;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -15,12 +16,10 @@ import java.util.Objects;
 
 @Getter
 @Setter
-@ToString
-@RequiredArgsConstructor
 @AllArgsConstructor
 @Entity
-@Accessors(chain = true)
 @Table(name = "account")
+@NoArgsConstructor
 public class Account implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -69,6 +68,16 @@ public class Account implements Serializable {
 
     @Column(name = "reset_token")
     private String resetToken;
+
+    @Transient
+    public String getPhotosImagePath() {
+        if (avatarUrl == null || id == null) return null;
+
+        return "/avatar/" + id + "/" + avatarUrl;
+    }
+
+    @Transient
+    private MultipartFile multipartFile;
 
     @Override
     public boolean equals(Object o) {

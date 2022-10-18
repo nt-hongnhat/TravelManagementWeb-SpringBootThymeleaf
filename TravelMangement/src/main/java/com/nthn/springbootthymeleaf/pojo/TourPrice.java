@@ -28,9 +28,6 @@ public class TourPrice implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "tour_id")
-    private Integer tourId;
-
     @Column(name = "group_price", nullable = false)
     private String groupPrice;
 

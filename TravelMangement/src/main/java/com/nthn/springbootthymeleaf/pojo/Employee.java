@@ -26,8 +26,7 @@ public class Employee implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "user_id")
-    private Integer userId;
+    private Account account;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -50,14 +49,12 @@ public class Employee implements Serializable {
     @Column(name = "phone")
     private String phone;
 
-
-    private User user;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    public User getUser() {
-        return user;
+    @JoinColumn(name = "account_id")
+    public Account getAccount() {
+        return account;
     }
+
 
     @Override
     public boolean equals(Object o) {

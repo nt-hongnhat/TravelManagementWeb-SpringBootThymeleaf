@@ -9,16 +9,10 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Travel - Register</title>
+    <title th:text="#{label.register}"></title>
 
-    <!-- Custom fonts for this template-->
-    <link th:href="@{/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
-    <link
-            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-            rel="stylesheet">
-
-    <!-- Custom styles for this template-->
-    <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet">
+    <!-- Style CSS -->
+    <th:block th:replace="~{/views/auth/login::style}"></th:block>
 
 </head>
 
@@ -34,18 +28,19 @@
                 <div class="col-lg-7">
                     <div class="p-5">
                         <div class="text-center">
-                            <h1 class="h4 text-gray-900 mb-4">Register an Account!</h1>
+                            <h1 class="h4 text-gray-900 mb-4" th:text="'Đăng ký tài khoản'"></h1>
                         </div>
                         <div th:if="${param.confirm}">
-                            <div class="alert alert-danger">The password confirmation does not match.</div>
+                            <div class="alert alert-danger">Xác nhận mật khẩu và mật khẩu không khớp.</div>
                         </div>
                         <div th:if="${param.username}">
-                            <div class="alert alert-info">Username is exists.</div>
+                            <div class="alert alert-info">Tên đăng nhập đã tồn tại.</div>
                         </div>
                         <div th:if="${param.success}">
-                            <div class="alert alert-info">Register an account successfull!</div>
+                            <div class="alert alert-info" th:text="${success}"></div>
                         </div>
-                        <form th:action="@{/register}" th:object="${accountRegistration}" method="post" class="user">
+                        <form th:action="@{/register}"
+                              th:object="${accountRegistration}" method="post" class="user">
                             <fieldset class="form-group row">
                                 <div class="col-sm-6 mb-3 mb-sm-0">
                                     <label for="firstName">First Name</label>
@@ -82,17 +77,17 @@
                                 </div>
                             </fieldset>
                             <fieldset class="form-group">
-                                <button type="submit" class="btn btn-primary btn-user btn-block">
-                                    Register Account
+                                <button type="submit" class="btn btn-primary btn-user btn-block"
+                                        th:text="#{label.register}">
                                 </button>
                             </fieldset>
                         </form>
                         <hr>
                         <div class="text-center">
-                            <a class="small" href="../forgot-password.html">Forgot Password?</a>
+                            <a class="small" href="forgot-password.html" th:text="#{label.forgotPasword}"></a>
                         </div>
                         <div class="text-center">
-                            <a class="small" th:href="@{/login}">Already have an account? Login!</a>
+                            <a class="small" th:href="@{/login}" th:text="'Đã có tài khoản? Đăng nhập!'"></a>
                         </div>
                     </div>
                 </div>
@@ -102,15 +97,8 @@
 
 </div>
 
-<!-- Bootstrap core JavaScript-->
-<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
-<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
-
-<!-- Core plugin JavaScript-->
-<script th:src="@{/vendor/jquery-easing/jquery.easing.min.js}"></script>
-
-<!-- Custom scripts for all pages-->
-<script th:src="@{/js/sb-admin-2.min.js}"></script>
+<!-- Script -->
+<th:block th:replace="~{/views/auth/login::script}"></th:block>
 
 </body>
 

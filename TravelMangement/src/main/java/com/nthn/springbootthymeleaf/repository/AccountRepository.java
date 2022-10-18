@@ -16,4 +16,7 @@ public interface AccountRepository extends JpaRepository<Account, Integer>, JpaS
 
     @Query("select a from Account a where a.username like concat('%', ?1, '%')")
     List<Account> findAllByUsernameContaining(String keyword);
+
+    @Query("select a from Account a where a.active = ?1")
+    List<Account> findAllByActive(Integer active);
 }

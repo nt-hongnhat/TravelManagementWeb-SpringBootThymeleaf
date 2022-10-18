@@ -14,7 +14,7 @@ import java.util.*;
 @Setter
 @ToString
 @Entity
-@Table(name = "province")
+@Table(name = "local_province")
 public class Province implements Serializable {
 
     @Serial

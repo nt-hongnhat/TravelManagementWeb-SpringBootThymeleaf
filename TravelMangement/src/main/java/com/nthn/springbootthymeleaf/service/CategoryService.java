@@ -48,28 +48,6 @@ public class CategoryService {
     }
 
 
-//    public Integer save(CategoryVO vO) {
-//        Category bean = new Category();
-//        BeanUtils.copyProperties(vO, bean);
-//        bean = categoryRepository.save(bean);
-//        return bean.getId();
-//    }
-
-//    public CategoryDTO getById(Integer id) {
-//        Category original = requireOne(id);
-//        return toDTO(original);
-//    }
-//
-//    public Page<CategoryDTO> query(CategoryQueryVO vO) {
-//        throw new UnsupportedOperationException();
-//    }
-//
-//    private CategoryDTO toDTO(Category original) {
-//        CategoryDTO bean = new CategoryDTO();
-//        BeanUtils.copyProperties(original, bean);
-//        return bean;
-//    }
-
     private Category requireOne(Integer id) {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Resource not found: " + id));

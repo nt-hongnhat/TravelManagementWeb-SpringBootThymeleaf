@@ -9,8 +9,8 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+@RequiredArgsConstructor
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 @ToString
@@ -26,37 +26,23 @@ public class News implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "user_id")
-    private Integer userId;
 
-    @Column(name = "content", nullable = false)
-    private String content;
+    @Column(name = "title", nullable = false)
+    private String title;
+
 
     @Column(name = "create_date", nullable = false)
     private LocalDateTime createDate = LocalDateTime.now();
+    @Column(name = "description", nullable = false)
+    private String description;
+    @Column(name = "active", nullable = false)
+    private Boolean active = Boolean.FALSE;
+    @Column(name = "images")
+    private String images;
 
-    /**
-     * Từ khoá để tìm kiếm tin
-     */
-    @Column(name = "meta_keywords", nullable = false)
-    private String metaKeywords;
-
-    @Column(name = "meta_title", nullable = false)
-    private String metaTitle;
-
-    @Column(name = "meta_description", nullable = false)
-    private String metaDescription;
-
-    @Column(name = "access", nullable = false)
-    private Boolean access = Boolean.FALSE;
-
-    private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    public User getUser() {
-        return user;
-    }
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "tour_group_id", nullable = false)
+    private TourGroup tourGroup;
 
 
     @Override

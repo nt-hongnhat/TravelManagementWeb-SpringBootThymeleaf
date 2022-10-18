@@ -1,23 +1,18 @@
 package com.nthn.springbootthymeleaf.controller;
 
-import com.nthn.springbootthymeleaf.service.AccountService;
-import com.nthn.springbootthymeleaf.service.CategoryService;
-import com.nthn.springbootthymeleaf.service.PermissionService;
-import com.nthn.springbootthymeleaf.service.ProvinceService;
+import com.nthn.springbootthymeleaf.service.*;
 import com.nthn.springbootthymeleaf.utils.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
 @Controller
-@RequestMapping("/{locale:en|vi}/admin")
+@RequestMapping("/admin")
 public class AdminController {
     @Autowired
     private AccountService accountService;
@@ -27,6 +22,8 @@ public class AdminController {
     private CategoryService categoryService;
     @Autowired
     private ProvinceService provinceService;
+    @Autowired
+    private TourService tourService;
 
     @ModelAttribute
     public void commonAttributes(Model model) {
@@ -34,11 +31,26 @@ public class AdminController {
         model.addAttribute("provinces", this.provinceService.getProvinces(""));
     }
 
-    @GetMapping
+    @GetMapping("")
     public String index(Model model, Principal principal) {
+        if (principal == null) {
+            return "redirect:/login";
+        }
         User user = (User) ((Authentication) principal).getPrincipal();
         String profile = WebUtils.toString(user);
         model.addAttribute("profile", profile);
         return "views/admin/index";
+    }
+
+    @GetMapping("/tours")
+    public String getTours(Model model) {
+        model.addAttribute("tours", tourService.getTours(""));
+        return "views/admin/tourManage";
+    }
+
+    @DeleteMapping("/tours/{id}/delete")
+    public String deleteTourById(@PathVariable("id") Integer id) {
+        tourService.delete(id);
+        return "redirect:/admin/tours";
     }
 }

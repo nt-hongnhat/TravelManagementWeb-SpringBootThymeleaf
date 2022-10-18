@@ -16,7 +16,7 @@ import java.util.Set;
 @Setter
 @ToString
 @Entity
-@Table(name = "district")
+@Table(name = "local_district")
 public class District implements Serializable {
 
     @Serial

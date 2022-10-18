@@ -25,11 +25,7 @@ public class Comment implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "user_id")
-    private Integer userId;
-
-    @Column(name = "news_id", nullable = false)
-    private Integer newsId;
+    private Account account;
 
     @Column(name = "rating", nullable = false)
     private Double rating;
@@ -50,19 +46,18 @@ public class Comment implements Serializable {
         return getClass().hashCode();
     }
 
-    private News news;
-
-    private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "news_id")
-    public News getNews() {
-        return news;
-    }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    public User getUser() {
-        return user;
+    public Account getAccount() {
+        return account;
+    }
+
+    private News news;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @JoinColumn(name = "news_id", nullable = false)
+    public News getNews() {
+        return news;
     }
 }

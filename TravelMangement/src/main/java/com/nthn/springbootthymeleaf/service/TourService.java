@@ -1,6 +1,8 @@
 package com.nthn.springbootthymeleaf.service;
 
 import com.nthn.springbootthymeleaf.pojo.Tour;
+import com.nthn.springbootthymeleaf.pojo.TourGroup;
+import com.nthn.springbootthymeleaf.repository.TourGroupRepository;
 import com.nthn.springbootthymeleaf.repository.TourRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -15,6 +18,8 @@ import java.util.NoSuchElementException;
 public class TourService {
     @Autowired
     private TourRepository tourRepository;
+    @Autowired
+    private TourGroupRepository tourGroupRepository;
 
     public Integer save(Tour tour) {
         Tour bean = new Tour();
@@ -37,12 +42,25 @@ public class TourService {
         return requireOne(id);
     }
 
-    public Page<Tour> getTours(Integer categoryId, Pageable pageable) {
-        return tourRepository.findByCategoryId(categoryId, pageable);
+
+    public List<Tour> getTours(String keyword) {
+        if (keyword == null) {
+            return tourRepository.findAll();
+        }
+        return null;
     }
 
-    public List<Tour> getTours() {
-        return tourRepository.findAll();
+    public List<Tour> getTours(TourGroup tourGroup) {
+        return tourRepository.findByTourGroupId(tourGroup.getId());
+    }
+
+    public List<String> getDurations() {
+        List<String> result = new ArrayList<>();
+        List<Tour> tours = tourRepository.findAll();
+        tours.forEach(tour -> {
+            result.add(tour.getDuration());
+        });
+        return result;
     }
 
     private Tour requireOne(Integer id) {

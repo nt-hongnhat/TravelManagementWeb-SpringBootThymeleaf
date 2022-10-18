@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout-admin}">
+<head>
+    <title th:text="#{label.userManagement}"></title>
+</head>
+<body>
+<h1 class="mt-4" layout:fragment="page-heading" th:text="#{label.userManagement}"></h1>
+<ol class="breadcrumb" layout:fragment="breadcrumb">
+    <li class="breadcrumb-item"><a th:href="@{/admin}" th:text="#{label.home}"></a></li>
+    <li class="breadcrumb-item active" aria-current="page" th:text="#{label.accountManagement}"></li>
+</ol>
+<th:block layout:fragment="page-content">
+    <div class="table-responsive">
+        <div class="card-header py-3">
+            <div class="row align-items-center justify-content-between pt-3">
+                <div class="col-auto mb-3">
+                    <div class="page-header-title">
+                        <div class="page-header-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                 stroke-linejoin="round"
+                                 class="feather feather-user">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            <span th:text="#{label.accountList}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-xl-auto mb-3">
+                    <a class="btn btn-sm btn-light text-primary" th:href="@{/admin/permission}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="feather feather-users me-1">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        Quản lý phân quyền
+                    </a>
+                    <a class="btn btn-sm btn-light text-primary" th:href="@{create}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="feather feather-user-plus me-1">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="8.5" cy="7" r="4"></circle>
+                            <line x1="20" y1="8" x2="20" y2="14"></line>
+                            <line x1="23" y1="11" x2="17" y2="11"></line>
+                        </svg>
+                        <span th:text="#{label.createAccount}"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th th:text="#{label.id}"></th>
+                        <th th:text="#{label.lastName}"></th>
+                        <th th:text="#{label.firstName}"></th>
+                        <th th:text="#{label.email}"></th>
+                        <th th:text="#{label.createDate}"></th>
+                        <th th:text="#{label.lastLogin}"></th>
+                        <th th:text="#{label.active}"></th>
+                        <th th:text="#{label.action}"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="account:${accounts}" class="m-0">
+                        <td th:text="${account.id}"></td>
+                        <td th:text="${account.lastName}"></td>
+                        <td th:text="${account.firstName}"></td>
+                        <td th:text="${account.email}"></td>
+                        <td th:text="${account.createTime}"></td>
+                        <td th:text="${account.lastLogin}"></td>
+                        <td>
+                        <span th:text="${account.active==true}?'Đang hoạt động':'Không hoạt động'"
+                              th:class="${account.active==true}?'badge badge-success':'badge badge-danger'"></span>
+                        </td>
+                        <td>
+                            <a class="badge badge-primary" th:href="@{{id}/details(id=${account.id})}"
+                               th:text="#{label.detail}"></a>
+                            <a class="badge badge-secondary" th:href="@{{id}/edit(id=${account.id})}"
+                               th:text="#{label.edit}"></a>
+                            <a class="badge badge-danger" th:if="${account.active==true}"
+                               th:href="@{{id}/delete(id=${account.id})}"
+                               th:text="#{label.delete}" data-toggle="modal" data-target="#deleteModal"></a>
+                            <div th:replace="~{/fragments/modal::delete('accounts', ${account.id}, 'Tài khoản' + ${account.firstName+account.lastName})} "
+                                 id="deleteModal"></div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</th:block>
+
+</body>
+
+</html>

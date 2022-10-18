@@ -1,22 +1,24 @@
 package com.nthn.springbootthymeleaf.pojo;
 
 import lombok.*;
+import lombok.experimental.Accessors;
 import org.hibernate.Hibernate;
-import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.*;
-
+import java.util.LinkedHashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Setter
 @ToString
 @RequiredArgsConstructor
 @Entity
-@Table(name = "tour")
+@Accessors(chain = true)
+@Table(name = "tour_info")
 public class Tour implements Serializable {
 
     @Serial
@@ -26,45 +28,41 @@ public class Tour implements Serializable {
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-//
-//    @Column(name = "category_id")
-//    private Integer categoryId;
 
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Column(name = "itinerary", nullable = false)
+    private String itinerary;
 
-    /**
-     * Số ngày
-     */
-    @Column(name = "days", nullable = false)
-    private Integer days;
+    @Column(name = "duration", nullable = false)
+    private String duration;
 
-    /**
-     * Số đêm
-     */
-    @Column(name = "night", nullable = false)
-    private Integer night;
+    @Column(name = "unit_price", nullable = false)
+    private BigDecimal unitPrice;
 
-    @Column(name = "slots", nullable = false)
-    private Integer slots;
+    @Column(name = "max_slot", nullable = false)
+    private Integer maxSlot;
 
-    @Column(name = "departure", nullable = false)
-    private String departure;
+    @Column(name = "transfer", nullable = false)
+    private String transfer;
 
-    @Column(name = "destination", nullable = false)
-    private String destination;
+    @Column(name = "departure_place", nullable = false)
+    private String departurePlace;
 
-    private Category category;
+    @Column(name = "image")
+    private String image;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, optional = false)
-    @JoinColumn(name = "category_id", nullable = false)
-    public Category getCategory() {
-        return category;
-    }
+    @Column(name = "description")
+    private String description;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "tour_group_id", nullable = false)
+    private TourGroup tourGroup;
+
+
+    @OneToMany(mappedBy = "tour", orphanRemoval = true)
+    private Set<TourSchedule> tourSchedules = new LinkedHashSet<>();
 
     @Override
     public boolean equals(Object o) {

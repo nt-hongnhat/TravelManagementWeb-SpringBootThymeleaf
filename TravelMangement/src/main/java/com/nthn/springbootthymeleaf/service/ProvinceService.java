@@ -28,41 +28,4 @@ public class ProvinceService {
             return provinceRepository.findAll();
         } else return provinceRepository.findAllByNameContainingIgnoreCaseOrderByNameAsc(keyword);
     }
-
-//    public String save(ProvinceVO vO) {
-//        Province bean = new Province();
-//        BeanUtils.copyProperties(vO, bean);
-//        bean = provinceRepository.save(bean);
-//        return bean.getId();
-//    }
-
-//    public void delete(String id) {
-//        provinceRepository.deleteById(id);
-//    }
-
-//    public void update(String id, ProvinceUpdateVO vO) {
-//        Province bean = requireOne(id);
-//        BeanUtils.copyProperties(vO, bean);
-//        provinceRepository.save(bean);
-//    }
-//
-//    public ProvinceDTO getById(String id) {
-//        Province original = requireOne(id);
-//        return toDTO(original);
-//    }
-//
-//    public Page<ProvinceDTO> query(ProvinceQueryVO vO) {
-//        throw new UnsupportedOperationException();
-//    }
-//
-//    private ProvinceDTO toDTO(Province original) {
-//        ProvinceDTO bean = new ProvinceDTO();
-//        BeanUtils.copyProperties(original, bean);
-//        return bean;
-//    }
-//
-//    private Province requireOne(String id) {
-//        return provinceRepository.findById(id)
-//                .orElseThrow(() -> new NoSuchElementException("Resource not found: " + id));
-//    }
 }

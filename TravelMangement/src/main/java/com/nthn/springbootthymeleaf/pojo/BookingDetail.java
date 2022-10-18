@@ -1,18 +1,18 @@
 package com.nthn.springbootthymeleaf.pojo;
 
 import lombok.*;
+import lombok.experimental.Accessors;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Objects;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @ToString
 @Entity
 @Table(name = "booking_detail")
@@ -24,23 +24,12 @@ public class BookingDetail implements Serializable {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Integer id;
 
-
-    @Column(name = "booking_id", nullable = false)
-    private Integer bookingId;
-
-    @Column(name = "surcharge_id")
-    private Integer surchargeId;
 
     @Column(name = "quantity", nullable = false)
-    private Integer quantity = 1;
+    private Integer quantity;
 
-    @Column(name = "discount", nullable = false)
-    private Double discount = 0.0D;
-
-    @Column(name = "unit_price", nullable = false)
-    private BigDecimal unitPrice;
 
     @Override
     public boolean equals(Object o) {
@@ -53,21 +42,5 @@ public class BookingDetail implements Serializable {
     @Override
     public int hashCode() {
         return getClass().hashCode();
-    }
-
-    private Surcharge surcharge;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "surcharge_id")
-    public Surcharge getSurcharge() {
-        return surcharge;
-    }
-
-    private Booking booking;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "booking_id")
-    public Booking getBooking() {
-        return booking;
     }
 }

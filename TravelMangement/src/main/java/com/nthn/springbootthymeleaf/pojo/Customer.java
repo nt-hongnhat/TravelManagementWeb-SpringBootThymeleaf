@@ -19,15 +19,18 @@ public class Customer implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
-
-
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "account_id")
-    private Integer accountId;
+    private Account account;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id")
+    public Account getAccount() {
+        return account;
+    }
 
     @Column(name = "fullname", nullable = false)
     private String fullname;
@@ -60,11 +63,4 @@ public class Customer implements Serializable {
         return getClass().hashCode();
     }
 
-    private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    public User getUser() {
-        return user;
-    }
 }

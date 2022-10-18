@@ -5,6 +5,7 @@ import com.nthn.springbootthymeleaf.repository.NewsRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,12 @@ public class NewsService {
         }
         return newsRepository.findAll();
     }
+//
+//    public Paged<News> getPage(int pageNumber, int size) {
+//        PageRequest request = PageRequest.of(pageNumber - 1, size, new Sort(Sort.Direction.ASC, "id"));
+//        Page<News> postPage = newsRepository.findAll(request);
+//        return new Paged<>(postPage, Paging.of(postPage.getTotalPages(), pageNumber, size));
+//    }
 
     public Integer save(News news) {
         News bean = new News();

@@ -2,136 +2,137 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout-admin}">
 <head>
-    <title>Create an account</title>
+    <title th:text="#{label.accountEdit}"></title>
 </head>
-<body class="bg-gradient-primary">
-<div layout:fragment="page-content" class="container-fluid">
-    <main>
-        <header class="page-header page-header-compact page-header-light border-bottom bg-white mb-4">
-            <div class="container-xl px-4">
-                <div class="page-header-content">
-                    <div class="row align-items-center justify-content-between pt-3">
-                        <div class="col-auto mb-3">
-                            <h1 class="page-header-title">
-                                <div class="page-header-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                         stroke-linejoin="round" class="feather feather-user">
-                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="12" cy="7" r="4"></circle>
-                                    </svg>
-                                </div>
-                                Edit User
-                            </h1>
-                        </div>
-                        <div class="col-12 col-xl-auto mb-3">
-                            <a class="btn btn-sm btn-light text-primary" href="user-management-list.html">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                     stroke-linejoin="round" class="feather feather-arrow-left me-1">
-                                    <line x1="19" y1="12" x2="5" y2="12"></line>
-                                    <polyline points="12 19 5 12 12 5"></polyline>
-                                </svg>
-                                Back to Users List
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </header>
-        <!-- Main page content-->
-        <div class="container-xl px-4 mt-4">
-            <div class="row">
-                <div class="col-xl-4">
-                    <!-- Profile picture card-->
-                    <div class="card mb-4 mb-xl-0">
-                        <div class="card-header">Profile Picture</div>
-                        <div class="card-body text-center">
-                            <!-- Profile picture image-->
-                            <img class="img-account-profile rounded-circle mb-2"
-                                 src="assets/img/illustrations/profiles/profile-1.png" alt="">
-                            <!-- Profile picture help block-->
-                            <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
-                            <!-- Profile picture upload button-->
-                            <button class="btn btn-primary" type="button">Upload new image</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-8">
-                    <!-- Account details card-->
-                    <div class="card mb-4">
-                        <div class="card-header">Account Details</div>
-                        <div class="card-body">
-                            <form>
-                                <!-- Form Row-->
-                                <div class="row gx-3 mb-3">
-                                    <!-- Form Group (first name)-->
-                                    <div class="col-md-6">
-                                        <label class="small mb-1" for="inputFirstName">First name</label>
-                                        <input class="form-control" id="inputFirstName" type="text"
-                                               placeholder="Enter your first name" value="Valerie">
-                                    </div>
-                                    <!-- Form Group (last name)-->
-                                    <div class="col-md-6">
-                                        <label class="small mb-1" for="inputLastName">Last name</label>
-                                        <input class="form-control" id="inputLastName" type="text"
-                                               placeholder="Enter your last name" value="Luna">
-                                    </div>
-                                </div>
-                                <!-- Form Group (email address)-->
-                                <div class="mb-3">
-                                    <label class="small mb-1" for="inputEmailAddress">Email address</label>
-                                    <input class="form-control" id="inputEmailAddress" type="email"
-                                           placeholder="Enter your email address" value="name@example.com">
-                                </div>
-                                <!-- Form Group (Group Selection Checkboxes)-->
-                                <div class="mb-3">
-                                    <label class="small mb-1">Group(s)</label>
-                                    <div class="form-check">
-                                        <input class="form-check-input" id="groupSales" type="checkbox" value=""
-                                               checked="">
-                                        <label class="form-check-label" for="groupSales">Sales</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" id="groupDevs" type="checkbox" value=""
-                                               checked="">
-                                        <label class="form-check-label" for="groupDevs">Developers</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" id="groupMarketing" type="checkbox" value="">
-                                        <label class="form-check-label" for="groupMarketing">Marketing</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" id="groupManagers" type="checkbox" value=""
-                                               checked="">
-                                        <label class="form-check-label" for="groupManagers">Managers</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" id="groupCustomer" type="checkbox" value="">
-                                        <label class="form-check-label" for="groupCustomer">Customer</label>
-                                    </div>
-                                </div>
-                                <!-- Form Group (Roles)-->
-                                <div class="mb-3">
-                                    <label class="small mb-1">Role</label>
-                                    <select class="form-select" aria-label="Default select example">
-                                        <option selected="" disabled="">Select a role:</option>
-                                        <option value="administrator" selected="">Administrator</option>
-                                        <option value="registered">Registered</option>
-                                        <option value="edtior">Editor</option>
-                                        <option value="guest">Guest</option>
-                                    </select>
-                                </div>
-                                <!-- Submit button-->
-                                <button class="btn btn-primary" type="button">Save changes</button>
-                            </form>
-                        </div>
-                    </div>
+<body>
+<h1 class="mt-4" layout:fragment="page-heading" th:text="#{label.accountManagement}"></h1>
+<ol class="breadcrumb" layout:fragment="breadcrumb">
+    <li class="breadcrumb-item"><a th:href="@{/admin}" th:text="#{label.home}"></a></li>
+    <li class="breadcrumb-item"><a th:href="@{/admin/accounts/}" th:text="#{label.accountManagement}"></a></li>
+    <li class="breadcrumb-item active" aria-current="page" th:text="#{label.accountEdit}"></li>
+</ol>
+
+<div class="table-responsive" layout:fragment="page-content">
+    <div class="row">
+        <div class="col-xl-4">
+            <!-- Profile picture card-->
+            <div class="card mb-4 mb-xl-0">
+                <div class="card-header">Hình đại diện</div>
+                <div class="card-body text-center">
+                    <!-- Profile picture image-->
+                    <img class="img-account-profile rounded-circle mb-2"
+                         src="" alt="" th:src="${account.getAvatarUrl()}">
+                    <!-- Profile picture help block-->
+                    <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
+                    <!-- Profile picture upload button-->
+                    <button class="btn btn-primary" type="submit">Upload new image</button>
                 </div>
             </div>
         </div>
-    </main>
+        <div class="col-xl-8">
+            <!-- Account details card-->
+            <div class="card mb-4">
+                <div class="card-header" th:text="#{label.accountDetails}"></div>
+                <div class="card-body">
+                    <div th:if="${param.error}">
+                        <div class="alert alert-danger" th:text="${errorMessage}"></div>
+                    </div>
+                    <div th:if="${param.success}">
+                        <div class="alert alert-info" th:text="${success}"></div>
+                    </div>
+                    <form method="post" action="" th:action="@{/admin/accounts/{id}/edit(id=${account.getId()})}"
+                          th:object="${account}">
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (id)-->
+                            <div class="col-md-2">
+                                <label class="mb-1" for="accountId" th:text="#{label.id}"></label>
+                                <input class="form-control" id="accountId" type="text" readonly th:value="*{id}"
+                                       th:field="*{id}">
+                            </div>
+                            <!-- Form Group (username)-->
+                            <div class="col-md-5">
+                                <label class="mb-1" for="username" th:text="#{label.username}"></label>
+                                <input class="form-control" id="username" type="text" readonly th:value="*{username}"
+                                       th:field="*{username}">
+                            </div>
+                            <!-- Form Group (Roles)-->
+                            <div class="col-md-5">
+                                <label class="mb-1" th:text="#{label.permission}"></label>
+                                <div>
+                                    <select class="form-select custom-select" aria-label="Default select example"
+                                            th:field="*{permission.id}">
+                                        <option th:each="permission:${permissions}"
+                                                th:value="${permission.id}"
+                                                th:text="${permission.getName()}"
+                                                th:selected="${permission.id==account.permission.id}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Form Row-->
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (last name)-->
+                            <div class="col-md-6">
+                                <label class="mb-1" for="inputLastName" th:text="#{label.lastName}"></label>
+                                <input class="form-control" id="inputLastName" type="text"
+                                       placeholder="Nhập họ" th:value="*{lastName}" th:field="*{lastName}">
+                            </div>
+                            <!-- Form Group (first name)-->
+                            <div class="col-md-6">
+                                <label class=" mb-1" for="inputFirstName" th:text="#{label.firstName}"></label>
+                                <input class="form-control" id="inputFirstName" type="text"
+                                       placeholder="Nhập tên" th:value="*{firstName}" th:field="*{firstName}">
+                            </div>
+                        </div>
+                        <!-- Form Group (email address)-->
+                        <div class="mb-3">
+                            <label class="mb-1" for="inputEmailAddress" th:text="#{label.email}"></label>
+                            <input class="form-control" id="inputEmailAddress" type="email" readonly
+                                   th:value="*{email}" th:field="*{email}">
+                        </div>
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (Group Selection Checkboxes)-->
+
+                            <div class="col-6 mb-3">
+                                <label class="mb-1" th:text="#{label.active}"></label>
+                                <div class="form-check">
+                                    <input class="form-check-input" id="active" type="radio" value="true"
+                                           name="activeAccount" th:checked="${account.active==true}"
+                                           th:field="*{active}">
+                                    <label class="form-check-label" for="active">Đang hoạt động</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" id="block" type="radio" value="false"
+                                           name="activeAccount" th:checked="${account.active==false}"
+                                           th:field="*{active}">
+                                    <label class="form-check-label" for="block">Khoá tài khoản</label>
+                                </div>
+                            </div>
+
+                            <input type="file" name="avatar" id="avatar">
+                        </div>
+                        <!--                        <div class="row gx-3 mb-3">-->
+                        <!--                            &lt;!&ndash; Form Group (password)&ndash;&gt;-->
+                        <!--                            <div class="col-md-6">-->
+                        <!--                                <label class="mb-1" for="password" th:text="#{label.password}"></label>-->
+                        <!--                                <input class="form-control" id="password" type="password" name="confirm"-->
+                        <!--                                       th:field="*{password}">-->
+                        <!--                            </div>-->
+                        <!--                            <div class="col-md-6">-->
+                        <!--                                <label class="mb-1" for="confirm" th:text="#{label.confirmPassword}"></label>-->
+                        <!--                                <input class="form-control" id="confirm" type="password" name="confirm"-->
+                        <!--                                       th:field="*{confirm}">-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
+                        <!-- Submit button-->
+                        <button class="btn btn-primary" type="submit" th:text="#{label.saveChanges}"></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 </body>
+
 </html>

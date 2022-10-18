@@ -1,6 +1,5 @@
 package com.nthn.springbootthymeleaf.service;
 
-import com.nthn.springbootthymeleaf.DTO.AccountDTO;
 import com.nthn.springbootthymeleaf.pojo.Account;
 import com.nthn.springbootthymeleaf.repository.AccountRepository;
 import com.nthn.springbootthymeleaf.repository.PermissionRepository;
@@ -21,6 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountService implements UserDetailsService {
@@ -32,19 +32,10 @@ public class AccountService implements UserDetailsService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public Account create(AccountDTO accountDTO) {
-        Account account = new Account();
-        BeanUtils.copyProperties(accountDTO, account);
-        account.setPassword(bCryptPasswordEncoder.encode(accountDTO.getPassword()));
-        account.setCreateTime(LocalDateTime.now());
-        account.setAvatarUrl("");
-        return accountRepository.save(account);
-    }
 
     public Account create(Account account) {
         account.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
         account.setCreateTime(LocalDateTime.now());
-        account.setAvatarUrl("");
         return accountRepository.save(account);
     }
 
@@ -58,6 +49,11 @@ public class AccountService implements UserDetailsService {
     }
 
 
+    public boolean matchPassword(String confirm, String password) {
+        confirm = bCryptPasswordEncoder.encode(confirm);
+        return bCryptPasswordEncoder.matches(confirm, password);
+    }
+
     public Account getAccount(Integer id) {
         Optional<Account> account = accountRepository.findById(id);
         return account.orElse(null);
@@ -69,21 +65,29 @@ public class AccountService implements UserDetailsService {
     }
 
     public List<Account> getAccounts(String keyword) {
+        List<Account> accounts;
         if (keyword == null) {
-            return accountRepository.findAll(Sort.by("username").ascending());
+
+            accounts = accountRepository.findAll().stream().filter(Account::getActive).collect(Collectors.toList());
+            return accounts;
+
         } else return accountRepository.findAllByUsernameContaining(keyword);
     }
 
     public boolean update(Integer id, Account account) {
         Account original = this.getAccount(id);
-        BeanUtils.copyProperties(account, original);
+        original.setFirstName(account.getFirstName());
+        original.setLastName(account.getLastName());
+        original.setPermission(account.getPermission());
+        original.setActive(account.getActive());
         accountRepository.save(original);
         return accountRepository.existsById(id);
     }
 
     public boolean delete(Integer id) {
-        accountRepository.deleteById(id);
-        return !accountRepository.existsById(id);
+        Account account = getAccount(id);
+        account.setActive(false);
+        return update(id, account);
     }
 
     @Override

@@ -1,10 +1,108 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout-admin}">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title th:text="#{label.accountDetails}"></title>
 </head>
 <body>
+<h1 class="mt-4" layout:fragment="page-heading" th:text="#{label.accountManagement}"></h1>
+<ol class="breadcrumb" layout:fragment="breadcrumb">
+    <li class="breadcrumb-item"><a th:href="@{/admin}" th:text="#{label.home}"></a></li>
+    <li class="breadcrumb-item"><a th:href="@{/admin/accounts/}" th:text="#{label.accountManagement}"></a></li>
+    <li class="breadcrumb-item active" aria-current="page" th:text="#{label.accountDetails}"></li>
+</ol>
+
+<div class="table-responsive" layout:fragment="page-content">
+    <div class="row">
+        <div class="col-xl-4">
+            <!-- Profile picture card-->
+            <div class="card mb-4 mb-xl-0">
+                <div class="card-header">Hình đại diện</div>
+                <div class="card-body text-center">
+                    <!-- Profile picture image-->
+                    <img class="img-account-profile rounded-circle mb-2"
+                         src="" alt="" th:src="/@{${account.getPhotosImagePath()}}">
+                    <!-- Profile picture help block-->
+                    <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
+                    <!-- Profile picture upload button-->
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-8">
+            <!-- Account details card-->
+            <div class="card mb-4">
+                <div class="card-header" th:text="#{label.accountDetails}"></div>
+                <div class="card-body">
+                    <div class="row gx-3 mb-3">
+                        <!-- Form Group (id)-->
+                        <div class="col-md-2">
+                            <label class="mb-1" for="accountId" th:text="#{label.id}"></label>
+                            <input class="form-control " id="accountId" type="text" readonly
+                                   th:value="${account.id}">
+                        </div>
+                        <!-- Form Group (username)-->
+                        <div class="col-md-5">
+                            <label class="mb-1" for="username" th:text="#{label.username}"></label>
+                            <input class="form-control" id="username" type="text" readonly
+                                   th:value="${account.username}">
+                        </div>
+                        <div class="col-md-5">
+                            <label class="mb-1" for="createDate" th:text="#{label.createDate}"></label>
+                            <input class="form-control" id="createDate" type="text" readonly
+                                   th:value="${account.createTime}">
+                        </div>
+                    </div>
+                    <!-- Form Row-->
+                    <div class="row gx-3 mb-3">
+                        <!-- Form Group (last name)-->
+                        <div class="col-md-6">
+                            <label class="mb-1" for="inputLastName" th:text="#{label.lastName}"></label>
+                            <input class="form-control" id="inputLastName" type="text" readonly
+                                   th:value="${account.lastName}">
+                        </div>
+                        <!-- Form Group (first name)-->
+                        <div class="col-md-6">
+                            <label class=" mb-1" for="inputFirstName" th:text="#{label.firstName}"></label>
+                            <input class="form-control" id="inputFirstName" type="text" readonly
+                                   th:value="${account.firstName}">
+                        </div>
+                    </div>
+                    <!-- Form Group (email address)-->
+                    <div class="mb-3">
+                        <label class="mb-1" for="inputEmailAddress" th:text="#{label.email}"></label>
+                        <input class="form-control" id="inputEmailAddress" type="email" readonly
+                               th:value="${account.email}">
+                    </div>
+                    <div class="row gx-3 mb-3">
+                        <!-- Form Group (Group Selection Checkboxes)-->
+
+                        <div class="col-6 mb-3">
+                            <label class="mb-1" th:text="#{label.active}" for="active"></label>
+                            <input class="form-control" id="active" type="text" name="activeAccount" readonly
+                                   th:value="${account.active}==true?'Đang hoạt động':'Đã bị khoá'">
+                        </div>
+                        <!-- Form Group (Roles)-->
+                        <div class="col-6 mb-3">
+                            <label class="mb-1" th:text="#{label.permission}" for="permission"></label>
+                            <input class="form-control" id="permission" type="text" value="false"
+                                   name="activeAccount" th:value="${account.permission.getName()}" readonly>
+                        </div>
+                    </div>
+                    <!-- Submit button-->
+                    <a class="btn btn-primary" th:text="#{label.accountEdit}"
+                       th:href="@{/admin/accounts/{id}/edit(id=${account.id})}"></a>
+                    <a class="btn btn-danger" href="" th:href="@{/admin/accounts/{id}/delete(id=${account.id})}"
+                       data-toggle="modal" data-target="#deleteModal" th:text="#{label.accountDelete}">
+                    </a>
+                    <div th:replace="~{/fragments/modal::delete('accounts', ${account.id}, ' tài khoản này')} "
+                         id="deleteModal"></div>
+                    <!--                    -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 </body>
+
 </html>

@@ -6,7 +6,6 @@ import org.hibernate.Hibernate;
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 @AllArgsConstructor
@@ -31,15 +30,6 @@ public class Surcharge implements Serializable {
 
     @Column(name = "surcharge", nullable = false)
     private Double surcharge;
-
-    @Column(name = "create_date", nullable = false)
-    private LocalDateTime createDate = LocalDateTime.now();
-
-    /**
-     * Hạn sử dụng
-     */
-    @Column(name = "expiry_date", nullable = false)
-    private LocalDateTime expiryDate;
 
 
     @Override

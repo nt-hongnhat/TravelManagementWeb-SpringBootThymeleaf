@@ -7,14 +7,10 @@ import org.hibernate.Hibernate;
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Objects;
+import java.util.*;
 
 @Getter
 @Setter
-@ToString
-@RequiredArgsConstructor
 @Entity
 @Accessors(chain = true)
 @Table(name = "permission")
@@ -33,6 +29,14 @@ public class Permission implements Serializable {
 
     @Column(name = "description", nullable = false)
     private String description;
+
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "permission_id")
+    private Set<Account> accounts = new LinkedHashSet<>();
+
+    @Transient
+    private Integer countAccount;
 
 
     @Override

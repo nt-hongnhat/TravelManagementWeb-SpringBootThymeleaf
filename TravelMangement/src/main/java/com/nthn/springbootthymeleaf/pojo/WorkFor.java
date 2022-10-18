@@ -26,14 +26,24 @@ public class WorkFor implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "agency_id", nullable = false)
-    private Integer agencyId;
+    private Agency agency;
 
-    @Column(name = "employee_id", nullable = false)
-    private Integer employeeId;
+    private Employee employee;
 
     @Column(name = "hire_date", nullable = false)
     private LocalDateTime hireDate = LocalDateTime.now();
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @JoinColumn(name = "agency_id", nullable = false)
+    public Agency getAgency() {
+        return agency;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "employee_id", nullable = false)
+    public Employee getEmployee() {
+        return employee;
+    }
 
     @Override
     public boolean equals(Object o) {
