@@ -6,7 +6,9 @@ import org.hibernate.Hibernate;
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,6 +27,7 @@ public class Customer implements Serializable {
     private Integer id;
 
     private Account account;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
@@ -49,6 +52,11 @@ public class Customer implements Serializable {
 
     @Column(name = "address")
     private String address;
+
+    @OneToMany(mappedBy = "customer", orphanRemoval = false)
+    @ToString.Exclude
+    private Set<Booking> bookings = new LinkedHashSet<>();
+
 
     @Override
     public boolean equals(Object o) {

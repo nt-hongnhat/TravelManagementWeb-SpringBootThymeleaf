@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout-admin}">
+<head>
+    <title th:text="#{label.accountManagement}"></title>
+</head>
+<body>
+<h1 class="mt-4" layout:fragment="page-heading" th:text="#{label.accountManagement}"></h1>
+
+<ol class="breadcrumb" layout:fragment="breadcrumb">
+    <li class="breadcrumb-item"><a th:href="@{/admin}" th:text="#{label.home}"></a></li>
+    <li class="breadcrumb-item active" aria-current="page" th:text="#{label.accountManagement}"></li>
+</ol>
+
+<th:block layout:fragment="page-content">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <div class="row align-items-center justify-content-between  pt-3">
+                <div class="col-auto">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="far fa-user"></i>
+                        <span th:text="#{label.accountList}"></span>
+                    </h6>
+                </div>
+
+                <div class="col-12 col-xl-auto">
+                    <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+                       th:href="@{/admin/permissions}">
+                        <i class="fas fa-users"></i>
+                        <span>Quản lý phân quyền</span>
+                    </a>
+                    <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+                       th:href="@{${#request.getRequestURL()}+'/create'}">
+                        <i class="fas fa-user-plus"></i>
+                        <span th:text="#{label.createAccount}"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable">
+                    <thead>
+                    <tr class="text-center">
+                        <th class="align-middle" th:text="#{label.id}"></th>
+                        <th class="align-middle" th:text="#{label.account}"></th>
+                        <th class="align-middle" th:text="#{label.lastName}"></th>
+                        <th class="align-middle" th:text="#{label.firstName}"></th>
+                        <th class="align-middle" th:text="#{label.email}"></th>
+                        <th class="align-middle" th:text="#{label.createDate}"></th>
+                        <!--                        <th th:text="#{label.lastLogin}"></th>-->
+                        <th class="align-middle" th:text="#{label.active}"></th>
+                        <th class="align-middle" th:text="#{label.action}"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="account:${accounts}">
+                        <td class="align-middle" th:text="${account.id}"></td>
+                        <td class="align-middle">
+                            <img id="thumbnailAvatar" class="img-account-profile rounded-circle mb-2"
+                                 src="" alt="" width="50px" height="50px" style="image-rendering: high-quality"
+                                 th:src="@{${account.getPhotosImagePath()}}">
+                            <span th:text="${account.username}"></span>
+                        </td>
+                        <td class="align-middle" th:text="${account.lastName}"></td>
+                        <td class="align-middle" th:text="${account.firstName}"></td>
+                        <td class="align-middle" th:text="${account.email}"></td>
+                        <!--                        <td th:text="${account.createTime}"></td>-->
+                        <td class="align-middle"
+                            th:text="${#temporals.format(account.createTime, 'hh:mm:ss dd-MM-yyyy')}"></td>
+                        <!--                        <td th:text="${account.lastLogin}"></td>-->
+                        <td class="align-middle">
+                            <span th:text="${account.active==true}?'Đang hoạt động':'Không hoạt động'"
+                                  th:class="${account.active==true}?'badge badge-success px-2 py-1':'badge badge-secondary px-2 py-1'"></span>
+                        </td>
+                        <td class="align-middle">
+                            <a class="badge badge-primary px-2 py-1"
+                               th:href="@{${#request.getRequestURL()}+'/'+${account.id}+'/edit'}">
+                                <i class="fas fa-edit"></i>
+                                <span th:text="#{label.edit}"></span>
+                            </a>
+                            <a class="badge badge-danger px-2 py-1" th:if="${account.active==true}"
+                               th:href="@{{id}/delete(id=${account.id})}"
+                               data-toggle="modal" data-target="#deleteModal">
+                                <i class="fas fa-trash"></i>
+                                <span th:text="#{label.delete}"></span>
+                            </a>
+                            <div th:replace="~{/fragments/modal::delete('accounts', ${account.id}, 'Tài khoản này')} "
+                                 id="deleteModal"></div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</th:block>
+</body>
+
+</html>

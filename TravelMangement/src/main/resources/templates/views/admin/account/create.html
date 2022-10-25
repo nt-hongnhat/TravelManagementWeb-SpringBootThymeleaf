@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout-admin}">
+<head>
+    <title th:text="#{label.createAccount}"></title>
+</head>
+<body>
+<h1 class="mt-4" layout:fragment="page-heading" th:text="#{label.accountManagement}"></h1>
+<ol class="breadcrumb" layout:fragment="breadcrumb">
+    <li class="breadcrumb-item"><a th:href="@{/admin}" th:text="#{label.home}"></a></li>
+    <li class="breadcrumb-item"><a th:href="@{/admin/accounts}" th:text="#{label.accountManagement}"></a></li>
+    <li class="breadcrumb-item active" aria-current="page" th:text="#{label.createAccount}"></li>
+</ol>
+
+<div class="table-responsive" layout:fragment="page-content">
+    <div class="row">
+        <div class="col-xl-4">
+            <div class="card mb-4 mb-xl-0">
+                <div class="card-header">Hình đại diện</div>
+                <div class="card-body text-center">
+                    <!-- Profile picture image-->
+                    <img id="thumbnailAvatar" class="img-account-profile rounded-circle mb-2"
+                         src="" alt="" width="250px" height="250px" style="image-rendering: high-quality">
+                    <!-- Profile picture help block-->
+                    <div class="small font-italic text-muted mb-4">JPG hoặc PNG không quá 5 MB</div>
+                    <!-- Profile picture upload button-->
+                    <div class="custom-file w-auto">
+                        <label class="custom-file-label" for="avatar" th:text="'Tải lên'"></label>
+                        <input form="formAccount" type="file" id="avatar" name="image" class="custom-file-input"
+                               accept="image/png, image/jpeg"/>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-8">
+            <!-- Account details card-->
+            <div class="card mb-4">
+                <div class="card-header" th:text="#{label.accountCreate}"></div>
+                <div class="card-body">
+                    <div th:if="${param.error}">
+                        <div class="alert alert-danger" th:text="${errorMessage}"></div>
+                    </div>
+                    <div th:if="${param.success}">
+                        <div class="alert alert-success" th:text="${success}"></div>
+                    </div>
+                    <form method="post" action="" enctype="multipart/form-data" id="formAccount"
+                          th:action="@{/admin/accounts/create}" th:object="${newAccount}">
+                        <!-- Form Row-->
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (last name)-->
+                            <div class="col-md-6">
+                                <label class="mb-1" for="inputLastName" th:text="#{label.lastName}"></label>
+                                <input class="form-control" id="inputLastName" type="text" autofocus
+                                       th:field="*{lastName}">
+                            </div>
+                            <!-- Form Group (first name)-->
+                            <div class="col-md-6">
+                                <label class=" mb-1" for="inputFirstName" th:text="#{label.firstName}"></label>
+                                <input class="form-control" id="inputFirstName" type="text" th:field="*{firstName}">
+                            </div>
+                        </div>
+                        <!-- Form Group (email address)-->
+                        <div class="mb-3">
+                            <label class="mb-1" for="inputEmailAddress" th:text="#{label.email}"></label>
+                            <input class="form-control" id="inputEmailAddress" type="email" th:field="*{email}">
+                        </div>
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (Roles)-->
+                            <div class="col-md-6">
+                                <label class="mb-1" for="username" th:text="#{label.username}"></label>
+                                <input class="form-control" id="username" type="text" th:field="*{username}">
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label class="mb-1" th:text="#{label.permission}"></label>
+                                <div>
+                                    <select class="form-select custom-select" aria-label="Default select example"
+                                            th:field="*{permission.id}">
+                                        <option th:each="permission:${permissions}" th:value="${permission.id}"
+                                                th:text="${permission.getName()}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (password)-->
+                            <div class="col-md-6">
+                                <label class="mb-1" for="password" th:text="#{label.password}"></label>
+                                <input class="form-control" id="password" type="password" name="confirm"
+                                       th:field="*{password}">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="mb-1" for="confirm" th:text="#{label.confirmPassword}"></label>
+                                <input class="form-control" id="confirm" type="password" name="confirm"
+                                       th:field="*{confirm}">
+                            </div>
+                        </div>
+                        <!-- Submit button-->
+                        <button class="btn btn-primary" type="submit" th:text="#{label.createAccount}"></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block layout:fragment="script">
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#avatar').change(function () {
+                showImageThumbnail(this);
+            });
+        });
+
+        function showImageThumbnail(fileInput) {
+            let file = fileInput.files[0];
+
+            let reader = new FileReader();
+            let maxAllowedSize = 5 * 1024 * 1024;
+
+            if (file.size > maxAllowedSize) {
+                alert('JPG hoặc PNG quá lớn!');
+                fileInput.files[0].value = "";
+            } else {
+                reader.onload = function (e) {
+                    $('#thumbnailAvatar').attr('src', e.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+</th:block>
+
+</body>
+
+</html>

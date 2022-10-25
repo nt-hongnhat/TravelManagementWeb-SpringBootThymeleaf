@@ -1,58 +1,31 @@
 package com.nthn.springbootthymeleaf.service;
 
 import com.nthn.springbootthymeleaf.pojo.Booking;
-import com.nthn.springbootthymeleaf.repository.BookingRepository;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.NoSuchElementException;
-
-@Service
-public class BookingService {
-
-    @Autowired
-    private BookingRepository bookingRepository;
-
-    public Integer save(Booking booking) {
-        Booking bean = new Booking();
-        BeanUtils.copyProperties(booking, bean);
-        bean = bookingRepository.save(bean);
-        return bean.getId();
-    }
-
-    public void delete(Integer id) {
-        bookingRepository.deleteById(id);
-    }
-
-    public void update(Integer id, Booking booking) {
-        Booking bean = requireOne(id);
-        BeanUtils.copyProperties(booking, bean);
-        bookingRepository.save(bean);
-    }
-
-    public Booking getById(Integer id) {
-        return (requireOne(id));
-    }
-
-//    public Page<BookingDTO> query(BookingQueryVO vO) {
-//        throw new UnsupportedOperationException();
-//    }
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 
 
-    private Booking requireOne(Integer id) {
-        return bookingRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Resource not found: " + id));
-    }
+public interface BookingService {
 
-//    public Page<BookingDTO> query(BookingQueryVO vO) {
-//        throw new UnsupportedOperationException();
-//    }
-//
-//    private BookingDTO toDTO(Booking original) {
-//        BookingDTO bean = new BookingDTO();
-//        BeanUtils.copyProperties(original, bean);
-//        return bean;
-//    }
+    Integer save(Booking booking);
+
+    void delete(Integer id);
+
+    void update(Integer id, Booking booking);
+
+    Booking getById(Integer id);
+
+    List<Booking> getBookings(LocalDateTime fromDate, LocalDateTime toDate, Integer customerId);
+
+    List<Booking> getBookingsByCustomer(Integer customerId);
+
+    List<Object[]> sumBookingTotalByCustomerId(Integer customerId, Integer fromMonth, Integer toMonth);
+
+    List<Object[]> sumBookingTotalInMonthByCustomerId(Integer customerId, Integer month, Integer year);
+
+    List<Object[]> sumTotalBookingByCustomerId(Integer customerId, LocalDateTime fromDate, LocalDateTime toDate);
 }

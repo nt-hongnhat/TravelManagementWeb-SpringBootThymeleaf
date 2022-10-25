@@ -1,6 +1,10 @@
 package com.nthn.springbootthymeleaf.controller;
 
+import com.nthn.springbootthymeleaf.pojo.Account;
+import com.nthn.springbootthymeleaf.pojo.Booking;
 import com.nthn.springbootthymeleaf.pojo.Customer;
+import com.nthn.springbootthymeleaf.service.AccountService;
+import com.nthn.springbootthymeleaf.service.BookingService;
 import com.nthn.springbootthymeleaf.service.CategoryService;
 import com.nthn.springbootthymeleaf.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,40 +20,48 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @Validated
 @Controller
-@RequestMapping("/{locale:en|vi}/admin/customer")
+@RequestMapping("/admin/customers")
 public class CustomerController {
 
     @Autowired
     private CustomerService customerService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private AccountService accountService;
+
+    @Autowired
+    private BookingService bookingService;
 
     // Hiển thị danh sách khách hàng
     // GET: /customer
-    @GetMapping("")
-    public String index(@RequestParam(required = false) Map<String, String> params, Model model) {
-        if (params.isEmpty()) {
-            model.addAttribute("customers", customerService.getCustomers());
-        } else {
-            int page = Integer.parseInt(params.getOrDefault("page", "1"));
-            int size = Integer.parseInt(params.getOrDefault("size", "10"));
-            Pageable pageable = PageRequest.of(page, size);
-            Page<Customer> customerPage = customerService.getCustomers(pageable);
-            model.addAttribute("customers", customerPage.getContent());
-        }
-        return "views/admin/customerList";
+    @GetMapping
+    public String index(Model model) {
+        List<Customer> customers = customerService.getCustomers();
+        long countByNationality_0 = customerService.countAllByNationality("Việt Nam");
+        long countByNationality_1 = customerService.countAllByNationality("Nước ngoài");
+
+        model.addAttribute("customers", customers);
+        model.addAttribute("countByNationality_VN", countByNationality_0);
+        model.addAttribute("countByNationality_NN", countByNationality_1);
+
+        return "views/admin/customer/list";
     }
 
     // Hiển thị giao diện tạo khách hàng
     // GET: /customer/create
     @GetMapping("/create")
     public String create(Model model) {
-        model.addAttribute("customer", new Customer());
-        return "views/customer";
+        model.addAttribute("newCustomer", new Customer());
+        return "views/admin/customer/create";
     }
 
     // Lưu thông tin khách hàng
@@ -57,42 +69,70 @@ public class CustomerController {
     @PostMapping("/create")
     public String save(@Valid Customer customer, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return "views/customer";
+            redirectAttributes.addFlashAttribute("errorMessage", "Đã xảy ra lỗi!!! Thử lại");
+            return "redirect:/admin/customers/create?error";
         }
         customerService.save(customer);
-        redirectAttributes.addFlashAttribute("Success", "Saved customer successfully!");
-        return "redirect:/";
+        redirectAttributes.addFlashAttribute("success", "Thêm khách hàng thành công!");
+        return "redirect:/admin/customers/create?success";
     }
 
-    // DELETE: /customer/{id}
-    @DeleteMapping("/{id}")
-    public void delete(@Valid @NotNull @PathVariable("id") Integer id) {
-        customerService.delete(id);
-    }
 
-    // Hiển thị trang chỉnh sửa hồ sơ khách hàng
-    // GET: /customer/{id}/edit
+    // Hiển thị trang hồ sơ khách hàng
+    // GET: /customers/{id}/edit
     @GetMapping("/{id}/edit")
-    public String edit(@Valid @NotNull @PathVariable("id") Integer id,
-                       Model model) {
-        model.addAttribute("customer", customerService.getById(id));
-        return "views/customerEdit";
+    public String edit(@Valid @NotNull @PathVariable("id") Integer id, Model model) {
+        Customer customer = customerService.getById(id);
+        Account account = customer.getAccount();
+        model.addAttribute("customer", customer);
+        model.addAttribute("account", account);
+        return "views/admin/customer/edit";
     }
 
     // Chỉnh sửa hồ sơ khách hàng
-    // PUT: /customer/{id}
-    @PutMapping("/update")
-    public String update(Customer customer, RedirectAttributes redirectAttributes) {
+    // POST: /customers/{id}/edit
+    @PostMapping("/{id}/edit")
+    public String update(@PathVariable("id") Integer id, @ModelAttribute("customer") Customer customer, RedirectAttributes redirectAttributes) {
         customerService.update(customer.getId(), customer);
-        redirectAttributes.addFlashAttribute("Success", "Modified customer successfully!");
-        return "redirect:/customer/";
+        redirectAttributes.addFlashAttribute("success", "Cập nhật hồ sơ khách hàng thành công!");
+        return "redirect:/admin/customers/{id}?success";
     }
 
-    // GET: /customer/{id}
+
     @GetMapping("/{id}")
-    public String getById(@Valid @NotNull @PathVariable("id") Integer id, Model model) {
-        model.addAttribute("customer", customerService.getById(id));
-        return "views/customerProfile";
+    public String details(@PathVariable("id") Integer id, Model model) {
+        Customer customer = customerService.getById(id);
+        List<Booking> bookings = bookingService.getBookingsByCustomer(id);
+        LocalDateTime now = LocalDateTime.now();
+        Integer month = now.getMonthValue();
+        Integer year = now.getYear();
+        List<Object[]> stats = bookingService.sumBookingTotalInMonthByCustomerId(id, month, year);
+
+
+        Map<Integer, BigDecimal> totals = new LinkedHashMap<>();
+
+
+        stats.forEach(stat -> {
+
+            totals.put(((LocalDateTime) stat[0]).getDayOfMonth(), (BigDecimal) stat[1]);
+
+        });
+
+
+        model.addAttribute("customer", customer);
+        model.addAttribute("bookings", bookings);
+        model.addAttribute("stats", stats);
+        model.addAttribute("time", month + "/" + year);
+        stats.forEach(o -> {
+            Arrays.stream(o).toList().forEach(System.out::println);
+        });
+
+
+        model.addAttribute("keySet", totals.keySet());
+        model.addAttribute("values", totals.values());
+
+
+        return "views/admin/customer/details";
     }
 
 

@@ -3,9 +3,31 @@ package com.nthn.springbootthymeleaf.repository;
 import com.nthn.springbootthymeleaf.pojo.Booking;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Integer>, JpaSpecificationExecutor<Booking> {
+    @Query("select b from Booking b where b.bookingDate between ?1 and ?2 and b.customer.id = ?3")
+    List<Booking> findByBookingDateBetweenAndCustomerId(LocalDateTime fromDate, LocalDateTime toDate, Integer customerId);
+
+    @Query("select b from Booking b where b.tour.id = ?1")
+    List<Integer> findByTourId(Integer tourId);
+
+    @Query("select b from Booking b where b.customer.id = ?1 order by b.bookingDate")
+    List<Booking> getBookingsByCustomerIdOrderByBookingDate(Integer customerId);
+
+    @Query("select month(b.bookingDate), sum(b.total) from Booking b where b.customer.id=?1 and month(b.bookingDate) between ?2 and ?3 group by b.bookingDate order by b.bookingDate")
+    List<Object[]> sumBookingTotalByCustomerId(Integer customerId, Integer fromMonth, Integer toMonth);
+
+    @Query("select b.bookingDate, sum(b.total) from Booking b where b.customer.id=?1 and month(b.bookingDate) =?2 and year(b.bookingDate)=?3 group by b.bookingDate order by b.bookingDate")
+    List<Object[]> sumBookingTotalInMonthByCustomerId(Integer customerId, Integer month, Integer year);
+
+    @Query("select b.bookingDate, sum(b.total) from Booking b where b.customer.id = ?1 and b.bookingDate between ?2 and ?3 group by b.bookingDate order by b.bookingDate")
+    List<Object[]> sumTotalBookingByCustomerId(Integer customerId, LocalDateTime fromDate, LocalDateTime toDate);
 
 }

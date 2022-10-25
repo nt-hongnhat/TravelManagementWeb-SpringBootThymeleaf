@@ -5,17 +5,11 @@ import com.nthn.springbootthymeleaf.repository.TourTicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
-@Service
-public class TourTicketService {
+public interface TourTicketService {
 
-    @Autowired
-    private TourTicketRepository tourTicketRepository;
+    List<TourTicket> getTourTickets(Integer bookingId);
 
-
-    private TourTicket requireOne(Integer id) {
-        return tourTicketRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Resource not found: " + id));
-    }
 }

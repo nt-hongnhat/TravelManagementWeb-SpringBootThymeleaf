@@ -3,14 +3,20 @@ package com.nthn.springbootthymeleaf.pojo;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.hibernate.Hibernate;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+
 
 @Getter
 @Setter
@@ -38,31 +44,79 @@ public class Tour implements Serializable {
     @Column(name = "duration", nullable = false)
     private String duration;
 
+    @Transient
+    private Integer days;
+    @Transient
+    private Integer nights;
+
+
     @Column(name = "unit_price", nullable = false)
     private BigDecimal unitPrice;
 
     @Column(name = "max_slot", nullable = false)
     private Integer maxSlot;
 
+    @Transient
+    public AtomicInteger getAvailableSlot() {
+        AtomicInteger count = new AtomicInteger();
+        bookings.forEach(booking -> {
+            count.addAndGet(booking.getCount());
+        });
+        return count;
+    }
+
     @Column(name = "transfer", nullable = false)
     private String transfer;
 
+    @Column(name = "departure_date", nullable = true)
+    private LocalDate departureDate;
+
+    @Transient
+    private String date;
+
+
     @Column(name = "departure_place", nullable = false)
     private String departurePlace;
+    @Column(name = "destination_place", nullable = false)
+    private String destinationPlace;
 
     @Column(name = "image")
     private String image;
 
+    @Transient
+    private MultipartFile multipartFile;
+
+    @Transient
+    public String getPhotosImagePath() {
+        if (image == null || id == null) return null;
+
+        return "/tour/" + id + "/" + image;
+    }
+
     @Column(name = "description")
     private String description;
 
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "tour_group_id", nullable = false)
+    @ToString.Exclude
     private TourGroup tourGroup;
 
 
     @OneToMany(mappedBy = "tour", orphanRemoval = true)
+    @ToString.Exclude
     private Set<TourSchedule> tourSchedules = new LinkedHashSet<>();
+
+
+    @OneToMany(mappedBy = "tour", orphanRemoval = true)
+    @ToString.Exclude
+    private Set<TourTicket> tourTickets = new LinkedHashSet<>();
+
+
+    @OneToMany(mappedBy = "tour", orphanRemoval = true)
+    @ToString.Exclude
+    private Set<Booking> bookings = new LinkedHashSet<>();
+
 
     @Override
     public boolean equals(Object o) {
@@ -76,4 +130,6 @@ public class Tour implements Serializable {
     public int hashCode() {
         return getClass().hashCode();
     }
+
+
 }

@@ -1,19 +1,26 @@
 package com.nthn.springbootthymeleaf.controller;
 
-import com.nthn.springbootthymeleaf.pojo.TourGroup;
+import com.nthn.springbootthymeleaf.pojo.*;
 import com.nthn.springbootthymeleaf.service.*;
 import com.nthn.springbootthymeleaf.utils.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/")
@@ -22,6 +29,8 @@ public class HomeController {
     private AccountService accountService;
     @Autowired
     private PermissionService permissionService;
+    @Autowired
+    private CustomerService customerService;
     @Autowired
     private CategoryService categoryService;
     @Autowired
@@ -42,22 +51,47 @@ public class HomeController {
 
     @ModelAttribute
     public void commonAttributes(Model model) {
-        model.addAttribute("categories", this.categoryService.getCategories(""));
-        model.addAttribute("tourGroups", this.tourGroupService.getTourGroups(""));
-        model.addAttribute("provinces", this.provinceService.getProvinces(""));
-        model.addAttribute("feedbacks", this.feedbackService.getFeedbacks(4.0));
-        model.addAttribute("places", this.placesService.getPlaces());
-        model.addAttribute("durations", this.tourService.getDurations());
+        LocalDate now = LocalDate.now();
+        List<Category> categories = categoryService.getCategories();
+        List<TourGroup> tourGroups = tourGroupService.getTourGroups();
+        List<Province> provinces = provinceService.getProvinces();
+        List<Places> places = placesService.getPlaces();
+        List<Feedback> feedbacks = feedbackService.getFeedbacks(4.0);
+
+        model.addAttribute("now", now);
+        model.addAttribute("categories", categories);
+        model.addAttribute("tourGroups", tourGroups);
+        model.addAttribute("provinces", provinces);
+        model.addAttribute("feedbacks", feedbacks);
+        model.addAttribute("places", places);
     }
 
 
-    @GetMapping("")
+    @GetMapping
     public String index(Model model, Principal principal) {
         String profile = null;
         if (principal != null) {
             User user = (User) ((Authentication) principal).getPrincipal();
             profile = WebUtils.toString(user);
         }
+
+        // Đếm số chuyến du lịch
+        int countTours = tourService.getTours().size();
+        // Đếm số lượng khách du lịch
+        int countTourist = customerService.getCustomers().size();
+        // Đếm số bài viết tin tức
+        int countNews = newsService.getNews().size();
+        // Đếm số địa điểm tham quan
+        int countPlaces = placesService.getPlaces().size();
+
+        model.addAttribute("durations", this.tourService.getDurations());
+        model.addAttribute("departurePlaces", this.tourService.getDeparturePlaces());
+        model.addAttribute("countTours", countTours);
+        model.addAttribute("countTourist", countTourist);
+        model.addAttribute("countPlaces", countPlaces);
+        model.addAttribute("countNews", countNews);
+
+
         model.addAttribute("profile", profile);
         return "views/index";
     }
@@ -77,6 +111,93 @@ public class HomeController {
     public String services(Model model) {
         return "views/services";
     }
-    
+//
+//    @GetMapping("/tours/{linkStatic}")
+//    public String getToursByTourGroup(@PathVariable(value = "linkStatic", required = false) String linkStatic, @RequestParam(required = false) Map<String, String> params, Model model) {
+//
+//
+////
+////        model.addAttribute("tourGroup", tourGroup);
+////        model.addAttribute("tours", tours);
+//
+//        return "views/tour/tourGroup";
+//    }
+
+
+    @GetMapping("/{categoryLink}")
+    public String getToursByCategory(@PathVariable("categoryLink") String categoryLink,
+                                     @RequestParam("page") int page, @RequestParam int size, Model model) {
+        List<TourGroup> tourGroups = tourGroupService.getTourGroupsByCategory(categoryLink);
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Tour> tourPage = tourService.getTourPageByTourGroup(tourGroups, pageable);
+
+        List<Tour> tours = tourPage.getContent();
+        int totalPages = tourPage.getTotalPages();
+        Integer totalItems = Math.toIntExact(tourPage.getTotalElements());
+
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                    .boxed()
+                    .collect(Collectors.toList());
+
+            model.addAttribute("pageNumbers", pageNumbers);
+        }
+
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("totalItems", totalItems);
+        model.addAttribute("tours", tours);
+
+        return "views/tour/tourGroup";
+    }
+
+    @GetMapping("/tours/{id}")
+    public String detail(@PathVariable("id") Integer id, Model model) {
+        Tour tour = tourService.getById(id);
+        Set<TourSchedule> tourSchedules = tour.getTourSchedules();
+        TourGroup tourGroup = tour.getTourGroup();
+//        List<Tour> tours = tourService.getTours(tourGroup);
+
+        model.addAttribute("tour", tour);
+        model.addAttribute("tourSchedules", tourSchedules);
+        model.addAttribute("tourGroup", tourGroup);
+//        model.addAttribute("getToursByTourGroup", );
+
+        return "views/tour/details";
+    }
+
+    @GetMapping("/tours/{linkStatic}")
+    public String searchTours(@PathVariable(value = "linkStatic", required = false) String tourGroupLink, @RequestParam(required = false) Map<String, String> params, Model model) {
+        String departure = params.getOrDefault("departure", "");
+        String destination = params.getOrDefault("destination", "");
+        String duration = params.getOrDefault("duration", "");
+
+        int page = Integer.parseInt(params.getOrDefault("page", "1"));
+        int size = Integer.parseInt(params.getOrDefault("size", "5"));
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Tour> tourPage = tourService.getTourPage(departure, destination, duration, tourGroupLink, pageable);
+
+        List<Tour> tours = tourPage.getContent();
+        int totalPages = tourPage.getTotalPages();
+        Integer totalItems = Math.toIntExact(tourPage.getTotalElements());
+
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                    .boxed()
+                    .collect(Collectors.toList());
+
+            model.addAttribute("pageNumbers", pageNumbers);
+        }
+
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("totalItems", totalItems);
+        model.addAttribute("tours", tours);
+
+        return "views/tour/list";
+    }
 
 }

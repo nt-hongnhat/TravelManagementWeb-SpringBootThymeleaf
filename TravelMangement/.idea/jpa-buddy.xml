@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="JpaBuddyIdeaProjectConfig">
+  <component name="JpaBuddyIdeaProjectConfig" reUseTableSchema="true">
     <option name="defaultUnitInitialized" value="true" />
     <option name="renamerInitialized" value="true" />
     <option name="reverseEngineeringLastDbConnectionId" value="c50a4bb0-2c00-48c9-874e-282df6c4d74b" />
-    <option name="reLastEntityCreationPackage" value="src/main/java/com/nthn/springbootthymeleaf" />
+    <option name="reLastEntityCreationPackage" value="src/main/java/com/nthn/springbootthymeleaf/pojo" />
     <option name="newEntityIdType" value="UUID" />
     <option name="newEntityIdStrategy" value="Auto" />
   </component>

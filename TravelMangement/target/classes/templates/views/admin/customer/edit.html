@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout-admin}">
+<head>
+    <title th:text="'Chỉnh sửa thông tin'"></title>
+</head>
+<body>
+<h1 class="mt-4" layout:fragment="page-heading" th:text="'Chỉnh sửa thông tin'"></h1>
+<ol class="breadcrumb" layout:fragment="breadcrumb">
+    <li class="breadcrumb-item"><a th:href="@{/admin}" th:text="#{label.home}"></a></li>
+    <li class="breadcrumb-item"><a th:href="@{/admin/customers}" th:text="#{label.customerManagement}"></a></li>
+    <li class="breadcrumb-item active" aria-current="page" th:text="'Chỉnh sửa thông tin'"></li>
+</ol>
+
+<th:block layout:fragment="page-content">
+    <div class="card shadow mb-4 w-75 m-auto">
+        <div class="card-header">
+            <span>Mã khách hàng: </span>
+            <span>[[${customer.id}]]</span>
+        </div>
+        <div class="card-body">
+            <div th:if="${param.error}">
+                <div class="alert alert-danger" th:text="${errorMessage}"></div>
+            </div>
+            <div th:if="${param.success}">
+                <div class="alert alert-success" th:text="${success}"></div>
+            </div>
+            <form method="post" action="" enctype="application/x-www-form-urlencoded" id="formAccount"
+                  th:action="@{/admin/customers/{id}/edit(id=${customer.id})}"
+                  th:object="${customer}">
+                <!-- Form Row -->
+                <div class="row gx-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="mb-1" for="inputFullName" th:text="#{label.fullName}+' *'"></label>
+                        <input class="form-control" id="inputFullName" type="text" autofocus required
+                               th:field="*{fullname}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="mb-1" th:text="#{label.gender}+' *'" for="selectGender"></label>
+                        <div>
+                            <select class="form-select custom-select" id="selectGender" th:field="*{gender}">
+                                <option th:value="'Nam'" th:text="'Nam'" selected></option>
+                                <option th:value="'Nữ'" th:text="'Nữ'"></option>
+                                <option th:value="'Khác'" th:text="'Khác'"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <!-- Form Row -->
+                <div class="row gx-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="mb-1" for="inputIdentifiedCard"
+                               th:text="#{label.identifiedcard}+' *'"></label>
+                        <input class="form-control" id="inputIdentifiedCard" type="text" minlength="12"
+                               maxlength="15" required th:field="*{identifiedcard}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="mb-1" for="inputPhone" th:text="#{label.phone}+' *'"></label>
+                        <input class="form-control" id="inputPhone" type="text" minlength="10" maxlength="15"
+                               required th:field="*{phone}">
+                    </div>
+                </div>   <!-- Form Row -->
+                <div class="row gx-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="mb-1" for="inputNationality"
+                               th:text="#{label.nationality}+' *'"></label>
+                        <select id="inputNationality" class="form-select custom-select"
+                                th:field="*{nationality}">
+                            <option th:value="'Việt Nam'" th:text="'Việt Nam'" selected></option>
+                            <option th:value="'Nước ngoài'" th:text="'Nước ngoài'"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="mb-1" for="inputAddress" th:text="#{label.address}"></label>
+                        <input class="form-control" id="inputAddress" type="text" maxlength="255"
+                               required th:field="*{address}">
+                    </div>
+                </div>
+                <!-- Submit button-->
+                <button class="btn btn-primary" type="submit" th:text="#{label.saveChanges}"></button>
+            </form>
+        </div>
+    </div>
+</th:block>
+
+</body>
+
+</html>

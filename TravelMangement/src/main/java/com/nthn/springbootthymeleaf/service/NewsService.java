@@ -1,74 +1,24 @@
 package com.nthn.springbootthymeleaf.service;
 
 import com.nthn.springbootthymeleaf.pojo.News;
-import com.nthn.springbootthymeleaf.repository.NewsRepository;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
-@Service
-public class NewsService {
+public interface NewsService {
+    Page<News> getNewsPage(Pageable pageable);
 
-    @Autowired
-    private NewsRepository newsRepository;
+    List<News> getNews();
 
-    public Page<News> getNewsPage(Pageable pageable) {
-        return newsRepository.findAll(pageable);
-    }
+    List<News> getNews(String keyword);
 
-    public List<News> getNews(String keyword) {
-        if (keyword == null) {
-            return newsRepository.findAll(Sort.by("create_date").descending());
-        }
-        return newsRepository.findAll();
-    }
-//
-//    public Paged<News> getPage(int pageNumber, int size) {
-//        PageRequest request = PageRequest.of(pageNumber - 1, size, new Sort(Sort.Direction.ASC, "id"));
-//        Page<News> postPage = newsRepository.findAll(request);
-//        return new Paged<>(postPage, Paging.of(postPage.getTotalPages(), pageNumber, size));
-//    }
 
-    public Integer save(News news) {
-        News bean = new News();
-        BeanUtils.copyProperties(news, bean);
-        bean = newsRepository.save(bean);
-        return bean.getId();
-    }
+    Integer save(News news);
 
-    public void delete(Integer id) {
-        newsRepository.deleteById(id);
-    }
+    void delete(Integer id);
 
-    public void update(Integer id, News news) {
-        News bean = requireOne(id);
-        BeanUtils.copyProperties(news, bean);
-        newsRepository.save(bean);
-    }
+    void update(Integer id, News news);
 
-    public News getById(Integer id) {
-        return (requireOne(id));
-    }
-
-    private News requireOne(Integer id) {
-        return newsRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Resource not found: " + id));
-    }
-
-//    public Page<NewsDTO> query(NewsQueryVO vO) {
-//        throw new UnsupportedOperationException();
-//    }
-//
-//    private NewsDTO toDTO(News original) {
-//        NewsDTO bean = new NewsDTO();
-//        BeanUtils.copyProperties(original, bean);
-//        return bean;
-//    }
+    News getById(Integer id);
 }

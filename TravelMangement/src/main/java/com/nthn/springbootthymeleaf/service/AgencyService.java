@@ -1,53 +1,20 @@
 package com.nthn.springbootthymeleaf.service;
 
 import com.nthn.springbootthymeleaf.pojo.Agency;
-import com.nthn.springbootthymeleaf.repository.AgencyRepository;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
-@Service
-public class AgencyService {
+public interface AgencyService {
+    Agency create(Agency agency);
 
-    @Autowired
-    private AgencyRepository agencyRepository;
+    Agency read(Integer id);
 
-    // CREATE
-    public Agency create(Agency agency) {
-        return agencyRepository.save(agency);
-    }
+    List<Agency> read(String keyword);
 
-    // READ
-    public Agency read(Integer id) {
-        Optional<Agency> agency = agencyRepository.findById(id);
-        return agency.orElse(null);
-    }
+    Agency update(Integer id, Agency agency);
 
-    public List<Agency> read(String keyword) {
-        if (keyword == null)
-            return agencyRepository.findAll();
-        return agencyRepository.findByNameContainingIgnoreCaseOrderByName(keyword);
-    }
-
-//    public List<Agency> getAgencyPage(int page, int size) {
-//        Pageable pageable = PageRequest.of(page, size);
-//        return agencyRepository.findAll(pageable).getContent();
-//    }
-
-    // UPDATE
-    public Agency update(Integer id, Agency agency) {
-        Agency original = this.read(id);
-        BeanUtils.copyProperties(agency, original);
-        return agencyRepository.save(original);
-    }
-
-    // DELETE
-    public void delete(Integer id) {
-        agencyRepository.deleteById(id);
-    }
-
+    void delete(Integer id);
 
 }

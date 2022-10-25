@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,14 +21,18 @@ public class PermissionController {
 
     @GetMapping
     public String index(Model model) {
-        Map<String, Integer> data = new LinkedHashMap<String, Integer>();
         List<Permission> permissions = permissionService.getPermissions();
+        Map<String, Integer> chartData = new LinkedHashMap<>();
+
         permissions.forEach(permission -> {
-            data.put(permission.getName(), permission.getCountAccount());
+            chartData.put(permission.getName(), permission.getCountAccount());
         });
 
         model.addAttribute("permissions", permissions);
-        model.addAttribute("data", data);
-        return "views/admin/permissionManage";
+        model.addAttribute("chartData", chartData);
+
+        return "views/admin/permission/list";
     }
+
+
 }

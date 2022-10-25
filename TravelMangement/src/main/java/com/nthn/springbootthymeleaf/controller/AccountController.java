@@ -3,7 +3,6 @@ package com.nthn.springbootthymeleaf.controller;
 import com.nthn.springbootthymeleaf.pojo.Account;
 import com.nthn.springbootthymeleaf.service.AccountService;
 import com.nthn.springbootthymeleaf.service.PermissionService;
-import com.nthn.springbootthymeleaf.utils.FileUploadUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,52 +15,50 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 
 @Validated
 @Controller
 @RequestMapping("/admin/accounts")
 public class AccountController {
-
     @Autowired
     private AccountService accountService;
     @Autowired
     private PermissionService permissionService;
+//
+//    @Autowired
+//    private Cloudinary cloudinary;
 
     @ModelAttribute
     public void commonAttribute(Model model) {
         model.addAttribute("permissions", permissionService.getPermissions());
     }
 
-    // GET: /account
-    @GetMapping("")
+    // GET: /accounts
+    @GetMapping()
     public String index(Model model) {
         model.addAttribute("accounts", accountService.getAccounts(""));
-        return "views/admin/accountManage";
+        return "views/admin/account/list";
     }
 
-    // GET: /account/{id}
-    @GetMapping("/{id}/details")
+    // GET: /accounts/{id}
+    @GetMapping("/{id}/edit")
     public String details(@Validated @NotNull @PathVariable("id") Integer id, Model model) {
         model.addAttribute("account", accountService.getAccount(id));
         System.out.println(accountService.getAccount(id).getPhotosImagePath());
-        return "views/admin/accountDetails";
+        return "views/admin/account/details";
     }
 
-    @GetMapping("/{id}/edit")
-    public String edit(@PathVariable Integer id, Model model) {
-        model.addAttribute("account", accountService.getAccount(id));
-
-        return "views/admin/accountEdit";
-    }
 
     // POST: /admin/accounts/{id}/edit
     @PostMapping("/{id}/edit")
-    public String edit(@PathVariable Integer id, Model model, @Validated @ModelAttribute("account") Account account, BindingResult result, final RedirectAttributes redirectAttributes) {
-        Account account1 = accountService.getAccount(id);
-        System.out.println(account);
-        System.out.println(account1);
-
+    public String save(@PathVariable Integer id, @RequestParam("image") MultipartFile multipartFile, Model model, @Validated @ModelAttribute("account") Account account, BindingResult result, final RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             model.addAttribute("account", account);
             model.addAttribute("permissions", permissionService.getPermissions());
@@ -70,16 +67,37 @@ public class AccountController {
             return "redirect:/admin/accounts/{id}/edit?error";
         }
         try {
+            if (!multipartFile.isEmpty()) {
+                String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
+                account.setAvatarUrl(fileName);
+
+                String uploadDir = "src/main/resources/static/avatar/" + account.getId();
+                Path uploadPath = Paths.get(uploadDir);
+
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
+
+                try (InputStream inputStream = multipartFile.getInputStream()) {
+                    Path filePath = uploadPath.resolve(fileName);
+                    Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+                } catch (IOException e) {
+                    throw new IOException("Không thể đăng tải file: " + fileName);
+                }
+            }
+
             accountService.update(id, account);
+
         } catch (Exception exception) {
             model.addAttribute("account", account);
             model.addAttribute("permissions", permissionService.getPermissions());
 //            model.addAttribute("errorMessage", "Error" + exception.getMessage());
-            redirectAttributes.addFlashAttribute("errorMessage", "Error" + exception.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", "Đã xảy ra lỗi!!! Thử lại!");
 
             return "redirect:/admin/accounts/{id}/edit?error";
         }
-        redirectAttributes.addFlashAttribute("success", "Saved account successfully!");
+
+        redirectAttributes.addFlashAttribute("success", "Lưu thay đổi thành công!");
         return "redirect:/admin/accounts/{id}/edit?success";
     }
 
@@ -97,47 +115,59 @@ public class AccountController {
     public String create(Model model) {
         model.addAttribute("newAccount", new Account());
         model.addAttribute("permissions", permissionService.getPermissions());
-        return "views/admin/accountCreate";
+        return "views/admin/account/create";
     }
+
 
     // POST: /account/save
     @PostMapping("/create")
-    public String create(Model model, @RequestParam("image") MultipartFile multipartFile, @Validated @ModelAttribute("newAccount") Account newAccount, BindingResult result, final RedirectAttributes redirectAttributes) {
+    public String create(@RequestParam("image") MultipartFile multipartFile, @Validated @ModelAttribute("newAccount") Account newAccount,
+                         Model model, BindingResult result,
+                         final RedirectAttributes redirectAttributes) throws IOException {
         model.addAttribute("newAccount", newAccount);
 
         if (!Objects.equals(newAccount.getConfirm(), newAccount.getPassword())) {
             redirectAttributes.addFlashAttribute("errorMessage", "Mật khẩu không khớp");
-            return "redirect:/admin/accounts/create";
+            return "redirect:/admin/accounts/create?error";
         }
 
         if (result.hasErrors()) {
             model.addAttribute("permissions", permissionService.getPermissions());
             redirectAttributes.addFlashAttribute("errorMessage", result.getAllErrors().toString());
-            return "redirect:/admin/accounts/create";
+            return "redirect:/admin/accounts/create?error";
         }
+
         Account account;
+
         try {
             String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
-            System.out.println(fileName);
+
             newAccount.setAvatarUrl(fileName);
             account = accountService.create(newAccount);
 
+            String uploadDir = "src/main/resources/static/avatar/" + account.getId();
+            Path uploadPath = Paths.get(uploadDir);
 
-            String uploadDir = "avatar/" + account.getId();
-            FileUploadUtils.saveFile(uploadDir, fileName, multipartFile);
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
 
-            System.out.println(fileName);
-
+            try (InputStream inputStream = multipartFile.getInputStream()) {
+                Path filePath = uploadPath.resolve(fileName);
+                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                throw new IOException("Không thể đăng tải file: " + fileName);
+            }
 
         } catch (Exception exception) {
             model.addAttribute("permissions", permissionService.getPermissions());
             model.addAttribute("errorMessage", "Lỗi" + exception.getMessage());
-            return "redirect:/admin/accounts/create";
+            return "redirect:/admin/accounts/create?error";
         }
 
         redirectAttributes.addFlashAttribute("success", "Tạo tài khoản thành công!");
         redirectAttributes.addFlashAttribute("newAccount", account);
-        return "redirect:/admin/accounts/create";
+        return "redirect:/admin/accounts/create?success";
     }
 
 }

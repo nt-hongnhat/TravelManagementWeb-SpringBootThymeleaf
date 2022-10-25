@@ -6,7 +6,9 @@ import org.hibernate.Hibernate;
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -30,6 +32,10 @@ public class Surcharge implements Serializable {
 
     @Column(name = "surcharge", nullable = false)
     private Double surcharge;
+
+
+    @OneToMany(mappedBy = "surcharge", orphanRemoval = true)
+    private Set<TourTicket> tourTickets = new LinkedHashSet<>();
 
 
     @Override

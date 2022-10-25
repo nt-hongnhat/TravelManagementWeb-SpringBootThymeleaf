@@ -91,4 +91,9 @@ public class Account implements Serializable {
     public int hashCode() {
         return getClass().hashCode();
     }
+
+    @Override
+    public String toString() {
+        return String.format("Username: %s; Permission: %s", getUsername(), permission.getName());
+    }
 }

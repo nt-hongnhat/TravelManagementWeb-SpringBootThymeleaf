@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
@@ -44,25 +45,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(authenticationProvider());
     }
 
+
     // Phân quyền truy cập
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http.authorizeRequests().antMatchers("/", "/login", "/logout", "/register", "/tours", "/news", "/static/**")
-//                .permitAll()
-//                .antMatchers("/profile", "/booking", "/comment")
-//                .access("hasAnyRole('CUSTOMER', 'EMPLOYEE', 'ADMIN')")
-//                .and()
-//                .authorizeRequests().antMatchers("/admin").access("hasRole('ADMIN')")
-//                .formLogin()
-//                .loginPage("/login")
-//                .defaultSuccessUrl("/")
-//                .permitAll()
-//                .and()
-//                .logout()
-//                .invalidateHttpSession(true)
-//                .clearAuthentication(true)
-//                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-//                .logoutSuccessUrl(("/login")).permitAll();
 
         http.csrf().disable();
 
@@ -70,10 +56,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/", "/login", "/logout", "/register", "/tours", "/news").permitAll();
         // Trang /profile yêu cầu phải login với vai trò CUSTOMER, EMPLOYEE hoặc ADMIN.
         // Nếu chưa login, nó sẽ redirect tới trang /login.
-        http.authorizeRequests().antMatchers("/profile", "/booking", "/comment").access("hasAnyRole('CUSTOMER', 'EMPLOYEE', 'ADMIN')");
+        http.authorizeRequests().antMatchers("/profile", "/booking", "/comment")
+                .access("hasAnyRole('CUSTOMER', 'EMPLOYEE', 'ADMIN')");
 
         // Trang chỉ dành cho ADMIN
-        http.authorizeRequests().antMatchers("/admin").access("hasRole('ADMIN')");
+        http.authorizeRequests().antMatchers("/admin/").access("hasRole('ADMIN')");
 
         // Khi người dùng đã login, với vai trò XX.
         // Nhưng truy cập vào trang yêu cầu vai trò YY,
@@ -84,11 +71,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().and().formLogin()//
                 // Submit URL của trang login
                 .loginProcessingUrl("/login") // Submit URL
-                .loginPage("/login")//
-                .defaultSuccessUrl("/")//
+                .loginPage("/login")
+
                 .failureUrl("/login?error")
                 .usernameParameter("username")//
                 .passwordParameter("password")
+                .successHandler((request, response, authentication) -> {
+                    User user = (User) authentication.getPrincipal();
+                    if (request.isUserInRole("ADMIN"))
+                        response.sendRedirect(request.getContextPath() + "/admin");
+                    else response.sendRedirect(request.getContextPath());
+                })
                 // Cấu hình cho Logout Page.
                 .and()
                 .logout()

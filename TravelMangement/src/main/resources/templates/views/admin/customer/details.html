@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout-admin}">
+<head>
+    <title th:text="#{label.customerProfile}"></title>
+</head>
+<body>
+<h1 class="mt-4" layout:fragment="page-heading" th:text="#{label.customerProfile}"></h1>
+<ol class="breadcrumb" layout:fragment="breadcrumb">
+    <li class="breadcrumb-item"><a th:href="@{/admin}" th:text="#{label.home}"></a></li>
+    <li class="breadcrumb-item"><a th:href="@{/admin/customers}" th:text="#{label.customerManagement}"></a></li>
+    <li class="breadcrumb-item active" aria-current="page" th:text="#{label.customerProfile}"></li>
+</ol>
+
+<th:block layout:fragment="page-content">
+    <div class="row">
+        <div class="col-xl-4 col-lg-5">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary" th:text="#{label.customerDetails}"></h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div th:if="${param.error}">
+                        <div class="alert alert-danger" th:text="${errorMessage}"></div>
+                    </div>
+                    <div th:if="${param.success}">
+                        <div class="alert alert-success" th:text="${success}"></div>
+                    </div>
+                    <form method="post" action="" enctype="application/x-www-form-urlencoded" id="formAccount"
+                          th:action="@{/admin/customers/{id}/edit(id=${customer.id})}"
+                          th:object="${customer}">
+                        <!-- Form Row -->
+                        <div class="row gx-3 mb-3">
+                            <div class="col-md-12">
+                                <label class="small mb-1" for="customerId" th:text="'Mã khách hàng'"></label>
+                                <input class="form-control bg-transparent" id="customerId" type="text" readonly
+                                       th:field="*{id}">
+                            </div>
+                        </div>
+                        <div class="row gx-3 mb-3">
+                            <div class="col-md-12">
+                                <label class="small mb-1" for="inputFullName" th:text="#{label.fullName}"></label>
+                                <input class="form-control" id="inputFullName" type="text" autofocus required
+                                       th:field="*{fullname}">
+                            </div>
+                        </div>
+                        <div class="row gx-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="small mb-1" th:text="#{label.gender}" for="selectGender"></label>
+                                <div>
+                                    <select class="form-select custom-select" id="selectGender" th:field="*{gender}">
+                                        <option th:value="'Nam'" th:text="'Nam'" selected></option>
+                                        <option th:value="'Nữ'" th:text="'Nữ'"></option>
+                                        <option th:value="'Khác'" th:text="'Khác'"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputIdentifiedCard"
+                                       th:text="#{label.identifiedcard}"></label>
+                                <input class="form-control" id="inputIdentifiedCard" type="text" minlength="12"
+                                       maxlength="15" required th:field="*{identifiedcard}">
+                            </div>
+                        </div>
+                        <!-- Form Row -->
+                        <div class="row gx-3 mb-3">
+
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputPhone" th:text="#{label.phone}"></label>
+                                <input class="form-control" id="inputPhone" type="text" minlength="10" maxlength="15"
+                                       required th:field="*{phone}">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputNationality"
+                                       th:text="#{label.nationality}"></label>
+                                <select id="inputNationality" class="form-select custom-select"
+                                        th:field="*{nationality}">
+                                    <option th:value="'Việt Nam'" th:text="'Việt Nam'" selected></option>
+                                    <option th:value="'Nước ngoài'" th:text="'Nước ngoài'"></option>
+                                </select>
+                            </div>
+
+                        </div>   <!-- Form Row -->
+                        <div class="row gx-3 mb-3">
+
+                            <div class="col-md-12">
+                                <label class="small mb-1" for="inputAddress" th:text="#{label.address}"></label>
+                                <input class="form-control" id="inputAddress" type="text" maxlength="255"
+                                       required th:field="*{address}">
+                            </div>
+                        </div>
+                        <!-- Submit button-->
+                        <button class="btn btn-primary" type="submit" th:text="#{label.saveChanges}"></button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-xl-8 col-lg-7">
+
+            <!-- Area Chart -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Tình hình đặt tour trong tháng [[${time}]]</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-area">
+                        <div class="chartjs-size-monitor">
+                            <div class="chartjs-size-monitor-expand">
+                                <div class=""></div>
+                            </div>
+                            <div class="chartjs-size-monitor-shrink">
+                                <div class=""></div>
+                            </div>
+                        </div>
+                        <canvas id="bookingAreaChart" style="display: block; height: 320px; width: 444px;" width="555"
+                                height="400" class="chartjs-render-monitor"></canvas>
+                        <script th:inline="javascript">
+                            const keySet = [[${keySet}]];
+                            const values = [[${values}]];
+                        </script>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary" th:text="#{label.historyBooking}"></h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th th:text="#{label.id}"></th>
+                        <th th:text="'Tên tour'"></th>
+                        <th th:text="'Ngày đặt'"></th>
+                        <th th:text="'Tổng tiền'"></th>
+                        <th th:text="'Trạng thái'"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="booking:${bookings}">
+                        <td th:text="${booking.getId()}"></td>
+                        <td th:text="${booking.getTour().getName()}"></td>
+                        <td class="text-nowrap"
+                            th:text="${#temporals.format(booking.getBookingDate(), 'dd-MM-yyyy')}"></td>
+                        <td class="text-nowrap" th:text="${#numbers.formatCurrency(booking.getTotal())}"></td>
+                        <td>
+                            <span th:text="${booking.payment==true}?'Đã thanh toán':'Chưa thanh toán'"
+                                  th:class="${booking.payment==false}?'badge badge-success px-2 py-1':'badge badge-secondary px-2 py-1'"></span>
+
+                        </td>
+
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</th:block>
+
+</body>
+
+</html>

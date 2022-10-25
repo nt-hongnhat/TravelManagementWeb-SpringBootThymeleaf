@@ -27,7 +27,6 @@ public class TourGroup implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Category category;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -40,12 +39,12 @@ public class TourGroup implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "category_id", nullable = false)
-    public Category getCategory() {
-        return category;
-    }
+    private Category category;
+
 
     @OneToMany
     @JoinColumn(name = "tour_group_id")
+    @ToString.Exclude
     private Set<Tour> tours = new LinkedHashSet<>();
 
     @Override

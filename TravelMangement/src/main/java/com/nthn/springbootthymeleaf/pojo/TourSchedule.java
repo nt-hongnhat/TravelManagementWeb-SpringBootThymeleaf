@@ -38,6 +38,7 @@ public class TourSchedule implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "tour_id", nullable = false)
+    @ToString.Exclude
     public Tour tour;
 
     @Override

@@ -2,80 +2,35 @@ package com.nthn.springbootthymeleaf.service;
 
 import com.nthn.springbootthymeleaf.pojo.Tour;
 import com.nthn.springbootthymeleaf.pojo.TourGroup;
-import com.nthn.springbootthymeleaf.repository.TourGroupRepository;
-import com.nthn.springbootthymeleaf.repository.TourRepository;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.text.ParseException;
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Set;
 
-@Service
-public class TourService {
-    @Autowired
-    private TourRepository tourRepository;
-    @Autowired
-    private TourGroupRepository tourGroupRepository;
+public interface TourService {
+    Tour save(Tour tour);
 
-    public Integer save(Tour tour) {
-        Tour bean = new Tour();
-        BeanUtils.copyProperties(tour, bean);
-        bean = tourRepository.save(bean);
-        return bean.getId();
-    }
+    Tour create(Tour tour) throws ParseException;
 
-    public void delete(Integer id) {
-        tourRepository.deleteById(id);
-    }
+    void delete(Integer id);
 
-    public void update(Integer id, Tour tour) {
-        Tour bean = requireOne(id);
-        BeanUtils.copyProperties(tour, bean);
-        tourRepository.save(bean);
-    }
+    void update(Integer id, Tour tour);
 
-    public Tour getById(Integer id) {
-        return requireOne(id);
-    }
+    Tour getById(Integer id);
 
+    List<Tour> getTours();
 
-    public List<Tour> getTours(String keyword) {
-        if (keyword == null) {
-            return tourRepository.findAll();
-        }
-        return null;
-    }
+    Page<Tour> getTourPage(Pageable pageable);
 
-    public List<Tour> getTours(TourGroup tourGroup) {
-        return tourRepository.findByTourGroupId(tourGroup.getId());
-    }
+    Page<Tour> getTourPage(String tourGroupLink, Pageable pageable);
 
-    public List<String> getDurations() {
-        List<String> result = new ArrayList<>();
-        List<Tour> tours = tourRepository.findAll();
-        tours.forEach(tour -> {
-            result.add(tour.getDuration());
-        });
-        return result;
-    }
+    Page<Tour> getTourPage(String departurePlace, String destinationPlace, String duration, String tourGroupLink, Pageable pageable);
 
-    private Tour requireOne(Integer id) {
-        return tourRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Resource not found: " + id));
-    }
+    Page<Tour> getTourPageByTourGroup(List<TourGroup> tourGroups, Pageable pageable);
 
+    Set<String> getDeparturePlaces();
 
-//    public Page<TourDTO> query(TourQueryVO vO) {
-//        throw new UnsupportedOperationException();
-//    }
-//
-//    private TourDTO toDTO(Tour original) {
-//        TourDTO bean = new TourDTO();
-//        BeanUtils.copyProperties(original, bean);
-//        return bean;
-//    }
+    Set<String> getDurations();
 }

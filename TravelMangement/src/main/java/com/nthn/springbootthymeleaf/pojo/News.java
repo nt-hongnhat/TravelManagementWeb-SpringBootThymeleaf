@@ -42,6 +42,7 @@ public class News implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "tour_group_id", nullable = false)
+    @ToString.Exclude
     private TourGroup tourGroup;
 
 

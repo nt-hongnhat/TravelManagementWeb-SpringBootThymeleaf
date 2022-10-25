@@ -27,38 +27,21 @@ public class TourTicket implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Agency agency;
-
-    private Tour tour;
-
-    private Surcharge surcharge;
-
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Column(name = "unit_price", nullable = false)
+    private BigDecimal unitPrice;
 
-    @Column(name = "quantity", nullable = false)
-    private Integer quantity;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "agency_id", nullable = false)
-    public Agency getAgency() {
-        return agency;
-    }
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "tour_id", nullable = false)
-    public Tour getTour() {
-        return tour;
-    }
+    @ToString.Exclude
+    private Tour tour;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "surcharge_id")
-    public Surcharge getSurcharge() {
-        return surcharge;
-    }
+    @ToString.Exclude
+    private Surcharge surcharge;
 
     @Override
     public boolean equals(Object o) {

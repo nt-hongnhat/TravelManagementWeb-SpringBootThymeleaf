@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout-admin}">
+<head>
+    <title th:text="#{label.customerManagement}"></title>
+</head>
+<body>
+<h1 class="mt-4" layout:fragment="page-heading" th:text="#{label.customerManagement}"></h1>
+
+<ol class="breadcrumb" layout:fragment="breadcrumb">
+    <li class="breadcrumb-item"><a th:href="@{/admin}" th:text="#{label.home}"></a></li>
+    <li class="breadcrumb-item active" aria-current="page" th:text="#{label.customerManagement}"></li>
+</ol>
+
+<th:block layout:fragment="page-content">
+    <div class="row">
+        <div class="col-xl-6 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Số khách du lịch trong nước
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"
+                                 th:text="${countByNationality_VN}"></div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-user fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-6 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Số khách du lịch nước ngoài
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"
+                                 th:text="${countByNationality_NN}"></div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-user-astronaut fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <div class="row align-items-center justify-content-between">
+                <div class="col-auto">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="far fa-user"></i>
+                        <span th:text="'Danh sách khách hàng'"></span>
+                    </h6>
+                </div>
+
+                <div class="col-12 col-xl-auto">
+                    <!--                    <a class="btn btn-sm btn-light text-primary" th:href="@{/admin/permissions}">-->
+                    <!--                        <i class="fas fa-users"></i>-->
+                    <!--                        <span>Quản lý phân quyền</span>-->
+                    <!--                    </a>-->
+
+                    <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+                       th:href="@{${#request.getRequestURL()}+'/create'}">
+                        <i class="fas fa-user-plus"></i>
+                        <span th:text="#{label.addCustomer}"></span>
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr class="text-center">
+                        <th class="align-middle" th:text="#{label.id}+' KH'"></th>
+                        <th class="align-middle" th:text="'Tài khoản'"></th>
+                        <th class="align-middle" th:text="#{label.fullName}"></th>
+                        <th class="align-middle" th:text="#{label.gender}"></th>
+                        <th class="align-middle" th:text="#{label.identifiedcard}"></th>
+                        <th class="align-middle" th:text="#{label.nationality}"></th>
+                        <th class="align-middle" th:text="#{label.phone}"></th>
+                        <th class="align-middle" th:text="#{label.action}"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="customer:${customers}">
+                        <td class="align-middle" th:text="${customer.getId()}"></td>
+                        <td class="align-middle"
+                            th:text="${customer.account==null} ?'Chưa có tài khoản':${customer.account.getUsername()}"></td>
+                        <td class="align-middle" th:text="${customer.getFullname()}"></td>
+                        <td class="align-middle" th:text="${customer.getGender()}"></td>
+                        <td class="align-middle" th:text="${customer.getIdentifiedcard()}"></td>
+                        <td class="align-middle" th:text="${customer.getNationality()}"></td>
+                        <td class="align-middle" th:text="${customer.getPhone()}"></td>
+                        <td class="align-middle">
+                            <a class="badge badge-primary px-2 py-1 m-1"
+                               th:href="@{${#request.getRequestURL()}+'/'+${customer.id}}">
+                                <i class="fas fa-folder"></i>
+                                <span th:text="#{label.detail}"></span>
+                            </a>
+
+                            <a class="badge badge-success px-2 py-1 m-1"
+                               th:href="@{${#request.getRequestURL()}+'/'+${customer.id}+'/edit'}">
+                                <i class="fas fa-edit"></i>
+                                <span th:text="#{label.edit}"></span>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</th:block>
+
+</body>
+
+</html>

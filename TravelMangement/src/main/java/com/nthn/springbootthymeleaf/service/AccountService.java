@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -23,6 +24,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class AccountService implements UserDetailsService {
 
     @Autowired
@@ -80,6 +82,7 @@ public class AccountService implements UserDetailsService {
         original.setLastName(account.getLastName());
         original.setPermission(account.getPermission());
         original.setActive(account.getActive());
+        original.setAvatarUrl(account.getAvatarUrl());
         accountRepository.save(original);
         return accountRepository.existsById(id);
     }

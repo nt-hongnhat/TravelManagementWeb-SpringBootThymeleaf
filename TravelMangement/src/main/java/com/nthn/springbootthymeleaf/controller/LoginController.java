@@ -28,7 +28,7 @@ public class LoginController {
     private AccountService accountService;
 
     @GetMapping("/login")
-    public String login(Model model) {
+    public String login() {
         return "views/auth/login";
     }
 
@@ -42,8 +42,10 @@ public class LoginController {
     @PostMapping("/register")
     public String register(@Valid @ModelAttribute("accountRegistration") Account accountRegistration, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         model.addAttribute("accountRegistration", accountRegistration);
+
         if (accountRegistration.getPassword().equals(accountRegistration.getConfirm())) {
             Account accountExists = accountService.getAccount(accountRegistration.getUsername());
+
             if (accountExists != null || result.hasErrors()) {
                 redirectAttributes.addFlashAttribute("accountRegistration", accountRegistration);
                 System.out.println(accountRegistration);
@@ -70,17 +72,18 @@ public class LoginController {
         return "redirect:/login?logout";
     }
 
+
     @GetMapping("/403")
     public String accessDenied(Model model, Principal principal) {
 
         if (principal != null) {
-            User loginedUser = (User) ((Authentication) principal).getPrincipal();
+            User loginUser = (User) ((Authentication) principal).getPrincipal();
 
-            String userInfo = WebUtils.toString(loginedUser);
+            String userInfo = WebUtils.toString(loginUser);
 
             model.addAttribute("userInfo", userInfo);
-
-            String message = "Hi " + principal.getName() + " You do not have permission to access this page!";
+            System.out.println(userInfo);
+            String message = "Chào " + principal.getName() + "! Bạn không có quyền truy cập trang này!";
             model.addAttribute("message", message);
         }
         return "views/403";

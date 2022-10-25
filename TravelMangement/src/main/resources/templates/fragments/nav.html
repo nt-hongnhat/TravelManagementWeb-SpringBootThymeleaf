@@ -56,11 +56,11 @@
                             </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" th:href="@{/logout}"
-                               sec:authorize="isAuthenticated()"
-                               data-toggle="modal" data-target="#logoutModal">
+                               sec:authorize="isAuthenticated()">
                                 <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-600"></i>
                                 <span th:text="#{label.logout}"></span>
                             </a>
+
                         </div>
                     </th:block>
                 </li>
@@ -91,9 +91,9 @@
     </li>
     <!-- Nav Item - Dashboard -->
     <li class="nav-item active">
-        <a class="nav-link" th:href="@{/admin}">
+        <a class="nav-link" th:href="@{/}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span></a>
+            <span>Trang chủ</span></a>
     </li>
     <!-- Divider -->
     <li>
@@ -114,9 +114,9 @@
         </a>
         <div id="collapseCategories" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" th:href="@{/categories}" th:text="#{label.categories}"></a>
-                <a class="collapse-item" th:href="@{/tours}" th:text="#{label.allList}"></a>
-                <a class="collapse-item" th:href="@{/tours/create}" th:text="#{label.createTour}"></a>
+                <a class="collapse-item" th:href="@{/admin/categories}" th:text="#{label.categories}"></a>
+                <a class="collapse-item" th:href="@{/admin/tours}" th:text="#{label.allList}"></a>
+                <a class="collapse-item" th:href="@{/admin/tours/create}" th:text="#{label.createTour}"></a>
             </div>
         </div>
     </li>
@@ -131,10 +131,10 @@
         <div id="collapseUserManagement" class="collapse" aria-labelledby="headingUtilities"
              data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" th:href="@{/admin/accounts/}" th:text="#{label.accountManagement}"></a>
-                <a class="collapse-item" th:href="@{/admin/employees/}" th:text="#{label.employeeManagement}"></a>
-                <a class="collapse-item" th:href="@{/admin/customers/}" th:text="#{label.customerManagement}"></a>
-                <a class="collapse-item" th:href="@{/admin/permissions/}" th:text="#{label.permissionManagement}"></a>
+                <a class="collapse-item" th:href="@{/admin/accounts}" th:text="#{label.accountManagement}"></a>
+                <a class="collapse-item" th:href="@{/admin/employees}" th:text="#{label.employeeManagement}"></a>
+                <a class="collapse-item" th:href="@{/admin/customers}" th:text="#{label.customerManagement}"></a>
+                <a class="collapse-item" th:href="@{/admin/permissions}" th:text="#{label.permissionManagement}"></a>
             </div>
         </div>
     </li>
@@ -149,8 +149,8 @@
         <div id="collapseNews" class="collapse" aria-labelledby="headingUtilities"
              data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" th:href="@{/news}" th:text="#{label.allList}"></a>
-                <a class="collapse-item" th:href="@{/news/create}" th:text="#{label.createPosts}"></a>
+                <a class="collapse-item" th:href="@{/admin/news}" th:text="#{label.allList}"></a>
+                <a class="collapse-item" th:href="@{/admin/news/create}" th:text="#{label.createPosts}"></a>
             </div>
         </div>
     </li>

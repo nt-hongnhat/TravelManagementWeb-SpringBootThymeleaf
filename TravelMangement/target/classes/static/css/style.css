@@ -61,12 +61,9 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
     font-family : "Source Serif Pro", serif; }
 
 .btn {
-    padding-top    : 12px;
-    padding-bottom : 12px;
-    padding-left   : 30px;
-    padding-right  : 30px;
-    border-radius  : 30px;
-    font-size      : 14px; }
+    padding       : 12px 30px;
+    border-radius : 30px;
+    font-size     : 14px; }
 
 .btn:active, .btn:focus {
     outline            : none;
@@ -105,7 +102,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
     margin-right : -20px;
     margin-left  : -20px; }
 
-@media (max-width : 991.98px) {
+@media (max-width : 992px) {
     .gutter-v1 {
         margin-left  : -15px;
         margin-right : -15px; }
@@ -116,7 +113,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
     padding-right : 20px;
     padding-left  : 20px; }
 
-@media (max-width : 991.98px) {
+@media (max-width : 992px) {
     .gutter-v1 > .col,
     .gutter-v1 > [class*="col-"] {
         padding-right : 15px;
@@ -127,7 +124,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
     margin-right : -5px;
     margin-left  : -5px; }
 
-@media (max-width : 991.98px) {
+@media (max-width : 992px) {
     .gutter-v2 {
         margin-left  : -15px;
         margin-right : -15px; }
@@ -138,7 +135,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
     padding-right : 5px;
     padding-left  : 5px; }
 
-@media (max-width : 991.98px) {
+@media (max-width : 992px) {
     .gutter-v2 > .col,
     .gutter-v2 > [class*="col-"] {
         padding-right : 15px;
@@ -241,7 +238,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
     -webkit-transform : translateY(-50%);
     -ms-transform     : translateY(-50%);
     transform         : translateY(-50%);
-    font-family       : 'icomoon'; }
+    font-family       : 'icomoon', serif; }
 
 .site-nav .site-navigation .site-menu .has-children .dropdown {
     visibility         : hidden;
@@ -255,7 +252,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
     border-radius      : 20px;
     padding            : 20px 0;
     margin-top         : 20px;
-    margin-left        : 0px;
+    margin-left        : 0;
     background         : #ffffff;
     -webkit-transition : 0.2s 0s;
     -o-transition      : 0.2s 0s;
@@ -331,7 +328,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
     -webkit-transition-delay : 0s;
     -o-transition-delay      : 0s;
     transition-delay         : 0s;
-    margin-top               : 0px;
+    margin-top               : 0;
     visibility               : visible;
     opacity                  : 1; }
 
@@ -404,7 +401,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
     font-size          : 30px;
     display            : inline-block;
     padding-left       : 10px;
-    padding-right      : 0px;
+    padding-right      : 0;
     line-height        : 1;
     cursor             : pointer;
     -webkit-transition : .3s all ease;
@@ -414,7 +411,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
 .site-mobile-menu .site-mobile-menu-header .site-mobile-menu-logo {
     float       : left;
     margin-top  : 10px;
-    margin-left : 0px; }
+    margin-left : 0; }
 
 .site-mobile-menu .site-mobile-menu-header .site-mobile-menu-logo a {
     display        : inline-block;
@@ -430,9 +427,8 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
     overflow-y                 : scroll;
     -webkit-overflow-scrolling : touch;
     position                   : relative;
-    padding                    : 0 20px 20px 20px;
     height                     : calc(100vh - 52px);
-    padding-bottom             : 150px; }
+    padding                    : 0 20px 150px; }
 
 .site-mobile-menu .site-nav-wrap {
     padding    : 0;
@@ -458,8 +454,8 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
 
 .site-mobile-menu .site-nav-wrap .arrow-collapse {
     position      : absolute;
-    right         : 0px;
-    top           : 0px;
+    right         : 0;
+    top           : 0;
     z-index       : 20;
     width         : 36px;
     height        : 36px;
@@ -471,7 +467,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
 .site-mobile-menu .site-nav-wrap .arrow-collapse:before {
     font-size          : 14px;
     z-index            : 20;
-    font-family        : "icomoon";
+    font-family        : "icomoon", serif;
     content            : "\e313";
     position           : absolute;
     top                : 50%;
@@ -568,8 +564,8 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
     color : #1A374D !important; }
 
 .sticky-wrapper .shrink {
-    padding-top    : 0px !important;
-    padding-bottom : 0px !important; }
+    padding-top    : 0 !important;
+    padding-bottom : 0 !important; }
 
 /* Burger */
 .burger {
@@ -591,10 +587,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
     opacity       : 1; }
 
 .burger:before, .burger:after {
-    -webkit-transition : top 0.35s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.35s cubic-bezier(0.23, 1, 0.32, 1), background-color 1.15s cubic-bezier(0.86, 0, 0.07, 1), -webkit-transform 0.35s cubic-bezier(0.23, 1, 0.32, 1);
-    transition         : top 0.35s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.35s cubic-bezier(0.23, 1, 0.32, 1), background-color 1.15s cubic-bezier(0.86, 0, 0.07, 1), -webkit-transform 0.35s cubic-bezier(0.23, 1, 0.32, 1);
     -o-transition      : top 0.35s cubic-bezier(0.23, 1, 0.32, 1), transform 0.35s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.35s cubic-bezier(0.23, 1, 0.32, 1), background-color 1.15s cubic-bezier(0.86, 0, 0.07, 1);
-    transition         : top 0.35s cubic-bezier(0.23, 1, 0.32, 1), transform 0.35s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.35s cubic-bezier(0.23, 1, 0.32, 1), background-color 1.15s cubic-bezier(0.86, 0, 0.07, 1);
     transition         : top 0.35s cubic-bezier(0.23, 1, 0.32, 1), transform 0.35s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.35s cubic-bezier(0.23, 1, 0.32, 1), background-color 1.15s cubic-bezier(0.86, 0, 0.07, 1), -webkit-transform 0.35s cubic-bezier(0.23, 1, 0.32, 1);
     -webkit-transition : top 0.35s cubic-bezier(0.23, 1, 0.32, 1), -webkit-transform 0.35s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.35s cubic-bezier(0.23, 1, 0.32, 1), background-color 1.15s cubic-bezier(0.86, 0, 0.07, 1);
     content            : ""; }
@@ -651,7 +644,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
     color     : #ffffff;
     font-size : 60px; }
 
-@media (max-width : 991.98px) {
+@media (max-width : 992px) {
     .hero h1 {
         font-size : 45px; }
 }
@@ -684,7 +677,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
     height             : 608px;
     margin-bottom      : -200px; }
 
-@media (max-width : 991.98px) {
+@media (max-width : 992px) {
     .hero .slides {
         left : 0; }
 }
@@ -877,7 +870,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
     -o-transition      : .3s all ease;
     transition         : .3s all ease; }
 
-@media (max-width : 767.98px) {
+@media (max-width : 768px) {
     .owl-3-slider .owl-nav .owl-prev, .owl-3-slider .owl-nav .owl-next {
         display : none; }
 }
@@ -919,7 +912,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
     top      : 20px;
     z-index  : 2; }
 
-@media (max-width : 991.98px) {
+@media (max-width : 992px) {
     .title-with-bg.overlap-right {
         right : auto; }
 }
@@ -930,7 +923,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
     -webkit-box-shadow : 0.5em 0 0 #1A374D, -0.5em 0 0 #1A374D;
     box-shadow         : 0.5em 0 0 #1A374D, -0.5em 0 0 #1A374D; }
 
-@media (max-width : 991.98px) {
+@media (max-width : 992px) {
     .title-with-bg {
         font-size : 40px; }
 }
@@ -946,7 +939,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
     top           : 0;
     margin-bottom : 30px !important; }
 
-@media (max-width : 991.98px) {
+@media (max-width : 992px) {
     .feature-1 {
         display : block !important; }
 }
@@ -1121,13 +1114,13 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
     background-image : url('/static/img/hero-slider-1.jpg');
 }
 
-@media (max-width : 991.98px) {
+@media (max-width : 992px) {
     .feature-img-bg {
         height        : 300px !important;
         margin-bottom : 30px; }
 }
 
-@media (max-width : 991.98px) {
+@media (max-width : 992px) {
     .counter-wrap {
         margin-bottom : 30px; }
 }
@@ -1142,7 +1135,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
 .counter-wrap .counter span {
     color : #1A374D; }
 
-@media (max-width : 991.98px) {
+@media (max-width : 992px) {
     .counter-wrap .counter {
         font-size : 2.5rem; }
 }
@@ -1190,26 +1183,25 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
 
 .custom-accordion .accordion-item {
     background-color : #f9f9f9;
-    margin-bottom    : 0px;
+    margin-bottom    : 0;
     position         : relative;
-    border-radius    : 0px;
+    border-radius    : 0;
     overflow         : hidden; }
 
 .custom-accordion .accordion-item .btn-link {
     display         : block;
     width           : 100%;
-    padding         : 15px 0;
     text-decoration : none;
     text-align      : left;
     color           : #999;
     border          : none;
-    padding-left    : 40px;
+    padding         : 15px 0 15px 40px;
     border-radius   : 0;
     position        : relative;
     background      : #ffffff; }
 
 .custom-accordion .accordion-item .btn-link:before {
-    font-family       : 'icomoon';
+    font-family       : 'icomoon', serif;
     content           : "\f067";
     position          : absolute;
     top               : 50%;
@@ -1223,7 +1215,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
     color       : #1A374D; }
 
 .custom-accordion .accordion-item .btn-link[aria-expanded="true"]:before {
-    font-family       : 'icomoon';
+    font-family       : 'icomoon', serif;
     content           : "\f068";
     position          : absolute;
     color             : #1A374D;
@@ -1292,7 +1284,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
     pointer-events : none; }
 
 .control__indicator:after {
-    font-family        : 'icomoon';
+    font-family        : 'icomoon', serif;
     content            : '\e5ca';
     position           : absolute;
     display            : none;
@@ -1456,7 +1448,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
 
 .list-check li:before {
     content     : "\e5ca";
-    font-family : 'icomoon';
+    font-family : 'icomoon', serif;
     position    : absolute;
     top         : -.3rem;
     font-size   : 20px;
@@ -1470,7 +1462,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
     -ms-transform     : translateY(-50%);
     transform         : translateY(-50%); }
 
-@media (max-width : 767.98px) {
+@media (max-width : 768px) {
     .owl-single .owl-nav {
         display : none; }
 }
@@ -1505,14 +1497,14 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
     line-height : 1.6; }
 
 .site-footer .inner {
-    padding-top    : 0px;
+    padding-top    : 0;
     padding-bottom : 70px;
     background     : #f8f9fa; }
 
 .site-footer .inner.first {
     padding-top : 80px; }
 
-@media (max-width : 991.98px) {
+@media (max-width : 992px) {
     .site-footer {
         padding-top : 30px; }
 }
@@ -1579,7 +1571,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
     left        : 0;
     position    : absolute;
     content     : "";
-    font-family : 'icomoon';
+    font-family : 'icomoon', serif;
     color       : #6998AB; }
 
 .site-footer ul.quick-info li.email:before {

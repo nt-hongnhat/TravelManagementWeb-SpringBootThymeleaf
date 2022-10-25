@@ -1,14 +1,11 @@
 package com.nthn.springbootthymeleaf.service;
 
-import com.nthn.springbootthymeleaf.repository.BookingDetailRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.nthn.springbootthymeleaf.pojo.BookingDetail;
 
-@Service
-public class BookingDetailService {
+import java.util.List;
 
-    @Autowired
-    private BookingDetailRepository bookingDetailRepository;
+public interface BookingDetailService {
+    List<BookingDetail> getBookingDetails(Integer id);
 
 
 }

@@ -1,59 +1,13 @@
 package com.nthn.springbootthymeleaf.service;
 
-
 import com.nthn.springbootthymeleaf.pojo.Employee;
-import com.nthn.springbootthymeleaf.repository.EmployeeRepository;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Service;
 
-import java.util.NoSuchElementException;
+public interface EmployeeService {
+    Integer save(Employee employee);
 
-@Service
-public class EmployeeService {
+    void delete(Integer id);
 
-    @Autowired
-    private EmployeeRepository employeeRepository;
+    void update(Integer id, Employee vO);
 
-    public Integer save(Employee employee) {
-        Employee bean = new Employee();
-        BeanUtils.copyProperties(employee, bean);
-        bean = employeeRepository.save(bean);
-        return bean.getId();
-    }
-
-    public void delete(Integer id) {
-        employeeRepository.deleteById(id);
-    }
-
-    public void update(Integer id, Employee vO) {
-        Employee bean = requireOne(id);
-        BeanUtils.copyProperties(vO, bean);
-        employeeRepository.save(bean);
-    }
-
-    public Employee getById(Integer id) {
-        return (requireOne(id));
-    }
-
-//    public Page<EmployeeDTO> query(EmployeeQueryVO vO) {
-//        throw new UnsupportedOperationException();
-//    }
-
-
-    private Employee requireOne(Integer id) {
-        return employeeRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Resource not found: " + id));
-    }
-
-//    public Page<EmployeeDTO> query(EmployeeQueryVO vO) {
-//        throw new UnsupportedOperationException();
-//    }
-//
-//    private EmployeeDTO toDTO(Employee original) {
-//        EmployeeDTO bean = new EmployeeDTO();
-//        BeanUtils.copyProperties(original, bean);
-//        return bean;
-//    }
+    Employee getById(Integer id);
 }

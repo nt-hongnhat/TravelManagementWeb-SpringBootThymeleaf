@@ -1,6 +1,7 @@
 package com.nthn.springbootthymeleaf.pojo;
 
 import lombok.*;
+import lombok.experimental.Accessors;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
@@ -8,17 +9,18 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.Objects;
+import java.util.Set;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 @ToString
+@RequiredArgsConstructor
 @Entity
+@Accessors(chain = true)
 @Table(name = "booking")
 public class Booking implements Serializable {
-
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -28,35 +30,42 @@ public class Booking implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+
     @Column(name = "booking_date", nullable = false)
     private LocalDateTime bookingDate = LocalDateTime.now();
 
     @Column(name = "total", nullable = false)
     private BigDecimal total;
+
+    @Column(name = "payment", nullable = false)
+    private Boolean payment = Boolean.FALSE;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "customer_id", nullable = false)
+    @ToString.Exclude
     private Customer customer;
 
-    @ManyToMany
-    @JoinTable(name = "booking_detail",
-            joinColumns = @JoinColumn(name = "booking_id"),
-            inverseJoinColumns = @JoinColumn(name = "ticket_id"))
-    private List<BookingDetail> bookingDetails = new ArrayList<>();
 
-    @Transient
-    private Integer adult;
-    @Transient
-    private Integer children;
-    @Transient
-    private Integer youngChildren;
-    @Transient
-    private Integer infants;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "tour_id", nullable = false)
+    @ToString.Exclude
+    private Tour tour;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id")
-    public Customer getCustomer() {
-        return customer;
+    @OneToMany(orphanRemoval = true)
+    @JoinColumn(name = "booking_id")
+    @ToString.Exclude
+    private Set<BookingDetail> bookingDetails = new LinkedHashSet<>();
+
+    @Transient
+    private int count;
+
+    public int getCount() {
+        bookingDetails.forEach(bookingDetail -> {
+            count += bookingDetail.getQuantity();
+        });
+        return count;
     }
-
 
     @Override
     public boolean equals(Object o) {

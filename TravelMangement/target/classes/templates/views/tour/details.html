@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout-user}">
+<head>
+    <title th:text="${tour.getName()}"></title>
+</head>
+<body>
+
+<th:block layout:fragment="banner">
+    <div class="hero hero-inner">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8 mx-auto text-center">
+                    <div class="intro-wrap">
+                        <h1 class="mb-0" th:text="${tour.tourGroup.getName()}"></h1>
+                        <p class="text-white" th:text="${tour.tourGroup.getDescription()}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="content">
+    <div class="untree_co-section">
+        <div class="container my-5">
+            <h3 class="text-justify" th:text="${tour.getName()}"></h3>
+            <div class="row justify-content-center">
+                <div class="col-8">
+                    <div class="mb-5">
+                        <div>
+                            <img src="" alt="" class="img-fluid"
+                                 th:src="${tour.getImage()}" th:alt="${tour.getName()}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4 m-auto">
+                    <div class="custom-block aos-init aos-animate text-justify" data-aos="fade-up">
+                        <h3 class="section-title" th:text="${tour.getName()}">
+                        </h3>
+                        <div class="row">
+                            <div class="col-4 font-weight-bold">Mã tour</div>
+                            <div class="col-8" th:text="${tour.getId()}"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4 font-weight-bold">Thời gian</div>
+                            <div class="col-8" th:text="${tour.getDuration()}"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4 font-weight-bold">Khởi hành</div>
+                            <div class="col-8" th:text="'Hàng ngày'"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4 font-weight-bold">Di chuyển</div>
+                            <div class="col-8" th:text="${tour.getTransfer()}"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4 font-weight-bold">Xuất phát</div>
+                            <div class="col-8" th:text="${tour.getDeparturePlace()}"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4 font-weight-bold">Số chỗ còn</div>
+                            <div class="col-8" th:text="${tour.getMaxSlot()}"></div>
+                        </div>
+                        <br>
+                        <div class="row align-baseline">
+                            <h4 class="col-6 text-danger m-auto"
+                                th:text="${#numbers.formatCurrency(tour.getUnitPrice())}"></h4>
+                            <div class="col-6">
+                                <a class="btn btn-outline-primary active py-1 w-100 mt-auto"
+                                   th:href="@{/booking/{id}(id=${tour.getId()})}" th:text="#{label.booking}"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="custom-block aos-init aos-animate" data-aos="fade-up">
+                        <h2 class="section-title">
+                            <span><i class="icon-info_outline"></i></span>
+                            <span>Điểm nhấn hành trình</span>
+                        </h2>
+                        <div class="row">
+                            <div class="col-2">Hành trình</div>
+                            <div class="col-10" th:text="${tour.getItinerary()}"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-2">Lịch trình</div>
+                            <div class="col-10" th:text="${tour.getDuration()}"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-2">Khởi hành</div>
+                            <div class="col-10" th:text="'Hàng ngày'"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-2">Di chuyển</div>
+                            <div class="col-10" th:text="${tour.getTransfer()}"></div>
+                        </div>
+                        <br>
+                        <p class="text-justify" th:text="${tour.getDescription()}"></p>
+
+                    </div> <!-- END .custom-block -->
+                    <div class="custom-block aos-init aos-animate" data-aos="fade-up">
+                        <h2 class="section-title">
+                            <span><i class="icon-map-o"></i></span>
+                            <span th:text="#{label.schedule}"></span>
+                        </h2>
+                        <div class="custom-accordion" th:each="tourSchedule, iterStat:${tourSchedules}">
+                            <div class="accordion-item">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                            th:data-target="|.collapse${iterStat.count}|" aria-expanded="false"
+                                            aria-controls="collapseOne"
+                                            th:text="${'Ngày '+tourSchedule.getOrdinalDate()+' | '+tourSchedule.getItinerary()}">
+                                    </button>
+                                </h2>
+
+                                <div th:class="|collapse collapse${iterStat.count}|"
+                                     aria-labelledby="headingOne" style="">
+                                    <div class="accordion-body text-justify text-wrap"
+                                         th:text="${tourSchedule.getDescription()}">
+                                    </div>
+                                </div>
+                            </div> <!-- .accordion-item -->
+                        </div>
+                    </div> <!-- END .custom-block -->
+                </div>
+                <div class="col-lg-4">
+                    <div class="custom-block aos-init" data-aos="fade-up">
+                        <!--                            <h2 class="section-title">Social Icons</h2>-->
+                        <!--                            <ul class="list-unstyled social-icons light">-->
+                        <!--                                <li><a href="#"><span class="icon-facebook"></span></a></li>-->
+                        <!--                                <li><a href="#"><span class="icon-twitter"></span></a></li>-->
+                        <!--                                <li><a href="#"><span class="icon-linkedin"></span></a></li>-->
+                        <!--                                <li><a href="#"><span class="icon-google"></span></a></li>-->
+                        <!--                                <li><a href="#"><span class="icon-play"></span></a></li>-->
+                        <!--                            </ul>-->
+                    </div> <!-- END .custom-block -->
+
+                </div>
+            </div>
+
+            <!--            <div class="row justify-content-center mt-5 section">-->
+
+            <!--                <div class="col-lg-10">-->
+            <!--                    <div class="row mb-5">-->
+            <!--                        <div class="col text-center">-->
+            <!--                            <h2 class="section-title text-center">Tour liên quan</h2>-->
+            <!--                        </div>-->
+            <!--                    </div>-->
+            <!--                    <div class="row">-->
+            <!--                        <div class="custom-block aos-init" data-aos="fade-up" data-aos-delay="100">-->
+            <!--                            <div class="owl-single owl-carousel no-nav owl-loaded owl-drag">-->
+            <!--                                <div class="owl-stage-outer owl-height" style="height: 187.594px;">-->
+            <!--                                    <div class="owl-stage"-->
+            <!--                                         style="transform: translate3d(-1497px, 0px, 0px); transition: all 0.8s ease 0s; width: 3493px;">-->
+            <!--                                        <div class="owl-item cloned" style="width: 499px;">-->
+            <!--                                            <div class="testimonial mx-auto">-->
+            <!--                                                <figure class="img-wrap">-->
+            <!--                                                    <img src="/static/img/person_3.jpg" alt="Image"-->
+            <!--                                                         class="img-fluid">-->
+            <!--                                                </figure>-->
+            <!--                                                <h3 class="name">Lukas Devlin</h3>-->
+            <!--                                                <blockquote>-->
+            <!--                                                    <p>“There live the blind texts. Separated they live in-->
+            <!--                                                       Bookmarksgrove right at the coast of the Semantics, a large-->
+            <!--                                                       language ocean.”</p>-->
+            <!--                                                </blockquote>-->
+            <!--                                            </div>-->
+            <!--                                        </div>-->
+
+            <!--                                    </div>-->
+            <!--                                </div>-->
+            <!--                                <div class="owl-nav disabled">-->
+            <!--                                    <div class="owl-prev"><span class="icon-keyboard_backspace"></span></div>-->
+            <!--                                    <div class="owl-next"><span class="icon-keyboard_backspace"></span></div>-->
+            <!--                                </div>-->
+            <!--                                <div class="owl-dots">-->
+            <!--                                    <div class="owl-dot" data-index="0"><span></span></div>-->
+            <!--                                    <div class="owl-dot active" data-index="1"><span></span></div>-->
+            <!--                                    <div class="owl-dot" data-index="2"><span></span></div>-->
+            <!--                                </div>-->
+            <!--                            </div>-->
+            <!--                        </div>-->
+            <!--                    </div>-->
+            <!--                </div>-->
+            <!--            </div>-->
+
+        </div>
+    </div>
+
+    <div class="untree_co-section">
+        <div class="container">
+            <div class="row text-center justify-content-center mb-5">
+                <div class="col-lg-7"><h2 class="section-title text-center">Tour liên quan</h2></div>
+            </div>
+
+            <div class="owl-carousel owl-3-slider owl-loaded owl-drag">
+                <div class="owl-stage-outer owl-height" style="height: 465px;">
+                    <div class="owl-stage"
+                         style="transform: translate3d(-1750px, 0px, 0px); transition: all 0.7s ease 0s; width: 4200px;">
+                        <div class="owl-item cloned" style="width: 340px; margin-right: 10px;">
+                            <div class="item">
+                                <a class="media-thumb" th:href="@{/img/hero-slider-4.jpg}"
+                                   data-fancybox="gallery">
+                                    <div class="media-text">
+                                        <h3>Rialto Bridge</h3>
+                                        <span class="location">Italy</span>
+                                    </div>
+                                    <img th:src="@{/img/hero-slider-2.jpg}" alt="Image" class="img-fluid" src="">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="owl-item cloned" style="width: 340px; margin-right: 10px;">
+                            <div class="item">
+                                <a class="media-thumb" th:href="@{/img/hero-slider-4.jpg}" data-fancybox="gallery">
+                                    <div class="media-text">
+                                        <h3>San Francisco, United States</h3>
+                                        <span class="location">United States</span>
+                                    </div>
+                                    <img th:src="@{/img/hero-slider-2.jpg}" alt="Image" class="img-fluid" src="">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="owl-item cloned" style="width: 340px; margin-right: 10px;">
+                            <div class="item">
+                                <a class="media-thumb" th:href="@{/img/hero-slider-4.jpg}" data-fancybox="gallery">
+                                    <div class="media-text">
+                                        <h3>Lake Thun</h3>
+                                        <span class="location">Switzerland</span>
+                                    </div>
+                                    <img th:src="@{/img/hero-slider-2.jpg}" alt="Image" class="img-fluid" src="">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="owl-item" style="width: 340px; margin-right: 10px;">
+                            <div class="item">
+                                <a class="media-thumb" th:href="@{/img/hero-slider-4.jpg}" data-fancybox="gallery">
+                                    <div class="media-text">
+                                        <h3>Pragser Wildsee</h3>
+                                        <span class="location">Italy</span>
+                                    </div>
+                                    <img th:src="@{/img/hero-slider-2.jpg}" alt="Image" class="img-fluid" src="">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="owl-item" style="width: 340px; margin-right: 10px;">
+                            <div class="item">
+                                <a class="media-thumb" th:href="@{/img/hero-slider-4.jpg}" data-fancybox="gallery">
+                                    <div class="media-text">
+                                        <h3>Oia</h3>
+                                        <span class="location">Greece</span>
+                                    </div>
+                                    <img th:src="@{/img/hero-slider-2.jpg}" alt="Image" class="img-fluid" src="">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="owl-item active" style="width: 340px; margin-right: 10px;">
+                            <div class="item">
+                                <a class="media-thumb" th:href="@{/img/hero-slider-4.jpg}" data-fancybox="gallery">
+                                    <div class="media-text">
+                                        <h3>Perhentian Islands</h3>
+                                        <span class="location">Malaysia</span>
+                                    </div>
+                                    <img th:src="@{/img/hero-slider-2.jpg}" alt="Image" class="img-fluid" src="">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="owl-item active" style="width: 340px; margin-right: 10px;">
+                            <div class="item">
+                                <a class="media-thumb" th:href="@{/img/hero-slider-4.jpg}" data-fancybox="gallery">
+                                    <div class="media-text">
+                                        <h3>Rialto Bridge</h3>
+                                        <span class="location">Italy</span>
+                                    </div>
+                                    <img th:src="@{/img/hero-slider-2.jpg}" alt="Image" class="img-fluid" src="">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="owl-item" style="width: 340px; margin-right: 10px;">
+                            <div class="item">
+                                <a class="media-thumb" th:href="@{/img/hero-slider-1.jpg}" data-fancybox="gallery">
+                                    <div class="media-text">
+                                        <h3>San Francisco, United States</h3>
+                                        <span class="location">United States</span>
+                                    </div>
+                                    <img th:src="@{/img/hero-slider-2.jpg}" alt="Image" class="img-fluid" src="">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="owl-item" style="width: 340px; margin-right: 10px;">
+                            <div class="item">
+                                <a class="media-thumb" th:href="@{/img/hero-slider-1.jpg}" data-fancybox="gallery">
+                                    <div class="media-text">
+                                        <h3>Lake Thun</h3>
+                                        <span class="location">Switzerland</span>
+                                    </div>
+                                    <img th:src="@{/img/hero-slider-2.jpg}" alt="Image" class="img-fluid" src="">
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="owl-nav">
+                    <div class="owl-prev"><span class="icon-keyboard_backspace"></span></div>
+                    <div class="owl-next"><span class="icon-keyboard_backspace"></span></div>
+                </div>
+                <div class="owl-dots">
+                    <div class="owl-dot" data-index="-3"><span></span></div>
+                    <div class="owl-dot active" data-index="-2"><span></span></div>
+                    <div class="owl-dot"><span></span></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</th:block>
+</body>
+</html>

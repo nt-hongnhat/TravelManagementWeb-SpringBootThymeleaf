@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout-user}">
+<head>
+    <title th:text="'Danh sách tour'"></title>
+</head>
+<body>
+
+<th:block layout:fragment="banner">
+    <div class="hero hero-inner">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mx-auto text-center">
+                    <div class="intro-wrap">
+                        <!--                        <h1 class="mb-0" th:text="${tourGroup.getName()}"></h1>-->
+                        <!--                        <p class="text-white" th:text="${tourGroup.getDescription()}"></p>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="content">
+    <div class="untree_co-section">
+        <div class="container">
+            <div class="row">
+                <div class="card border-0 " th:each="tour:${tours}"
+                     th:class="${tours.size()>1?'col-6 col-md-6 col-lg-4':'col-12'}">
+                    <div class="card h-100">
+                        <!-- Product image-->
+                        <img class="card-img-top" src="" alt="" th:src="${tour.getImage()}"
+                             th:alt="${tour.getDescription()}"/>
+                        <!-- Product details-->
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <!-- Product name-->
+                                <h5 class="fw-bolder text-wrap text-justify font-weight-bold"
+                                    th:text="${tour.getName()}"></h5>
+                                <!-- Product price-->
+
+                                <div class="text-left overflow-hidden text-nowrap">
+                                    <span><i class="icon-map"></i></span>
+                                    <span th:text="${tour.getItinerary()+'...'}"></span>
+                                </div>
+                                <div class="text-left">
+                                    <span><i class="icon-calendar"></i></span>
+                                    <span th:text="${tour.getDuration()}"></span>
+                                </div>
+                                <div class="text-left text-danger">
+                                    <span><i class="icon-tag"></i></span>
+                                    <span th:text="${#numbers.formatCurrency(tour.getUnitPrice())}"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Product actions-->
+                        <div class="card-footer pt-0 border-top-0 bg-transparent">
+                            <div class="text-center pt-1">
+                                <a class="btn btn-outline-secondary mt-auto"
+                                   th:href="@{/tour/{id}(id=${tour.getId()})}"
+                                   th:text="#{label.viewDetail}"></a>
+                                <a class="btn btn-outline-primary mt-auto active"
+                                   th:href="@{/booking/{id}(id=${tour.getId()})}"
+                                   th:text="#{label.booking}"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <nav th:if="${totalPages > 1}" aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>
+                <th:block th:if="${totalPages > 0}" class="pagination"
+                          th:each="pageNumber : ${pageNumbers}">
+                    <li class="page-item">
+                        <a th:text="${pageNumber}"
+                           th:class="${pageNumber==currentPage + 1} ? 'page-link active':'page-link'"
+                           th:href="@{/tours(page=${pageNumber})}"></a>
+                    </li>
+                </th:block>
+
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+    </div>
+
+</th:block>
+</body>
+</html>

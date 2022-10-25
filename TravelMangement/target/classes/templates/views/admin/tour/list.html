@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout-admin}">
+<head>
+    <title th:text="#{label.tourManagement}"></title>
+</head>
+<body>
+<h1 class="mt-4" layout:fragment="page-heading" th:text="#{label.tourManagement}"></h1>
+
+<ol class="breadcrumb" layout:fragment="breadcrumb">
+    <li class="breadcrumb-item"><a href="#" th:text="#{label.home}">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page" th:text="#{label.tourManagement}">Tour Management</li>
+</ol>
+
+<div class="card shadow mb-4" layout:fragment="page-content">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <div class="row align-items-center justify-content-between pt-3">
+                <div class="col-auto">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="far fa-map"></i>
+                        <span th:text="'Danh sách tour du lịch'"></span>
+                    </h6>
+                </div>
+
+                <div class="col-12 col-xl-auto">
+                    <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" th:href="@{/admin/categories}">
+                        <i class="fas fa-list-alt"></i>
+                        <span th:text="#{label.categoriesManagement}"></span>
+                    </a>
+                    <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+                       th:href="@{${#request.getRequestURL()}+'/create'}">
+                        <i class="fas fa-folder-plus"></i>
+                        <span th:text="#{label.createTour}"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable">
+                <thead>
+                <tr class="text-wrap text-center">
+                    <th class="align-middle" th:text="#{label.id}"></th>
+                    <th class="align-middle" th:text="'Nhóm tour'"></th>
+                    <th class="align-middle" th:text="'Tên chuyến du lịch'"></th>
+                    <th class="align-middle" th:text="'Lịch trình'"></th>
+                    <th class="align-middle" th:text="'Ngày khởi hành'"></th>
+                    <th class="align-middle" th:text="'Số lượng chỗ tối đa'"></th>
+                    <th class="align-middle" th:text="'Số lượng chỗ còn đặt được'"></th>
+                    <th class="align-middle" th:text="#{label.action}"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="tour:${tours}">
+                    <td class="align-middle" th:text="${tour.id}"></td>
+                    <td class="align-middle text-nowrap" th:text="${tour.tourGroup.name}"></td>
+                    <td class="align-middle text-wrap w-25" th:text="${tour.name}"></td>
+
+                    <td class="align-middle text-nowrap" th:text="${tour.duration}"></td>
+                    <td class="align-middle" th:text="${#temporals.format(tour.getDepartureDate(), 'dd/MM/yyyy')}"></td>
+                    <td class="align-middle" th:text="${tour.maxSlot}"></td>
+                    <td class="align-middle" th:text="${tour.getAvailableSlot().intValue()}"></td>
+
+                    <td class="align-middle text-center text-nowrap">
+                        <a class="badge badge-primary px-2 py-1" data-toggle="modal"
+                           data-target="#editModal" th:href="@{${#request.getRequestURL()}+'/'+${tour.id}+'/edit'}">
+                            <i class="fas fa-edit fa-w-3"></i>
+                            <span th:text="#{label.edit}"></span>
+                        </a>
+                        <a class="badge badge-danger px-2 py-1"
+                           th:href="@{{id}/delete(id=${tour.id})}"
+                           data-toggle="modal" data-target="#deleteModal">
+                            <i class="fas fa-trash fa-w-3"></i>
+                            <span th:text="#{label.delete}"></span>
+                        </a>
+                        <div th:replace="~{/fragments/modal::delete('tours', ${tour.id}, ${tour.getName()})} "
+                             id="deleteModal"></div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>

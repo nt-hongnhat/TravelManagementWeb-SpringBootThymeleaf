@@ -72,14 +72,14 @@
 <script th:src="@{/js/custom.js}"></script>
 <script>
     $(function () {
-        var slides = $('.slides'),
+        const slides = $('.slides'),
             images = slides.find('img');
 
         images.each(function (i) {
             $(this).attr('data-id', i + 1);
         })
 
-        var typed = new Typed('.typed-words', {
+        const typed = new Typed('.typed-words', {
             strings: ["San Francisco.", " Paris.", " New Zealand.", " Maui.", " London."],
             typeSpeed: 80,
             backSpeed: 80,

@@ -26,7 +26,54 @@
         </div>
     </div>
 </div>
+<div th:fragment="create(model, titleModal, labelCreate)" class="modal fade" id="createModal" tabindex="-1"
+     role="dialog"
+     aria-labelledby="titleModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl " role="document">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <h5 class="modal-title" th:text="${titleModal}"></h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
 
+            <div class="modal-body" th:insert="~{::bodyModal}">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">
+                    Huỷ
+                </button>
+                <a class="btn btn-primary"
+                   th:href="@{/admin/{model}/create(model=${model})}" th:text="${labelCreate}"></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="edit(model, id, titleModal)" class="modal fade" id="editModal" tabindex="-1" role="dialog"
+     aria-labelledby="titleModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl " role="document">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <h5 class="modal-title" id="titleModal" th:text="${titleModal}"></h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+
+            <div class="modal-body" th:insert="~{::bodyModal}">HELLO
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">
+                    Huỷ
+                </button>
+                <a class="btn btn-primary"
+                   th:href="@{/admin/{model}/{id}/edit(model=${model}, id=${id})}" th:text="#{label.saveChanges}"></a>
+            </div>
+        </div>
+    </div>
+</div>
 <div th:fragment="delete(model, id, variable)" class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
      aria-labelledby="exampleModalLabel"
      aria-hidden="true">
