@@ -40,7 +40,7 @@ public class Category implements Serializable {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id")
     @ToString.Exclude
-    private Set<TourGroup> tourGroups = new LinkedHashSet<>();
+    private List<TourGroup> tourGroups = new ArrayList<>();
 
 
 }

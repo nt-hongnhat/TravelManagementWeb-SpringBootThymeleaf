@@ -14,7 +14,6 @@
 
     <div class="row">
         <div class="col-xl-8 col-lg-7">
-
             <div class="card shadow mb-4" th:each="category:${categories}">
                 <div class="card-header py-3">
                     <div class="row align-items-center justify-content-between">
@@ -24,6 +23,51 @@
                                 <span th:text="${category.name}"></span>
                             </h6>
                             <p th:text="${category.description}"></p>
+                        </div>
+                        <div class="col-12 col-xl-auto">
+                            <!--                            <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"-->
+                            <!--                               th:href="@{/admin/categories}">-->
+                            <!--                                <i class="fas fa-users"></i>-->
+                            <!--                                <span>Quản lý phân quyền</span>-->
+                            <!--                            </a>-->
+                            <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal"
+                               data-target="#createModal">
+                                <i class="fas fa-user-plus"></i>
+                                <span th:text="'Thêm danh mục tour'"></span>
+                            </a>
+
+                            <div th:fragment="create('categories', 'Thêm danh mục tour', 'Thêm danh mục')"
+                                 class="modal fade" id="createModal" tabindex="-1"
+                                 role="dialog"
+                                 aria-labelledby="titleModal" aria-hidden="true">
+                                <div th:fragment="bodyModal">
+                                    <form method="post" action=""
+                                          th:action="@{/admin/categories/create}">
+                                        <div class="mb-3">
+                                            <label class="mb-1" for="inputCategoryName"
+                                                   th:text="'Tên danh mục *'"></label>
+                                            <input class="form-control" id="inputCategoryName" name="categoryName"
+                                                   type="text" autofocus required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="mb-1" for="inputLinkStatic"
+                                                   th:text="'Liên kết tĩnh *'"></label>
+                                            <input class="form-control" id="inputLinkStatic" name="linkStatic"
+                                                   type="text" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="mb-1" for="inputDescription"
+                                                   th:text="'Mô tả danh mục *'"></label>
+                                            <textarea class="form-control" id="inputDescription" name="description"
+                                                      type="text" rows="5"
+                                                      required></textarea>
+                                        </div>
+                                        <!-- Submit button-->
+                                        <button class="btn btn-primary" type="submit"
+                                                th:text="'Thêm danh mục'"></button>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

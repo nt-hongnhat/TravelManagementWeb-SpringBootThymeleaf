@@ -180,7 +180,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
 .site-nav {
     position : absolute;
     top      : 0;
-    z-index  : 9;
+    z-index  : 10;
     width    : 100%; }
 
 .site-nav {

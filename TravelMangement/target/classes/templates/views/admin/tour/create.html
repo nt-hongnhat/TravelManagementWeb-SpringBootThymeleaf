@@ -63,22 +63,18 @@
                                    th:field="*{itinerary}">
                         </div>
                         <div class="row gx-3 mb-3">
-                            <div class="col-4">
+                            <div class="col-6">
                                 <span class="mb-1" th:text="'Thời gian đi *'"></span>
-                                <div class="input-group">
+                                <div class="input-group p-0 m-0 align-middle">
                                     <input class="form-control col-4" type="number" name="days" id="days" min="1"
                                            required th:value="1" th:field="*{days}">
-                                    <label class="input-group-prepend" for="days" th:text="' ngày'"></label>
+                                    <label class="mb-1 col-2" for="days" th:text="' ngày'"></label>
                                     <input class="form-control col-4" type="number" name="nights" id="nights" min="0"
                                            required th:value="0" th:field="*{nights}">
-                                    <label class="input-group-prepend" for="nights" th:text="' đêm'"></label>
+                                    <label class="mb-1 col-2 " for="nights" th:text="' đêm'"></label>
                                 </div>
                             </div>
-                            <div class="col-2">
-                                <label class="mb-1" for="inputMaxSlot" th:text="'Số chỗ tối đa *'"></label>
-                                <input class="form-control" type="number" id="inputMaxSlot" required
-                                       min="10" th:value="10" th:field="*{maxSlot}">
-                            </div>
+
                             <div class="col-6">
                                 <label class="mb-1" for="inputTransfer" th:text="'Phương tiện di chuyển *'"></label>
                                 <input class="form-control" type="text" id="inputTransfer" required
@@ -109,28 +105,16 @@
                             </div>
                         </div>
                         <div class="row gx-3 mb-3">
-                            <div class="col-4">
-                                <label class="mb-1" for="inputTourTicket" th:text="'Giá tour *'"></label>
-                                <input class="form-control" type="number" id="inputTourTicket" required min="100000"
-                                       step="1000"
-                                       th:field="*{unitPrice}">
+                            <div class="col-6">
+                                <label class="mb-1" for="inputTourTicket1" th:text="'Giá tour *'"></label>
+                                <input class="form-control" type="number" id="inputTourTicket1" required
+                                       min="100000" step="1000" th:value="100000" th:field="*{unitPrice}">
                             </div>
-                            <!--                            <div class="col-4">-->
-                            <!--                                <label class="mb-1" for="inputDeparturePlace" th:text="'Nơi khởi hành *'"></label>-->
-                            <!--                                <select id="inputDeparturePlace" class="form-select custom-select"-->
-                            <!--                                        th:field="*{departurePlace}">-->
-                            <!--                                    <option th:each="province:${provinces}" th:value="${province.getName()}"-->
-                            <!--                                            th:text="${province.getName()}"></option>-->
-                            <!--                                </select>-->
-                            <!--                            </div>-->
-                            <!--                            <div class="col-4">-->
-                            <!--                                <label for="inputDestinationPlace" class="mb-1" th:text="'Nơi đến *'"></label>-->
-                            <!--                                <select id="inputDestinationPlace" class="form-select custom-select"-->
-                            <!--                                        th:field="*{destinationPlace}">-->
-                            <!--                                    <option th:each="province:${provinces}" th:value="${province.getName()}"-->
-                            <!--                                            th:text="${province.getName()}"></option>-->
-                            <!--                                </select>-->
-                            <!--                            </div>-->
+                            <div class="col-6">
+                                <label class="mb-1" for="inputMaxSlot" th:text="'Số chỗ tối đa *'"></label>
+                                <input class="form-control" type="number" id="inputMaxSlot" required
+                                       min="10" th:value="10" th:field="*{maxSlot}">
+                            </div>
                         </div>
 
                         <div class="mb-3">
@@ -156,20 +140,23 @@
         });
 
         function showImageThumbnail(fileInput) {
-            let file = fileInput.files[0];
+            for (const file in fileInput) {
+                let file = fileInput.files[0];
 
-            let reader = new FileReader();
-            let maxAllowedSize = 5 * 1024 * 1024;
+                let reader = new FileReader();
+                let maxAllowedSize = 5 * 1024 * 1024;
 
-            if (file.size > maxAllowedSize) {
-                alert('JPG hoặc PNG quá lớn!');
-                fileInput.files[0].value = "";
-            } else {
-                reader.onload = function (e) {
-                    $('#thumbnail').attr('src', e.target.result);
-                };
-                reader.readAsDataURL(file);
+                if (file.size > maxAllowedSize) {
+                    alert('JPG hoặc PNG quá lớn!');
+                    fileInput.files[0].value = "";
+                } else {
+                    reader.onload = function (e) {
+                        $('#thumbnail').attr('src', e.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
             }
+
         }
     </script>
 </th:block>

@@ -45,7 +45,7 @@ public class TourGroup implements Serializable {
     @OneToMany
     @JoinColumn(name = "tour_group_id")
     @ToString.Exclude
-    private Set<Tour> tours = new LinkedHashSet<>();
+    private List<Tour> tours = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

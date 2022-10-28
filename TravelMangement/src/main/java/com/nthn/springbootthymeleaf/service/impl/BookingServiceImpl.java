@@ -5,11 +5,10 @@ import com.nthn.springbootthymeleaf.repository.BookingRepository;
 import com.nthn.springbootthymeleaf.service.BookingService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -21,11 +20,9 @@ public class BookingServiceImpl implements BookingService {
     private BookingRepository bookingRepository;
 
     @Override
-    public Integer save(Booking booking) {
-        Booking bean = new Booking();
-        BeanUtils.copyProperties(booking, bean);
-        bean = bookingRepository.save(bean);
-        return bean.getId();
+    public Booking save(Booking booking) {
+
+        return bookingRepository.save(booking);
     }
 
     @Override

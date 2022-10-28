@@ -6,6 +6,7 @@ import org.hibernate.Hibernate;
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -19,23 +20,16 @@ import java.util.Set;
 @Table(name = "surcharge")
 public class Surcharge implements Serializable {
 
-    @Serial
-    private static final long serialVersionUID = 1L;
-
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "tour_ticket_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "surcharge", nullable = false)
-    private Double surcharge;
-
-
-    @OneToMany(mappedBy = "surcharge", orphanRemoval = true)
-    private Set<TourTicket> tourTickets = new LinkedHashSet<>();
+    @Column(name = "value", nullable = false)
+    private BigDecimal surcharge;
 
 
     @Override

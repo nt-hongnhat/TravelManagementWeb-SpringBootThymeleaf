@@ -1,8 +1,8 @@
 package com.nthn.springbootthymeleaf.service.impl;
 
+import com.nthn.springbootthymeleaf.DTO.SearchTourDTO;
 import com.nthn.springbootthymeleaf.pojo.Tour;
 import com.nthn.springbootthymeleaf.pojo.TourGroup;
-import com.nthn.springbootthymeleaf.pojo.TourTicket;
 import com.nthn.springbootthymeleaf.repository.TourGroupRepository;
 import com.nthn.springbootthymeleaf.repository.TourRepository;
 import com.nthn.springbootthymeleaf.repository.TourTicketRepository;
@@ -14,11 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Date;
+import java.math.BigDecimal;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -87,31 +85,107 @@ public class TourServiceImpl implements TourService {
         return this.tourRepository.findAll(pageable);
     }
 
+    @Override
+    public Page<Tour> getTourPageBySearchTour(SearchTourDTO searchTourDTO, Pageable pageable) {
+
+        if (searchTourDTO == null) {
+            return tourRepository.findAll(pageable);
+        }
+        String departurePlace = searchTourDTO.getDeparturePlace();
+        String destinationPlace = searchTourDTO.getDestinationPlace();
+        LocalDate fromDate = searchTourDTO.getFromDepartureDate();
+        LocalDate toDate = searchTourDTO.getToDepartureDate();
+
+        if (searchTourDTO.getRangePrice() == null) {
+            return tourRepository.searchTours(departurePlace, destinationPlace,
+                    fromDate, toDate, pageable);
+        }
+
+        BigDecimal fromPrice = BigDecimal.valueOf(searchTourDTO.getFromPrice());
+        BigDecimal toPrice = BigDecimal.valueOf(searchTourDTO.getToPrice());
+
+        return tourRepository.searchTours(departurePlace, destinationPlace,
+                fromDate, toDate, fromPrice, toPrice, pageable);
+    }
+
+
+    @Override
+    public Page<Tour> getTourPageByCategory(String categoryLink, Pageable pageable) {
+        return tourRepository.findByCategory(categoryLink, pageable);
+    }
+
+    @Override
+    public Page<Tour> getTourPageByTourGroup(String tourGroupLink, Pageable pageable) {
+        return tourRepository.findByTourGroup(tourGroupLink, pageable);
+    }
+
+
     /**
-     * Lấy trang tour theo nhóm tour
-     *
+     * @param departurePlace
+     * @param destinationPlace
+     * @param duration
      * @param tourGroupLink
      * @param pageable
      * @return
      */
     @Override
-    public Page<Tour> getTourPage(String tourGroupLink, Pageable pageable) {
-        return this.tourRepository.findByTourGroup(pageable, tourGroupLink);
+    public Page<Tour> getTourPage(String departurePlace, String destinationPlace, String duration, String tourGroupLink, Pageable pageable) {
+        return null;
     }
 
     /**
-     * Tìm kiếm tour theo nhiều tiêu chí
-     *
-     * @param departurePlace   : nơi khởi hành
-     * @param destinationPlace : nơi đến
-     * @param duration         : thời gian đi
-     * @param pageable         : page, size
-     * @return page
+     * @param params
+     * @param pageable
+     * @return
      */
     @Override
-    public Page<Tour> getTourPage(String departurePlace, String destinationPlace, String duration, String tourGroupLink, Pageable pageable) {
-        return tourRepository.searchTours(departurePlace, destinationPlace, duration, tourGroupLink, pageable);
+    public Page<Tour> getTourPage(Map<String, String> params, Pageable pageable) {
+        return null;
     }
+
+//    /**
+//     * Tìm kiếm tour theo nhiều tiêu chí
+//     *
+//     * @param departurePlace   : nơi khởi hành
+//     * @param destinationPlace : nơi đến
+//     * @param duration         : thời gian đi
+//     * @param pageable         : page, size
+//     * @return page
+//     */
+//    @Override
+//    public Page<Tour> getTourPage(String departurePlace, String destinationPlace, String duration, String tourGroupLink, Pageable pageable) {
+//        return tourRepository.searchTours(departurePlace, destinationPlace, duration, tourGroupLink, pageable);
+//    }
+
+//    @Override
+//    public Page<Tour> getTourPage(Map<String, String> params, Pageable pageable) {
+//        int page, size, totalPages, totalItems;
+//
+//        Page<Tour> tourPage;
+//        List<Tour> tours;
+//        List<Integer> pageNumbers;
+//        String price, fromPrice, toPrice, departurePlace, destinationPlace, duration;
+//
+//
+//        duration = params.get("daterange");
+//        String[] date = duration.split("-");
+//        System.out.println(date[0].trim());
+//        System.out.println(date[1].trim());
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+//        LocalDate fromDate = LocalDate.parse(date[0].trim(), formatter);
+//        LocalDate toDate = LocalDate.parse(date[1].trim(), formatter);
+//
+//
+//        page = Integer.parseInt(params.getOrDefault("page", "1"));
+//        size = Integer.parseInt(params.getOrDefault("size", "6"));
+//
+//
+//        departurePlace = params.getOrDefault("departure", "");
+//        destinationPlace = params.getOrDefault("destination", "");
+//        duration = params.getOrDefault("duration", "");
+//        Integer numberPeople = Integer.valueOf(params.getOrDefault("numberPeople", "1"));
+//        return tourRepository.searchTours(departurePlace, destinationPlace, duration, numberPeople, pageable);
+//    }
 
 
     /**
@@ -122,7 +196,7 @@ public class TourServiceImpl implements TourService {
      * @return
      */
     @Override
-    public Page<Tour> getTourPageByTourGroup(List<TourGroup> tourGroups, Pageable pageable) {
+    public Page<Tour> getTourPageByTourGroup(Set<TourGroup> tourGroups, Pageable pageable) {
         return tourRepository.getByTourGroupIn(tourGroups, pageable);
     }
 

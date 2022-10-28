@@ -20,11 +20,9 @@ public class CustomerServiceImpl implements CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    public Integer save(Customer customerDTO) {
-        Customer customer = new Customer();
-        BeanUtils.copyProperties(customerDTO, customer);
-        customer = customerRepository.save(customer);
-        return customer.getId();
+    @Override
+    public Customer save(Customer customer) {
+        return customerRepository.save(customer);
     }
 
     public void delete(Integer id) {
@@ -41,10 +39,16 @@ public class CustomerServiceImpl implements CustomerService {
         return requireOne(id);
     }
 
+    @Override
+    public Customer getCustomer(String identified) {
+        return customerRepository.getCustomerByIdentified(identified);
+    }
+
     public List<Customer> getCustomers() {
         return customerRepository.findAll();
     }
 
+    @Override
     public Page<Customer> getCustomers(Pageable pageable) {
         return customerRepository.findAll(pageable);
     }

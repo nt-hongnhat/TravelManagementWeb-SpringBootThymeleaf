@@ -22,6 +22,11 @@ public class BookingDetailServiceImpl implements BookingDetailService {
      */
     @Override
     public List<BookingDetail> getBookingDetails(Integer id) {
-        return null;
+        return bookingDetailRepository.findByBookingId(id);
+    }
+
+    @Override
+    public BookingDetail save(BookingDetail bookingDetail) {
+        return bookingDetailRepository.save(bookingDetail);
     }
 }

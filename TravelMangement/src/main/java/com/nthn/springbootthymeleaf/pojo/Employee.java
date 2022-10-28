@@ -48,6 +48,8 @@ public class Employee implements Serializable {
 
     @Column(name = "phone")
     private String phone;
+    @Column(name = "active")
+    private Boolean active = true;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")

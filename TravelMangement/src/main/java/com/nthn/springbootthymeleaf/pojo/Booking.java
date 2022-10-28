@@ -35,7 +35,7 @@ public class Booking implements Serializable {
     private LocalDateTime bookingDate = LocalDateTime.now();
 
     @Column(name = "total", nullable = false)
-    private BigDecimal total;
+    private BigDecimal total = BigDecimal.valueOf(0);
 
     @Column(name = "payment", nullable = false)
     private Boolean payment = Boolean.FALSE;
@@ -53,18 +53,42 @@ public class Booking implements Serializable {
 
 
     @OneToMany(orphanRemoval = true)
-    @JoinColumn(name = "booking_id")
+    @JoinColumn(name = "booking_id", insertable = false, updatable = false)
     @ToString.Exclude
     private Set<BookingDetail> bookingDetails = new LinkedHashSet<>();
 
+    @ManyToMany
+    @JoinTable(name = "booking_detail",
+            joinColumns = @JoinColumn(name = "booking_id"),
+            inverseJoinColumns = @JoinColumn(name = "tour_ticket_id"))
+    @ToString.Exclude
+    private Set<TourTicket> tourTickets = new LinkedHashSet<>();
+
+
     @Transient
     private int count;
+    @Transient
+    private int numberAdult = 1;
+    @Transient
+    private int numberChildren = 0;
+    @Transient
+    private int numberYoungChildren = 0;
+    @Transient
+    private int numberInfants = 0;
+
 
     public int getCount() {
         bookingDetails.forEach(bookingDetail -> {
             count += bookingDetail.getQuantity();
         });
         return count;
+    }
+
+    public void calculateTotal() {
+        bookingDetails.forEach(bookingDetail -> {
+            total = total.add(bookingDetail.getUnitPrice().multiply(BigDecimal.valueOf(bookingDetail.getQuantity())));
+            System.out.println(bookingDetail.getTourTicket().getUnitPrice() + "--------" + bookingDetail.getQuantity());
+        });
     }
 
     @Override

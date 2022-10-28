@@ -25,6 +25,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public Category getCategory(String linkStatic) {
+        return categoryRepository.getCategoryByLinkStatic(linkStatic);
+    }
+
+    @Override
     public List<Category> getCategories() {
         return categoryRepository.findAll();
     }

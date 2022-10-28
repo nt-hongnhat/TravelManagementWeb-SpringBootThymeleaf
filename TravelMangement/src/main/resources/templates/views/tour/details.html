@@ -28,10 +28,8 @@
             <div class="row justify-content-center">
                 <div class="col-8">
                     <div class="mb-5">
-                        <div>
-                            <img src="" alt="" class="img-fluid"
-                                 th:src="${tour.getImage()}" th:alt="${tour.getName()}">
-                        </div>
+                        <img src="" alt="" class="img-fluid" height="500px"
+                             th:src="@{${tour.getPhotosImagePath()}}" th:alt="${tour.getName()}">
                     </div>
                 </div>
                 <div class="col-4 m-auto">
@@ -81,22 +79,22 @@
                     <div class="custom-block aos-init aos-animate" data-aos="fade-up">
                         <h2 class="section-title">
                             <span><i class="icon-info_outline"></i></span>
-                            <span>Điểm nhấn hành trình</span>
+                            <span class="">Điểm nhấn hành trình</span>
                         </h2>
                         <div class="row">
-                            <div class="col-2">Hành trình</div>
+                            <div class="col-2 font-weight-bold">Hành trình</div>
                             <div class="col-10" th:text="${tour.getItinerary()}"></div>
                         </div>
                         <div class="row">
-                            <div class="col-2">Lịch trình</div>
+                            <div class="col-2 font-weight-bold">Lịch trình</div>
                             <div class="col-10" th:text="${tour.getDuration()}"></div>
                         </div>
                         <div class="row">
-                            <div class="col-2">Khởi hành</div>
+                            <div class="col-2 font-weight-bold">Khởi hành</div>
                             <div class="col-10" th:text="'Hàng ngày'"></div>
                         </div>
                         <div class="row">
-                            <div class="col-2">Di chuyển</div>
+                            <div class="col-2 font-weight-bold">Di chuyển</div>
                             <div class="col-10" th:text="${tour.getTransfer()}"></div>
                         </div>
                         <br>

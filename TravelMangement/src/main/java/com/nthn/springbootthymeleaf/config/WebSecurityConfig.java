@@ -1,5 +1,6 @@
 package com.nthn.springbootthymeleaf.config;
 
+import com.nthn.springbootthymeleaf.config.handlers.LoginSuccessHandler;
 import com.nthn.springbootthymeleaf.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -26,6 +28,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private DataSource dataSource;
+    @Autowired
+    private AuthenticationSuccessHandler successHandler;
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -38,6 +42,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         authenticationProvider.setUserDetailsService(accountService);
         authenticationProvider.setPasswordEncoder(bCryptPasswordEncoder());
         return authenticationProvider;
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler successHandler() {
+        return new LoginSuccessHandler();
     }
 
     @Autowired
@@ -72,16 +81,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // Submit URL của trang login
                 .loginProcessingUrl("/login") // Submit URL
                 .loginPage("/login")
-
+                .defaultSuccessUrl("/")
                 .failureUrl("/login?error")
+                .successHandler(this.successHandler)
                 .usernameParameter("username")//
                 .passwordParameter("password")
-                .successHandler((request, response, authentication) -> {
-                    User user = (User) authentication.getPrincipal();
-                    if (request.isUserInRole("ADMIN"))
-                        response.sendRedirect(request.getContextPath() + "/admin");
-                    else response.sendRedirect(request.getContextPath());
-                })
                 // Cấu hình cho Logout Page.
                 .and()
                 .logout()

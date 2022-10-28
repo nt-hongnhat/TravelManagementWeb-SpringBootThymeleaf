@@ -3,6 +3,7 @@ package com.nthn.springbootthymeleaf.controller;
 import com.nthn.springbootthymeleaf.pojo.Account;
 import com.nthn.springbootthymeleaf.service.AccountService;
 import com.nthn.springbootthymeleaf.service.PermissionService;
+import com.nthn.springbootthymeleaf.utils.FileUploadUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -72,18 +73,7 @@ public class AccountController {
                 account.setAvatarUrl(fileName);
 
                 String uploadDir = "src/main/resources/static/avatar/" + account.getId();
-                Path uploadPath = Paths.get(uploadDir);
-
-                if (!Files.exists(uploadPath)) {
-                    Files.createDirectories(uploadPath);
-                }
-
-                try (InputStream inputStream = multipartFile.getInputStream()) {
-                    Path filePath = uploadPath.resolve(fileName);
-                    Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-                } catch (IOException e) {
-                    throw new IOException("Không thể đăng tải file: " + fileName);
-                }
+                FileUploadUtils.saveFile(uploadDir, fileName, multipartFile);
             }
 
             accountService.update(id, account);
@@ -146,18 +136,7 @@ public class AccountController {
             account = accountService.create(newAccount);
 
             String uploadDir = "src/main/resources/static/avatar/" + account.getId();
-            Path uploadPath = Paths.get(uploadDir);
-
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
-            }
-
-            try (InputStream inputStream = multipartFile.getInputStream()) {
-                Path filePath = uploadPath.resolve(fileName);
-                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-                throw new IOException("Không thể đăng tải file: " + fileName);
-            }
+            FileUploadUtils.saveFile(uploadDir, fileName, multipartFile);
 
         } catch (Exception exception) {
             model.addAttribute("permissions", permissionService.getPermissions());

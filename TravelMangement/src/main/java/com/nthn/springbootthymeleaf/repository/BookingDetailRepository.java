@@ -9,9 +9,9 @@ import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 public interface BookingDetailRepository extends JpaRepository<BookingDetail, Integer>, JpaSpecificationExecutor<BookingDetail> {
-    @Query("select b from BookingDetail b where b.bookingId = ?1")
+    @Query("select b from BookingDetail b where b.booking.id = ?1")
     List<BookingDetail> findByBookingId(Integer bookingId);
 
-    @Query("select b from BookingDetail b where b.bookingId in ?1")
+    @Query("select b from BookingDetail b where b.booking.id in ?1")
     List<BookingDetail> findByBookingIdIn(List<Integer> bookingIds);
 }

@@ -68,7 +68,7 @@
                         <td class="align-middle" th:text="${account.email}"></td>
                         <!--                        <td th:text="${account.createTime}"></td>-->
                         <td class="align-middle"
-                            th:text="${#temporals.format(account.createTime, 'hh:mm:ss dd-MM-yyyy')}"></td>
+                            th:text="${#temporals.format(account.createTime, 'hh:mm:ss dd/MM/yyyy')}"></td>
                         <!--                        <td th:text="${account.lastLogin}"></td>-->
                         <td class="align-middle">
                             <span th:text="${account.active==true}?'Đang hoạt động':'Không hoạt động'"

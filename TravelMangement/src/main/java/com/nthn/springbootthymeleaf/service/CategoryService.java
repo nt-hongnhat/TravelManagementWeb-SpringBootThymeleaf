@@ -10,6 +10,8 @@ public interface CategoryService {
 
     Category getCategoryById(Integer id);
 
+    Category getCategory(String linkStatic);
+
     List<Category> getCategories(String keyword);
 
     List<Category> getCategories();

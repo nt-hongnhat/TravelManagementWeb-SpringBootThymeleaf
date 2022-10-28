@@ -12,9 +12,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.LinkedHashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -86,6 +84,9 @@ public class Tour implements Serializable {
     @Transient
     private MultipartFile multipartFile;
 
+    @Column(name = "active")
+    private Boolean active = true;
+
     @Transient
     public String getPhotosImagePath() {
         if (image == null || id == null) return null;
@@ -110,7 +111,7 @@ public class Tour implements Serializable {
 
     @OneToMany(mappedBy = "tour", orphanRemoval = true)
     @ToString.Exclude
-    private Set<TourTicket> tourTickets = new LinkedHashSet<>();
+    private List<TourTicket> tourTickets = new ArrayList<>();
 
 
     @OneToMany(mappedBy = "tour", orphanRemoval = true)

@@ -86,14 +86,15 @@ public class TourController {
     }
 
     @PostMapping("/create")
-    public String save(@RequestParam("tourImage") MultipartFile multipartFile, @Validated @ModelAttribute("newTour") Tour newTour, Model model, BindingResult result, final RedirectAttributes redirectAttributes) throws IOException {
+    public String save(@RequestParam("tourImage") MultipartFile multipartFile, @Validated @ModelAttribute("newTour") Tour newTour, @ModelAttribute("tourTickets") List<TourTicket> tourTickets, Model model, BindingResult result, final RedirectAttributes redirectAttributes) throws IOException {
         System.out.println("New: " + newTour);
         System.out.println(multipartFile.getOriginalFilename());
-
+        System.out.println(tourTickets.toString());
         model.addAttribute("newTour", newTour);
 
         if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Error" + result.getAllErrors());
+            System.out.println(result.getAllErrors());
+            redirectAttributes.addFlashAttribute("errorMessage", "Lỗi!!!");
             return "redirect:/admin/tours/create?error";
         }
 

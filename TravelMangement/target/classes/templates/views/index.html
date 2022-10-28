@@ -18,12 +18,12 @@
 
                         <div class="row">
                             <div class="col-12">
-                                <form class="form" method="get" th:action="@{/tours/}">
+                                <form class="form" method="get" th:action="@{/tours}" th:object="${searchTourDTO}">
                                     <div class="row mb-2">
                                         <div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-6">
                                             <label for="departure">Nơi khởi hành</label>
-                                            <select name="departure" id="departure"
-                                                    class="form-control custom-select">
+                                            <select name="departure" id="departure" class="form-control custom-select"
+                                                    th:field="*{departurePlace}">
                                                 <option th:each="departure:${departurePlaces}" th:value="${departure}"
                                                         th:text="${departure}"></option>
                                             </select>
@@ -31,25 +31,29 @@
                                         <div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-6">
                                             <label for="destination">Nơi đến</label>
                                             <select name="destination" id="destination"
-                                                    class="form-control custom-select">
-                                                <option th:each="province:${provinces}" th:value="${province.name}"
-                                                        th:text="${province.name}"></option>
+                                                    class="form-control custom-select" th:field="*{destinationPlace}">
+                                                <option th:each="province:${provinces}" th:value="${province.getName()}"
+                                                        th:text="${province.getName()}"></option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="row mb-2">
+                                        <!--                                        <div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-6">-->
+                                        <!--                                            <label for="duration">Thời gian đi</label>-->
+                                        <!--                                            <select name="duration" id="duration"-->
+                                        <!--                                                    class="form-control custom-select">-->
+                                        <!--                                                <option th:each="duration:${durations}" th:value="${duration}"-->
+                                        <!--                                                        th:text="${duration}"></option>-->
+                                        <!--                                            </select>-->
+                                        <!--                                        </div>-->
                                         <div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-6">
-                                            <label for="duration">Thời gian đi</label>
-                                            <select name="duration" id="duration"
-                                                    class="form-control custom-select">
-                                                <option th:each="duration:${durations}" th:value="${duration}"
-                                                        th:text="${duration}"></option>
-                                            </select>
+                                            <label for="departureDate">Ngày khởi hành</label>
+                                            <input type="text" class="form-control" name="daterange" id="departureDate">
                                         </div>
                                         <div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-6">
                                             <label for="numberPeople">Số người</label>
                                             <input type="number" name="numberPeople" id="numberPeople"
-                                                   class="form-control" min="1" th:value="1">
+                                                   class="form-control" min="1" th:value="1" th:field="*{numberPeople}">
                                         </div>
                                     </div>
                                     <div class="row mb-2 align-items-center">
@@ -147,7 +151,7 @@
                 <div class="col-6 col-sm-6 col-md-6 col-lg-3">
                     <div class="counter-wrap">
                         <div class="counter">
-                            <span class="" th:value="${countTours}" th:data-number="${countTours}"></span>
+                            <span class="text-center" th:value="${countTours}" th:data-number="${countTours}"></span>
                         </div>
                         <span class="caption">Chuyến du lịch</span>
                     </div>
@@ -155,7 +159,8 @@
                 <div class="col-6 col-sm-6 col-md-6 col-lg-3">
                     <div class="counter-wrap">
                         <div class="counter">
-                            <span class="" th:value="${countTourist}" th:data-number="${countTourist}"></span>
+                            <span class="text-center" th:value="${countTourist}"
+                                  th:data-number="${countTourist}"></span>
                         </div>
                         <span class="caption">Khách du lịch</span>
                     </div>
@@ -163,7 +168,7 @@
                 <div class="col-6 col-sm-6 col-md-6 col-lg-3">
                     <div class="counter-wrap">
                         <div class="counter">
-                            <span class="" th:value="${countNews}" th:data-number="${countNews}"></span>
+                            <span class="text-center" th:value="${countNews}" th:data-number="${countNews}"></span>
                         </div>
                         <span class="caption">Tin tức</span>
                     </div>
@@ -171,7 +176,7 @@
                 <div class="col-6 col-sm-6 col-md-6 col-lg-3">
                     <div class="counter-wrap">
                         <div class="counter">
-                            <span class="" th:value="${countPlaces}" th:data-number="${countPlaces}"></span>
+                            <span class="text-center" th:value="${countPlaces}" th:data-number="${countPlaces}"></span>
                         </div>
                         <span class="caption">Địa điểm tham quan</span>
                     </div>
@@ -181,29 +186,48 @@
     </div>
 
     <div class="untree_co-section">
-        <div class="container" th:each="tourGroup:${tourGroups}" th:if="${tourGroup!=null}">
+        <div class="container" th:each="category:${categories}" th:if="${category!=null}">
             <div class="row text-center justify-content-center mb-5">
                 <div class="col-lg-7">
-                    <h2 class="section-title text-center" th:text="${tourGroup.getName()}"></h2>
+                    <h2 class="section-title text-center" th:text="${category.getName()}"></h2>
                 </div>
             </div>
 
-            <div class="owl-carousel owl-3-slider">
-                <div class="item" th:each="tour:${tourGroup.getTours()}">
-                    <a class="media-thumb" th:href="@{/tours/{id}(id=${tour.getId()})}">
-                        <div class="media-text">
-                            <h6 th:text="${tour.getName()}"></h6>
-                            <div class="location"
-                                 th:text="${tour.getDuration()}"></div>
-                            <div
-                                    class="location"
-                                    th:text="${tour.getUnitPrice() + ' VND'}"></div>
-                        </div>
-                        <img alt="Image" class="img-fluid" src="/static/img/hero-slider-2.jpg">
-                    </a>
-                </div>
+            <th:block th:each="tourGroup:${category.tourGroups}">
+                <div class="owl-carousel owl-3-slider" th:each="tour, iteratorStat:${tourGroup.tours}">
 
-            </div>
+                    <div class="item">
+                        <a class="media-thumb" href="" data-fancybox="gallery">
+                            <div class="media-text">
+                                <h3 th:text="${tour.getName()}"></h3>
+                                <span class="location" th:text="${tour.getItinerary()}"></span>
+                            </div>
+                            <img src="" alt="Image" class="img-fluid" th:src="@{${tour.getPhotosImagePath()}}">
+                        </a>
+                    </div>
+
+                    <!--                    <div class="item">-->
+                    <!--                        <a class="media-thumb" href="" data-fancybox="gallery">-->
+                    <!--                            <div class="media-text">-->
+                    <!--                                <h3>Oia</h3>-->
+                    <!--                                <span class="location">Greece</span>-->
+                    <!--                            </div>-->
+                    <!--                            <img src="" alt="Image" class="img-fluid">-->
+                    <!--                        </a>-->
+                    <!--                    </div>-->
+
+                    <!--                    <div class="item">-->
+                    <!--                        <a class="media-thumb" href="" data-fancybox="gallery">-->
+                    <!--                            <div class="media-text">-->
+                    <!--                                <h3>Perhentian Islands</h3>-->
+                    <!--                                <span class="location">Malaysia</span>-->
+                    <!--                            </div>-->
+                    <!--                            <img src="" alt="Image" class="img-fluid">-->
+                    <!--                        </a>-->
+                    <!--                    </div>-->
+
+                </div>
+            </th:block>
         </div>
     </div>
 
@@ -216,8 +240,8 @@
                     <div class="owl-single owl-carousel no-nav">
                         <div class="testimonial mx-auto" th:each="feedback:${feedbacks}">
                             <figure class="img-wrap">
-                                <img th:src="${feedback.getAccount().getAvatarUrl()}" alt="Image" class="img-fluid"
-                                     src="">
+                                <img th:src="@{${feedback.getAccount().getPhotosImagePath()}}" alt="Image"
+                                     class="" src="" height="70px">
                             </figure>
                             <h3 class="name"
                                 th:text="${feedback.getAccount().getLastName()+ ' ' +feedback.getAccount().getFirstName() }"></h3>
@@ -235,37 +259,14 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-7 text-center">
-                    <h2 class="section-title text-center mb-5">Ý kiến</h2>
-
-                    <div class="owl-single owl-carousel no-nav">
-                        <div class="testimonial mx-auto" th:each="place:${places}">
-                            <figure class="img-wrap">
-                                <img th:src="${place.getImages()}" alt="Image" class="img-fluid"
-                                     src="">
-                            </figure>
-                            <h3 class="name"
-                                th:text="${place.getName() }"></h3>
-                            <blockquote>
-                                <q th:text="${place.getDistrict().getName()}">&ldquo;&rdquo;</q>
-                            </blockquote>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="untree_co-section testimonial-section mt-5">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-7 text-center">
                     <h2 class="section-title text-center mb-5">Địa điểm tham quan</h2>
 
                     <div class="owl-single owl-carousel no-nav">
-                        <div class="testimonial mx-auto" th:each="place:${places}">
+                        <div class="testimonial mx-auto">
                             <div class="container">
                                 <div class="row">
                                     <div class="col-6 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0"
-                                         th:each="place:${places}">
+                                         th:each="place, iStat:${places}" th:if="${iStat.index<4}">
                                         <div class="media-1">
                                             <a href="#" class="d-block mb-3"><img th:src="${place.getImages()}"
                                                                                   alt="Image"

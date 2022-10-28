@@ -1,8 +1,5 @@
 package com.nthn.springbootthymeleaf;
 
-import com.cloudinary.Cloudinary;
-import com.cloudinary.SingletonManager;
-import com.cloudinary.utils.ObjectUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

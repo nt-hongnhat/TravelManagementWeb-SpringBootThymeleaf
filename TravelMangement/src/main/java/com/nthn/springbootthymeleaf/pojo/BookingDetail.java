@@ -4,12 +4,10 @@ import lombok.*;
 import lombok.experimental.Accessors;
 import org.hibernate.Hibernate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @Getter
@@ -26,16 +24,29 @@ public class BookingDetail implements Serializable {
 
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "booking_id", nullable = false)
-    private Integer bookingId;
 
-    @Column(name = "tour_ticket_id", nullable = false)
-    private Integer tourTicketId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "booking_id", nullable = false)
+    @ToString.Exclude
+    private Booking booking;
 
-    @Column(name = "quantity", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "tour_ticket_id", nullable = false)
+    @ToString.Exclude
+    private TourTicket tourTicket;
+
+    @Column(name = "quantity")
     private Integer quantity;
+
+    @Column(name = "unit_price")
+    private BigDecimal unitPrice;
+
+    @Transient
+    private BigDecimal total;
+
 
     @Override
     public boolean equals(Object o) {

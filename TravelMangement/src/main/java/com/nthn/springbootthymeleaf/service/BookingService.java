@@ -1,17 +1,14 @@
 package com.nthn.springbootthymeleaf.service;
 
 import com.nthn.springbootthymeleaf.pojo.Booking;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 
 public interface BookingService {
 
-    Integer save(Booking booking);
+    Booking save(Booking booking);
 
     void delete(Integer id);
 

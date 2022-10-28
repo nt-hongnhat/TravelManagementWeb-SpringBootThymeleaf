@@ -38,11 +38,11 @@ public class Customer implements Serializable {
     @Column(name = "fullname", nullable = false)
     private String fullname;
 
-    @Column(name = "gender", nullable = false)
+    @Column(name = "gender")
     private String gender;
 
-    @Column(name = "identifiedcard", nullable = false)
-    private String identifiedcard;
+    @Column(name = "identified", nullable = false, length = 15)
+    private String identified;
 
     @Column(name = "nationality")
     private String nationality;
@@ -52,6 +52,9 @@ public class Customer implements Serializable {
 
     @Column(name = "address")
     private String address;
+
+    @Column(name = "active")
+    private Boolean active = true;
 
     @OneToMany(mappedBy = "customer", orphanRemoval = false)
     @ToString.Exclude

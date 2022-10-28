@@ -34,7 +34,7 @@ public class PlacesServiceImpl implements PlacesService {
      */
     @Override
     public Page<Places> getPlacesPage(Pageable pageable) {
-        return null;
+        return placesRepository.findAll(pageable);
     }
 
 

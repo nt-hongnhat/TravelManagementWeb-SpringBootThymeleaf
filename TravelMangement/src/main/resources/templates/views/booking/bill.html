@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout-user}">
+<head>
+    <title th:text="'Chi tiết đặt tour'"></title>
+</head>
+<body>
+
+<th:block layout:fragment="banner">
+    <div class="hero hero-inner">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mx-auto text-center">
+                    <div class="intro-wrap">
+                        <!--                        <h1 class="mb-0" th:text="${tourGroup.getName()}"></h1>-->
+                        <!--                        <p class="text-white" th:text="${tourGroup.getDescription()}"></p>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="content">
+    <div class="untree_co-section">
+        <div class="container my-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="custom-block aos-init aos-animate" data-aos="fade-up">
+                        <h2 class="section-title">Chi tiết đặt tour</h2>
+                        <div class="card invoice">
+                            <div class="card-header p-4 p-md-5 border-bottom-0 bg-gradient-primary-to-secondary text-black-50">
+                                <div class="row justify-content-between align-items-center">
+                                    <div class="col-12 col-lg-auto mb-5 mb-lg-0 text-center text-lg-start">
+                                        <div class="h2 text-black mb-0">Hoá đơn đặt tour</div>
+                                    </div>
+                                    <div class="col-12 col-lg-auto text-black text-center text-lg-right">
+                                        <!-- Invoice details-->
+                                        <h3  th:text="${booking.getCustomer().getFullname()}"></h3>
+                                        <span th:text="'#'+${booking.getId()}"></span>
+                                        <br>
+                                        <span th:text="${#temporals.format(booking.getBookingDate(), 'hh:mm dd/MM/yyyy')}"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-borderless mb-0">
+                                        <thead class="border-bottom">
+                                        <tr class="text-uppercase text-muted">
+                                            <th scope="col">Loại vé</th>
+                                            <th class="text-center" scope="col">Số vé</th>
+                                            <th class="text-right" scope="col">Giá vé</th>
+                                            <th class="text-right" scope="col">Tổng tiền</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="border-bottom" th:each="bookingDetail:${bookingDetails}">
+                                            <td>
+                                                <div class="font-weight-bold"
+                                                     th:text="${bookingDetail.getTourTicket().getName()}"></div>
+                                                <div class="small text-muted d-none d-md-block"
+                                                     th:if="${bookingDetail.getTourTicket().getSurcharge()!=null}"
+                                                     th:text="${bookingDetail.getTourTicket().getSurcharge().getName()}">
+                                                </div>
+                                            </td>
+                                            <td class="text-center"
+                                                th:text="${bookingDetail.getQuantity()}"></td>
+                                            <td th:if="${bookingDetail.getTourTicket().getSurcharge()==null}"
+                                                class="text-right"
+                                                th:text="${#numbers.formatCurrency(bookingDetail.getUnitPrice())}"></td>
+                                            <td th:if="${bookingDetail.getTourTicket().getSurcharge()!=null}">
+                                                <div class="text-right"
+                                                     th:text="${#numbers.formatCurrency(bookingDetail.getTourTicket().getUnitPrice())}"></div>
+                                                <div class="small text-muted text-right d-none d-md-block"
+                                                     th:text="${#numbers.formatCurrency(bookingDetail.getTourTicket().getSurcharge().getSurcharge())}">
+                                                </div>
+                                            </td>
+                                            <td class="text-right"
+                                                th:text="${#numbers.formatCurrency(bookingDetail.getTotal())}"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="pb-0" colspan="3">
+                                                <div class="text-uppercase font-weight-bold text-muted">Thành tiền:
+                                                </div>
+                                            </td>
+                                            <td class="text-right pb-0">
+                                                <div class="h5 mb-0 font-weight-bold"
+                                                     th:text="${#numbers.formatCurrency(booking.getTotal())}"></div>
+                                            </td>
+                                        </tr>
+                                        <!--                        &lt;!&ndash; Invoice tax column&ndash;&gt;-->
+                                        <!--                        <tr>-->
+                                        <!--                            <td class="text-end pb-0" colspan="3">-->
+                                        <!--                                <div class="text-uppercase small fw-700 text-muted">Tax (7%):</div>-->
+                                        <!--                            </td>-->
+                                        <!--                            <td class="text-end pb-0">-->
+                                        <!--                                <div class="h5 mb-0 fw-700">$134.75</div>-->
+                                        <!--                            </td>-->
+                                        <!--                        </tr>-->
+                                        <!-- Invoice total-->
+                                        <!--                        <tr>-->
+                                        <!--                            <td class="text-end pb-0" colspan="3">-->
+                                        <!--                                <div class="text-uppercase small fw-700 text-muted">Total Amount Due:</div>-->
+                                        <!--                            </td>-->
+                                        <!--                            <td class="text-end pb-0">-->
+                                        <!--                                <div class="h5 mb-0 fw-700 text-green">$2059.75</div>-->
+                                        <!--                            </td>-->
+                                        <!--                        </tr>-->
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!--                        <div class="row justify-content-end mt-3 mx-auto">-->
+                                <!--                            <div class="col-2">-->
+                                <!--                                <button type="submit" class="btn btn-outline-danger w-100">Huỷ đặt</button>-->
+                                <!--                            </div>-->
+                                <!--                            <div class="col-2">-->
+                                <!--                                <a th:href="@{/bill/{id}/payment(id=${booking.getId()})}" class="btn btn-primary w-100">Thanh-->
+                                <!--                                                                                                                        toán</a>-->
+                                <!--                            </div>-->
+                                <!--                        </div>-->
+                            </div>
+                            <div class="card-footer p-4 p-lg-5 border-top-0">
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
+                                        <!-- Invoice - sent to info-->
+                                        <div class="small text-muted text-uppercase fw-700 mb-2">To</div>
+                                        <div class="h6 mb-1">Company Name</div>
+                                        <div class="small">1234 Company Dr.</div>
+                                        <div class="small">Yorktown, MA 39201</div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
+                                        <!-- Invoice - sent from info-->
+                                        <div class="small text-muted text-uppercase fw-700 mb-2">From</div>
+                                        <div class="h6 mb-0">Start Bootstrap</div>
+                                        <div class="small">5678 Company Rd.</div>
+                                        <div class="small">Yorktown, MA 39201</div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <!-- Invoice - additional notes-->
+                                        <div class="small text-muted text-uppercase fw-700 mb-2">Note</div>
+                                        <div class="small mb-0">Payment is due 15 days after receipt of this invoice.
+                                                                Please
+                                                                make checks
+                                                                or money orders out to Company Name, and include the
+                                                                invoice
+                                                                number in
+                                                                the memo. We appreciate your business, and hope to be
+                                                                working
+                                                                with you
+                                                                again very soon!
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- END .custom-block -->
+
+                </div>
+                <div class="col-lg-4">
+                    <div class="custom-block aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
+                        <h2 class="section-title">Thanh toán</h2>
+                        <div>Chấp nhận các loại thẻ</div>
+                        <div class="icon-cc-paypal">
+                            <i class="w-100 icon-cc-visa" style="color:navy;"></i>
+                            <i class="w-100 icon-cc-amex" style="color:blue;"></i>
+                            <i class="w-100 icon-cc-mastercard" style="color:red;"></i>
+                            <i class="w-100 icon-cc-discover" style="color:orange;"></i>
+                        </div>
+                    </div>
+                        <form class="contact-form bg-white" method="post" th:action="@{/bill/{id}/pay(id=${booking.id})}">
+                            <div class="form-group">
+                                <label for="price">Tổng tiền</label>
+                                <input class="form-control" type="text" name="price" id="price"
+                                       th:value="${booking.getTotal()}">
+                            </div>
+                            <div class="form-group">
+                                <label class="text-black" for="currency">Đơn vị tiền</label>
+                                <input class="form-control" type="text" name="currency" id="currency">
+                            </div>
+                            <div class="form-group">
+                                <label class="text-black" for="method">Phương thức thanh toán</label>
+                                <input type="text" class="form-control" id="method">
+                            </div>
+                            <div class="form-group">
+                                <label class="text-black" for="intent">Intent</label>
+                                <input type="text" class="form-control" id="intent" value="sale">
+                            </div>
+                            <div class="form-group">
+                                <label class="text-black" for="description">Nội dung thanh toán</label>
+                                <textarea name="description" class="form-control" id="description" cols="30"
+                                          rows="5"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Tiếp tục để kiểm tra</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center mt-5 section">
+
+                <div class="col-lg-10">
+                    <div class="row mb-5">
+                        <div class="col text-center">
+                            <h2 class="section-title text-center">Our Team</h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 mb-4">
+                            <div class="team">
+                                <img src="images/person_1.jpg" alt="Image" class="img-fluid mb-4">
+                                <div class="px-3">
+                                    <h3 class="mb-0">James Watson</h3>
+                                    <p>Co-Founder &amp; CEO</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 mb-4">
+                            <div class="team">
+                                <img src="images/person_2.jpg" alt="Image" class="img-fluid mb-4">
+                                <div class="px-3">
+                                    <h3 class="mb-0">Carl Anderson</h3>
+                                    <p>Co-Founder &amp; CEO</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 mb-4">
+                            <div class="team">
+                                <img src="images/person_4.jpg" alt="Image" class="img-fluid mb-4">
+                                <div class="px-3">
+                                    <h3 class="mb-0">Michelle Allison</h3>
+                                    <p>Co-Founder &amp; CEO</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 mb-4">
+                            <div class="team">
+                                <img src="images/person_3.jpg" alt="Image" class="img-fluid mb-4">
+                                <div class="px-3">
+                                    <h3 class="mb-0">Drew Wood</h3>
+                                    <p>Co-Founder &amp; CEO</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="container-xl px-4 mt-4">
+        <div class="row">
+            <div class="col-8">
+
+            </div>
+            <div class="col-4">
+
+            </div>
+        </div>
+
+    </div>
+</th:block>
+</body>
+</html>

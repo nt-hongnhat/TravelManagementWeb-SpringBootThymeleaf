@@ -18,7 +18,8 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor
 @Entity
-@Table(name = "account")
+@Table(name = "account",
+        uniqueConstraints = {@UniqueConstraint(columnNames = "username"), @UniqueConstraint(columnNames = "email")})
 @NoArgsConstructor
 public class Account implements Serializable {
     @Serial
@@ -68,16 +69,15 @@ public class Account implements Serializable {
 
     @Column(name = "reset_token")
     private String resetToken;
+    @Transient
+    private MultipartFile multipartFile;
 
     @Transient
     public String getPhotosImagePath() {
         if (avatarUrl == null || id == null) return null;
 
-        return "/avatar/" + id + "/" + avatarUrl;
+        return "/avatar/" + id + '/' + avatarUrl;
     }
-
-    @Transient
-    private MultipartFile multipartFile;
 
     @Override
     public boolean equals(Object o) {

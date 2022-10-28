@@ -36,16 +36,16 @@
                 <li><a th:href="@{/about}" th:text="#{label.about}"></a></li>
                 <li><a th:href="@{/about}" th:text="#{label.contact}"></a></li>
                 <li class="dropdown no-arrow">
-                    <th:block th:if="${profile == null}">
+                    <th:block th:if="${currentUser==null}">
                         <a th:href="@{/login}" th:text="#{label.login}"></a>
                     </th:block>
-                    <th:block th:if="${profile != null}">
+                    <th:block th:if="${currentUser != null}">
                         <a class="nav-link dropdown-toggle" href="#" id="user" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="mr-2 d-none d-lg-inline text-gray-600"
-                                  sec:authentication="principal.username"></span>
-                            <img alt="" class="img-profile rounded-circle" style="width: 30px;"
-                                 th:src="@{/img/undraw_profile.svg}" src="">
+                                  sec:authentication="principal.username" th:text="${currentUser.username}"></span>
+                            <!--                            <img alt="" class="img-profile rounded-circle" style="width: 30px;"-->
+                            <!--                                 th:src="@{${currentUser.getPhotosImagePath()}}" src="">-->
                         </a>
                         <!-- Dropdown - User Information -->
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"

@@ -8,7 +8,9 @@ import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -38,10 +40,20 @@ public class TourTicket implements Serializable {
     @ToString.Exclude
     private Tour tour;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "surcharge_id")
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "id")
     @ToString.Exclude
     private Surcharge surcharge;
+
+
+    @ManyToMany(mappedBy = "tourTickets")
+    @ToString.Exclude
+    private Set<Booking> bookings = new LinkedHashSet<>();
+
+
+    @Transient
+    private int quantity;
 
     @Override
     public boolean equals(Object o) {
