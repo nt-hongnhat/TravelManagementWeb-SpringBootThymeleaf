@@ -3,18 +3,17 @@
       layout:decorate="~{layouts/layout-user}">
 <head>
     <meta charset="UTF-8">
-    <title>News</title>
+    <title th:text="#{label.news}"></title>
 </head>
 <body>
 <th:block layout:fragment="banner">
     <div class="hero hero-inner">
         <div class="container">
             <div class="row align-items-center">
-                <div class="col-lg-6 mx-auto text-center">
+                <div class="col-lg-8 mx-auto text-center">
                     <div class="intro-wrap">
                         <h1 class="mb-0">Trải nghiệm tour</h1>
-                        <p class="text-white">Far far away, behind the word mountains, far from the countries Vokalia
-                                              and Consonantia, there live the blind texts. </p>
+                        <p class="text-white"></p>
                     </div>
                 </div>
             </div>
@@ -26,30 +25,39 @@
     <!-- Page Content-->
     <section class="py-5">
         <div class="container px-5">
-            <h1 class="fw-bolder fs-5 mb-4">Company Blog</h1>
+            <h1 class="fw-bolder fs-5 mb-4"></h1>
             <div class="card border-0 shadow rounded-3 overflow-hidden">
                 <div class="card-body p-0">
                     <div class="row gx-0">
                         <div class="col-lg-6 col-xl-5 py-lg-5">
                             <div class="p-4 p-md-5">
                                 <div class="badge bg-primary bg-gradient rounded-pill mb-2">News</div>
-                                <div class="h2 fw-bolder">Article heading goes here</div>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique delectus ab
-                                   doloremque, qui doloribus ea officiis...</p>
-                                <a class="stretched-link text-decoration-none" href="#!">
-                                    Read more
-                                    <i class="bi bi-arrow-right"></i>
+                                <div class="h2 fw-bolder" th:text="${newsList.get(0).getTitle()}"></div>
+                                <p class="text-justify overflow-hidden"
+                                   th:text="${newsList.get(0).getDescription().substring(0,150)}+'...'"></p>
+                                <a class="stretched-link text-decoration-none" href=""
+                                   th:href="@{/news/{id}(id=${newsList.get(0).getId()})}">
+                                    <span>Xem thêm</span>
+                                    <i class="fas fa-arrow-right"></i>
                                 </a>
                             </div>
                         </div>
                         <div class="col-lg-6 col-xl-7">
-                            <div class="bg-featured-blog"
-                                 style="background-image: url('https://dulichviet.com.vn/images/bandidau/NOI-DIA/Da-Nang/du-lich-da-nang-mua-thu-pho-co-hoi-an-du-lich-viet(1).jpg')"></div>
+                            <img src="" alt="" height="100%" th:src="@{${newsList.get(0).getImages()}}">
+                            <!--                            <div class="bg-featured-blog">-->
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <!--        <div class="owl-carousel owl-single">-->
+
+        <!--            <div class="item">-->
+        <!--                -->
+        <!--            </div>-->
+        <!--        </div>-->
+
     </section>
     <section class="py-5 bg-light">
         <div class="container px-5">
@@ -109,18 +117,21 @@
         <div class="container px-5">
             <h2 class="fw-bolder fs-5 mb-4">Featured Stories</h2>
             <div class="row gx-5">
-                <div class="col-lg-4 mb-5">
+                <div class="col-lg-4 mb-5" th:each="news:${newsList}">
                     <div class="card h-100 shadow border-0">
                         <img class="card-img-top"
                              src="https://dulichviet.com.vn/images/bandidau/NOI-DIA/Da-Nang/du-lich-da-nang-mua-thu-pho-co-hoi-an-du-lich-viet(1).jpg"
                              alt="..."/>
                         <div class="card-body p-4">
-                            <div class="badge bg-primary bg-gradient rounded-pill mb-2">News</div>
-                            <a class="text-decoration-none link-dark stretched-link" href="#!">
-                                <div class="h5 card-title mb-3">Blog post title</div>
+                            <div class="badge bg-primary bg-gradient-primary rounded-pill mb-2"
+                                 th:if="${news.tourGroup.name!=null}"
+                                 th:text="${news.tourGroup.name}"></div>
+                            <a class="text-decoration-none link-dark stretched-link" href=""
+                               th:href="@{id(id=${news.getId()})}">
+                                <div class="h5 card-title mb-3" th:text="${news.getTitle()}"></div>
                             </a>
-                            <p class="card-text mb-0">Some quick example text to build on the card title and make up the
-                                                      bulk of the card's content.</p>
+                            <p class="card-text mb-0 text-justify"
+                               th:text="${news.getDescription().subSequence(0, news.getDescription().indexOf('.'))}+'...'"></p>
                         </div>
                         <div class="card-footer p-4 pt-0 bg-transparent border-top-0">
                             <div class="d-flex align-items-end justify-content-between">
@@ -128,7 +139,7 @@
                                     <img class="rounded-circle me-3" src="https://dummyimage.com/40x40/ced4da/6c757d"
                                          alt="..."/>
                                     <div class="small">
-                                        <div class="fw-bold">Kelly Rowan</div>
+                                        <div class="fw-bold"></div>
                                         <div class="text-muted">March 12, 2022 &middot; 6 min read</div>
                                     </div>
                                 </div>
@@ -136,60 +147,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 mb-5">
-                    <div class="card h-100 shadow border-0">
-                        <img class="card-img-top" src="https://dummyimage.com/600x350/adb5bd/495057" alt="..."/>
-                        <div class="card-body p-4">
-                            <div class="badge bg-primary bg-gradient rounded-pill mb-2">Media</div>
-                            <a class="text-decoration-none link-dark stretched-link" href="#!">
-                                <div class="h5 card-title mb-3">Another blog post title</div>
-                            </a>
-                            <p class="card-text mb-0">This text is a bit longer to illustrate the adaptive height of
-                                                      each card. Some quick example text to build on the card title and
-                                                      make up the bulk of the card's content.</p>
-                        </div>
-                        <div class="card-footer p-4 pt-0 bg-transparent border-top-0">
-                            <div class="d-flex align-items-end justify-content-between">
-                                <div class="d-flex align-items-center">
-                                    <img class="rounded-circle me-3"
-                                         src="https://dulichviet.com.vn/images/bandidau/NOI-DIA/Da-Nang/du-lich-da-nang-mua-thu-pho-co-hoi-an-du-lich-viet(1).jpg"
-                                         alt="..."/>
-                                    <div class="small">
-                                        <div class="fw-bold">Josiah Barclay</div>
-                                        <div class="text-muted">March 23, 2022 &middot; 4 min read</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 mb-5">
-                    <div class="card h-100 shadow border-0">
-                        <img class="card-img-top" src="https://dummyimage.com/600x350/6c757d/343a40" alt="..."/>
-                        <div class="card-body p-4">
-                            <div class="badge bg-primary bg-gradient rounded-pill mb-2">News</div>
-                            <a class="text-decoration-none link-dark stretched-link" href="#!">
-                                <div class="h5 card-title mb-3">The last blog post title is a little bit longer than the
-                                                                others
-                                </div>
-                            </a>
-                            <p class="card-text mb-0">Some more quick example text to build on the card title and make
-                                                      up the bulk of the card's content.</p>
-                        </div>
-                        <div class="card-footer p-4 pt-0 bg-transparent border-top-0">
-                            <div class="d-flex align-items-end justify-content-between">
-                                <div class="d-flex align-items-center">
-                                    <img class="rounded-circle me-3" src="https://dummyimage.com/40x40/ced4da/6c757d"
-                                         alt="..."/>
-                                    <div class="small">
-                                        <div class="fw-bold">Evelyn Martinez</div>
-                                        <div class="text-muted">April 2, 2022 &middot; 10 min read</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
             </div>
             <div class="text-end mb-5 mb-xl-0">
                 <a class="text-decoration-none" href="#!">

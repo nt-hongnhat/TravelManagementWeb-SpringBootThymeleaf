@@ -1,4 +1,4 @@
-package com.nthn.springbootthymeleaf.controller;
+package com.nthn.springbootthymeleaf.controller.admin;
 
 import com.nthn.springbootthymeleaf.pojo.Account;
 import com.nthn.springbootthymeleaf.pojo.Booking;
@@ -28,7 +28,7 @@ import java.util.*;
 
 @Validated
 @Controller
-@RequestMapping("/admin/customers")
+@RequestMapping("/dashboard/customers")
 public class CustomerController {
 
     @Autowired

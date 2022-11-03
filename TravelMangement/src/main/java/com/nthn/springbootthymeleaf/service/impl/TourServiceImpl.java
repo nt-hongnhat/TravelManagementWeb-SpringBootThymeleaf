@@ -2,7 +2,6 @@ package com.nthn.springbootthymeleaf.service.impl;
 
 import com.nthn.springbootthymeleaf.DTO.SearchTourDTO;
 import com.nthn.springbootthymeleaf.pojo.Tour;
-import com.nthn.springbootthymeleaf.pojo.TourGroup;
 import com.nthn.springbootthymeleaf.repository.TourGroupRepository;
 import com.nthn.springbootthymeleaf.repository.TourRepository;
 import com.nthn.springbootthymeleaf.repository.TourTicketRepository;
@@ -37,17 +36,17 @@ public class TourServiceImpl implements TourService {
 
     @Override
     public Tour create(Tour tour) throws ParseException {
-        tour.setDuration(tour.getDays() + " ngày " + tour.getNights() + " đêm");
+//        tour.setDuration(tour.getDays() + " ngày " + tour.getNights() + " đêm");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         tour.setDepartureDate(LocalDate.parse(tour.getDate(), formatter));
-//        tour.setDepartureDate(LocalDateTime.from(tour.getDepartureDate()));
 //        Set<TourTicket> tourTickets = tour.getTourTickets();
 //        Tour finalTour = save(tour);
 //        tourTickets.forEach(tourTicket -> {
 //            tourTicket.setTour(finalTour);
 //            tourTicketRepository.save(tourTicket);
 //        });
-        return save(tour);
+        return tourRepository.save(tour);
+
     }
 
 
@@ -110,13 +109,13 @@ public class TourServiceImpl implements TourService {
 
 
     @Override
-    public Page<Tour> getTourPageByCategory(String categoryLink, Pageable pageable) {
-        return tourRepository.findByCategory(categoryLink, pageable);
+    public Page<Tour> getTourPageByTourGroup(Integer id, Pageable pageable) {
+        return tourRepository.findByTourGroupId(id, pageable);
     }
 
     @Override
-    public Page<Tour> getTourPageByTourGroup(String tourGroupLink, Pageable pageable) {
-        return tourRepository.findByTourGroup(tourGroupLink, pageable);
+    public Page<Tour> getTourPageByCategory(String linkStatic, Pageable pageable) {
+        return tourRepository.findByCategory(linkStatic, pageable);
     }
 
 
@@ -133,15 +132,6 @@ public class TourServiceImpl implements TourService {
         return null;
     }
 
-    /**
-     * @param params
-     * @param pageable
-     * @return
-     */
-    @Override
-    public Page<Tour> getTourPage(Map<String, String> params, Pageable pageable) {
-        return null;
-    }
 
 //    /**
 //     * Tìm kiếm tour theo nhiều tiêu chí
@@ -187,18 +177,6 @@ public class TourServiceImpl implements TourService {
 //        return tourRepository.searchTours(departurePlace, destinationPlace, duration, numberPeople, pageable);
 //    }
 
-
-    /**
-     * Lấy danh sách tour theo danh mục tour
-     *
-     * @param tourGroups
-     * @param pageable
-     * @return
-     */
-    @Override
-    public Page<Tour> getTourPageByTourGroup(Set<TourGroup> tourGroups, Pageable pageable) {
-        return tourRepository.getByTourGroupIn(tourGroups, pageable);
-    }
 
     @Override
     public Set<String> getDeparturePlaces() {

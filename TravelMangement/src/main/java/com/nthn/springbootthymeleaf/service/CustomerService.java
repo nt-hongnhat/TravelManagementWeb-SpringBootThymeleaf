@@ -9,6 +9,8 @@ import java.util.List;
 public interface CustomerService {
     Customer save(Customer customer);
 
+    Customer add(String fullName, String identified, String phone, String address);
+
     void delete(Integer id);
 
     void update(Integer id, Customer customer);
@@ -22,4 +24,7 @@ public interface CustomerService {
     Page<Customer> getCustomers(Pageable pageable);
 
     long countAllByNationality(String nationality);
+    
+
+    Customer getCustomerByAccount(Integer id);
 }

@@ -14,12 +14,8 @@ public class TourTicketServiceImpl implements TourTicketService {
     @Autowired
     private TourTicketRepository tourTicketRepository;
 
-    /**
-     * @param bookingId
-     * @return
-     */
     @Override
-    public List<TourTicket> getTourTickets(Integer bookingId) {
-        return null;
+    public List<TourTicket> getTourTicketsByTour(Integer tourId) {
+        return tourTicketRepository.findByTourId(tourId);
     }
 }

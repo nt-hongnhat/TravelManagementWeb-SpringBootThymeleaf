@@ -7,17 +7,17 @@
 <body>
 
 <th:block layout:fragment="banner">
-    <div class="hero hero-inner">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6 mx-auto text-center">
-                    <div class="intro-wrap">
-                        <!--                        <h1 class="mb-0" th:text="${tourGroup.getName()}"></h1>-->
-                        <!--                        <p class="text-white" th:text="${tourGroup.getDescription()}"></p>-->
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="hero hero-inner h-25">
+        <!--        <div class="container">-->
+        <!--            <div class="row align-items-center">-->
+        <!--                <div class="col-lg-6 mx-auto text-center">-->
+        <!--                    <div class="intro-wrap">-->
+        <!--                        &lt;!&ndash;                        <h1 class="mb-0" th:text="${tourGroup.getName()}"></h1>&ndash;&gt;-->
+        <!--                        &lt;!&ndash;                        <p class="text-white" th:text="${tourGroup.getDescription()}"></p>&ndash;&gt;-->
+        <!--                    </div>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--        </div>-->
     </div>
 </th:block>
 
@@ -36,7 +36,7 @@
                                     </div>
                                     <div class="col-12 col-lg-auto text-black text-center text-lg-right">
                                         <!-- Invoice details-->
-                                        <h3  th:text="${booking.getCustomer().getFullname()}"></h3>
+                                        <h3 th:text="${booking.getCustomer().getFullname()}"></h3>
                                         <span th:text="'#'+${booking.getId()}"></span>
                                         <br>
                                         <span th:text="${#temporals.format(booking.getBookingDate(), 'hh:mm dd/MM/yyyy')}"></span>
@@ -168,87 +168,86 @@
                             <i class="w-100 icon-cc-discover" style="color:orange;"></i>
                         </div>
                     </div>
-                        <form class="contact-form bg-white" method="post" th:action="@{/bill/{id}/pay(id=${booking.id})}">
-                            <div class="form-group">
-                                <label for="price">Tổng tiền</label>
-                                <input class="form-control" type="text" name="price" id="price"
-                                       th:value="${booking.getTotal()}">
-                            </div>
-                            <div class="form-group">
-                                <label class="text-black" for="currency">Đơn vị tiền</label>
-                                <input class="form-control" type="text" name="currency" id="currency">
-                            </div>
-                            <div class="form-group">
-                                <label class="text-black" for="method">Phương thức thanh toán</label>
-                                <input type="text" class="form-control" id="method">
-                            </div>
-                            <div class="form-group">
-                                <label class="text-black" for="intent">Intent</label>
-                                <input type="text" class="form-control" id="intent" value="sale">
-                            </div>
-                            <div class="form-group">
-                                <label class="text-black" for="description">Nội dung thanh toán</label>
-                                <textarea name="description" class="form-control" id="description" cols="30"
-                                          rows="5"></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Tiếp tục để kiểm tra</button>
-                        </form>
-                    </div>
+                    <form class="contact-form bg-white" method="post" th:action="@{/bill/{id}/pay(id=${booking.id})}">
+                        <div class="form-group">
+                            <label for="price">Tổng tiền</label>
+                            <input class="form-control" type="text" name="price" id="price"
+                                   th:value="${booking.getTotal()}">
+                        </div>
+                        <div class="form-group">
+                            <label class="text-black" for="currency">Đơn vị tiền</label>
+                            <input class="form-control" type="text" name="currency" id="currency">
+                        </div>
+                        <div class="form-group">
+                            <label class="text-black" for="method">Phương thức thanh toán</label>
+                            <input type="text" class="form-control" id="method">
+                        </div>
+                        <div class="form-group">
+                            <label class="text-black" for="intent">Intent</label>
+                            <input type="text" class="form-control" id="intent" value="sale">
+                        </div>
+                        <div class="form-group">
+                            <label class="text-black" for="description">Nội dung thanh toán</label>
+                            <textarea name="description" class="form-control" id="description" cols="30"
+                                      rows="5"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Tiếp tục để kiểm tra</button>
+                    </form>
                 </div>
             </div>
-
-            <div class="row justify-content-center mt-5 section">
-
-                <div class="col-lg-10">
-                    <div class="row mb-5">
-                        <div class="col text-center">
-                            <h2 class="section-title text-center">Our Team</h2>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-3 mb-4">
-                            <div class="team">
-                                <img src="images/person_1.jpg" alt="Image" class="img-fluid mb-4">
-                                <div class="px-3">
-                                    <h3 class="mb-0">James Watson</h3>
-                                    <p>Co-Founder &amp; CEO</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 mb-4">
-                            <div class="team">
-                                <img src="images/person_2.jpg" alt="Image" class="img-fluid mb-4">
-                                <div class="px-3">
-                                    <h3 class="mb-0">Carl Anderson</h3>
-                                    <p>Co-Founder &amp; CEO</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-3 mb-4">
-                            <div class="team">
-                                <img src="images/person_4.jpg" alt="Image" class="img-fluid mb-4">
-                                <div class="px-3">
-                                    <h3 class="mb-0">Michelle Allison</h3>
-                                    <p>Co-Founder &amp; CEO</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 mb-4">
-                            <div class="team">
-                                <img src="images/person_3.jpg" alt="Image" class="img-fluid mb-4">
-                                <div class="px-3">
-                                    <h3 class="mb-0">Drew Wood</h3>
-                                    <p>Co-Founder &amp; CEO</p>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
         </div>
+
+        <!--        <div class="row justify-content-center mt-5 section">-->
+
+        <!--            <div class="col-lg-10">-->
+        <!--                <div class="row mb-5">-->
+        <!--                    <div class="col text-center">-->
+        <!--                        <h2 class="section-title text-center">Our Team</h2>-->
+        <!--                    </div>-->
+        <!--                </div>-->
+        <!--                <div class="row">-->
+        <!--                    <div class="col-lg-3 mb-4">-->
+        <!--                        <div class="team">-->
+        <!--                            <img src="images/person_1.jpg" alt="Image" class="img-fluid mb-4">-->
+        <!--                            <div class="px-3">-->
+        <!--                                <h3 class="mb-0">James Watson</h3>-->
+        <!--                                <p>Co-Founder &amp; CEO</p>-->
+        <!--                            </div>-->
+        <!--                        </div>-->
+        <!--                    </div>-->
+        <!--                    <div class="col-lg-3 mb-4">-->
+        <!--                        <div class="team">-->
+        <!--                            <img src="images/person_2.jpg" alt="Image" class="img-fluid mb-4">-->
+        <!--                            <div class="px-3">-->
+        <!--                                <h3 class="mb-0">Carl Anderson</h3>-->
+        <!--                                <p>Co-Founder &amp; CEO</p>-->
+        <!--                            </div>-->
+        <!--                        </div>-->
+        <!--                    </div>-->
+
+        <!--                    <div class="col-lg-3 mb-4">-->
+        <!--                        <div class="team">-->
+        <!--                            <img src="images/person_4.jpg" alt="Image" class="img-fluid mb-4">-->
+        <!--                            <div class="px-3">-->
+        <!--                                <h3 class="mb-0">Michelle Allison</h3>-->
+        <!--                                <p>Co-Founder &amp; CEO</p>-->
+        <!--                            </div>-->
+        <!--                        </div>-->
+        <!--                    </div>-->
+        <!--                    <div class="col-lg-3 mb-4">-->
+        <!--                        <div class="team">-->
+        <!--                            <img src="images/person_3.jpg" alt="Image" class="img-fluid mb-4">-->
+        <!--                            <div class="px-3">-->
+        <!--                                <h3 class="mb-0">Drew Wood</h3>-->
+        <!--                                <p>Co-Founder &amp; CEO</p>-->
+        <!--                            </div>-->
+        <!--                        </div>-->
+        <!--                    </div>-->
+
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--        </div>-->
+
     </div>
     <div class="container-xl px-4 mt-4">
         <div class="row">

@@ -47,6 +47,11 @@ public class TourGroup implements Serializable {
     @ToString.Exclude
     private List<Tour> tours = new ArrayList<>();
 
+
+    @OneToMany(mappedBy = "tourGroup", orphanRemoval = true)
+    private List<News> news = new ArrayList<>();
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

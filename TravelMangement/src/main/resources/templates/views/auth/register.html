@@ -30,50 +30,51 @@
                         <div class="text-center">
                             <h1 class="h4 text-gray-900 mb-4" th:text="'Đăng ký tài khoản'"></h1>
                         </div>
-                        <div th:if="${param.confirm}">
-                            <div class="alert alert-danger">Xác nhận mật khẩu và mật khẩu không khớp.</div>
-                        </div>
-                        <div th:if="${param.username}">
-                            <div class="alert alert-info">Tên đăng nhập đã tồn tại.</div>
+                        <div th:if="${param.error}">
+                            <div class="alert alert-danger">
+                                <ul>
+                                    <li th:each="error:${getAllErrors}"
+                                        th:text="${error.getDefaultMessage()}"></li>
+                                </ul>
+                            </div>
                         </div>
                         <div th:if="${param.success}">
                             <div class="alert alert-info" th:text="${success}"></div>
                         </div>
-                        <form th:action="@{/register}"
-                              th:object="${accountRegistration}" method="post" class="user">
+                        <form th:action="@{/register}" th:object="${accountRegistration}" method="post" class="user">
                             <fieldset class="form-group row">
                                 <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <label for="firstName">First Name</label>
-                                    <input type="text" class="form-control " id="firstName" placeholder="First Name"
-                                           th:field="*{firstName}" required>
+                                    <label for="firstName">Tên</label>
+                                    <input type="text" class="form-control " id="firstName" placeholder="Tên" autofocus
+                                           th:value="${accountRegistration.getFirstName()}" th:field="*{firstName}">
                                 </div>
                                 <div class="col-sm-6">
-                                    <label for="lastName">Last Name</label>
-                                    <input type="text" class="form-control" id="lastName" placeholder="Last Name"
-                                           th:field="*{lastName}" required>
+                                    <label for="lastName">Họ và chữ lót</label>
+                                    <input type="text" class="form-control" id="lastName" placeholder="Họ và chữ lót"
+                                           th:value="${accountRegistration.getLastName()}" th:field="*{lastName}">
                                 </div>
                             </fieldset>
                             <fieldset class="form-group">
-                                <label for="email">Email Address</label>
-                                <input type="email" class="form-control" id="email" placeholder="Email Address"
-                                       th:field="*{email}" required>
+                                <label for="email">Địa chỉ email</label>
+                                <input type="email" class="form-control" id="email" placeholder="Địa chỉ email"
+                                       th:value="${accountRegistration.getEmail()}" th:field="*{email}">
                             </fieldset>
                             <fieldset class="form-group">
-                                <label for="username">Username</label>
-                                <input type="text" class="form-control" id="username" placeholder="Username"
-                                       th:field="*{username}" required>
+                                <label for="username">Tên đăng nhập</label>
+                                <input type="text" class="form-control" id="username" placeholder="Tên đăng nhập"
+                                       th:value="${accountRegistration.getUsername()}" th:field="*{username}">
                             </fieldset>
 
                             <fieldset class="form-group row">
                                 <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <label for="password">Password</label>
-                                    <input type="password" class="form-control " id="password" placeholder="Password"
-                                           th:field="*{password}" required>
+                                    <label for="password">Mật khẩu</label>
+                                    <input type="password" class="form-control " id="password"
+                                           placeholder="Nhập mật khẩu" th:field="*{password}">
                                 </div>
                                 <div class="col-sm-6">
-                                    <label for="confirm">Confirm Password</label>
+                                    <label for="confirm">Xác nhận mật khẩu</label>
                                     <input type="password" class="form-control" id="confirm"
-                                           placeholder="Confirm Password" th:field="*{confirm}" required>
+                                           placeholder="Nhập lại mật khẩu" th:field="*{confirmPassword}">
                                 </div>
                             </fieldset>
                             <fieldset class="form-group">

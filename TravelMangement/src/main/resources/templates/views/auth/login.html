@@ -45,10 +45,10 @@
                                     <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                                 </div>
                                 <div th:if="${param.error}">
-                                    <div class="alert alert-danger">Invalid username and password.</div>
+                                    <div class="alert alert-danger">Tên đăng nhập hoặc mật khẩu không hợp lệ.</div>
                                 </div>
                                 <div th:if="${param.logout}">
-                                    <div class="alert alert-info">You have been logged out.</div>
+                                    <div class="alert alert-info">Bạn vừa đăng xuất.</div>
                                 </div>
                                 <form action="" class="user" method="post" name="formLogin"
                                       th:action="@{/login}">
@@ -73,20 +73,19 @@
                                             th:text="#{label.login}"></button>
                                     <hr>
                                     <a href="../index.html" class="btn btn-google btn-user btn-block">
-                                        <i class="fab fa-google fa-fw"></i> Login with Google
+                                        <i class="fab fa-google fa-fw"></i>Đăng nhập với Google
                                     </a>
                                     <a href="https://www.facebook.com/" class="btn btn-facebook btn-user btn-block">
-                                        <i class="fab fa-facebook-f fa-fw"></i> Login with Facebook
+                                        <i class="fab fa-facebook-f fa-fw"></i>Đăng nhập với Facebook
                                     </a>
                                 </form>
                                 <hr>
                                 <div class="text-center">
-                                    <a class="small" href="forgot-password.html"
-                                       th:text="#{label.forgotPasword}">?</a>
+                                    <a class="small" th:href="@{/forgot-password}"
+                                       th:text="#{label.forgotPasword}+'?'"></a>
                                 </div>
                                 <div class="text-center">
-                                    <a class="small" th:href="@{/register}"
-                                       th:text="#{label.createAccount}">!</a>
+                                    <a class="small" th:href="@{/register}" th:text="#{label.createAccount}+'!'"></a>
                                 </div>
                             </div>
                         </div>

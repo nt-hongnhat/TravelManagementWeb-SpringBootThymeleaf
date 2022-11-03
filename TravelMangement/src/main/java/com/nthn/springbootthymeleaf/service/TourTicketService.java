@@ -10,6 +10,7 @@ import java.util.NoSuchElementException;
 
 public interface TourTicketService {
 
-    List<TourTicket> getTourTickets(Integer bookingId);
+
+    List<TourTicket> getTourTicketsByTour(Integer tourId);
 
 }

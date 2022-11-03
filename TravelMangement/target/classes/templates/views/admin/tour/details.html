@@ -1,10 +1,172 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout-admin}">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title th:text="${title}"></title>
 </head>
 <body>
+<h1 class="mt-4" layout:fragment="page-heading" th:text="#{label.tourManagement}"></h1>
+<ol class="breadcrumb" layout:fragment="breadcrumb">
+    <li class="breadcrumb-item"><a th:href="@{/dashboard}" th:text="#{label.home}"></a></li>
+    <li class="breadcrumb-item"><a th:href="@{/dashboard/tours}" th:text="#{label.tourManagement}"></a></li>
+    <li class="breadcrumb-item active" aria-current="page" th:text="#{label.createTour}"></li>
+</ol>
+
+<div class="table-responsive" layout:fragment="page-content">
+    <div class="row">
+        <div class="col-xl-4">
+            <div class="card mb-4 mb-xl-0">
+                <div class="card-header">Hình ảnh</div>
+                <div class="card-body text-center">
+                    <!-- Profile picture image-->
+                    <img id="thumbnail" class="img-account-profile rounded-circle mb-2"
+                         src="" alt="" width="250px" height="250px" style="image-rendering: high-quality">
+                    <!-- Profile picture help block-->
+                    <div class="small font-italic text-muted mb-4">JPG hoặc PNG không quá 5 MB</div>
+                    <!-- Profile picture upload button-->
+                    <div class="custom-file w-auto">
+                        <label class="custom-file-label" for="tourImage" th:text="'Tải lên'"></label>
+                        <input form="formTour" type="file" id="tourImage" name="tourImage"
+                               class="custom-file-input" accept="image/png, image/jpeg"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-8">
+            <!-- Account details card-->
+            <div class="card mb-4">
+                <div class="card-header" th:text="'Thông tin tour'"></div>
+                <div class="card-body">
+                    <div th:if="${param.error}">
+                        <div class="alert alert-danger" th:text="${errorMessage}"></div>
+                    </div>
+                    <div th:if="${param.success}">
+                        <div class="alert alert-success" th:text="${success}"></div>
+                    </div>
+                    <form method="post" action="" enctype="multipart/form-data" id="formTour"
+                          th:action="@{/dashboard/tours/create}" th:object="${tour}">
+                        <div class="mb-3">
+                            <label for="inputId">Mã chuyến du lịch</label>
+                            <input class="form-control bg-transparent border" id="inputId" type="text"
+                                   th:field="*{id}" readonly disabled>
+                        </div>
+                        <div class="mb-3">
+                            <label for="selectTourGroup" class="mb-1" th:text="'Nhóm tour'"></label>
+                            <select id="selectTourGroup" class="form-select custom-select" th:field="*{tourGroup.id}">
+                                <option value="" th:text="'Chọn nhóm tour'" disabled selected></option>
+                                <option th:each="tourGroup:${tourGroups}" th:value="${tourGroup.id}"
+                                        th:text="${tourGroup.getName()}"></option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="mb-1" for="inputTourName" th:text="'Tên chuyến du lịch *'"></label>
+                            <input class="form-control" id="inputTourName" type="text" autofocus required
+                                   th:field="*{name}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="mb-1" for="inputItinerary" th:text="'Lịch trình *'"></label>
+                            <input class="form-control" id="inputItinerary" type="text" required
+                                   th:field="*{itinerary}">
+                        </div>
+                        <div class="row gx-3 mb-3">
+                            <div class="col-6">
+                                <span class="mb-1" th:text="'Thời gian đi *'"></span>
+                                <div class="input-group p-0 m-0 align-middle">
+                                    <input class="form-control col-4" type="number" name="days" id="days" min="1"
+                                           required th:value="1" th:field="*{days}">
+                                    <label class="mb-1 col-2" for="days" th:text="' ngày'"></label>
+                                    <input class="form-control col-4" type="number" name="nights" id="nights" min="0"
+                                           required th:value="0" th:field="*{nights}">
+                                    <label class="mb-1 col-2 " for="nights" th:text="' đêm'"></label>
+                                </div>
+                            </div>
+
+                            <div class="col-6">
+                                <label class="mb-1" for="inputTransfer" th:text="'Phương tiện di chuyển *'"></label>
+                                <input class="form-control" type="text" id="inputTransfer" required
+                                       th:field="*{transfer}">
+                            </div>
+                        </div>
+                        <div class="row gx-3 mb-3">
+                            <div class="col-4">
+                                <label class="mb-1" for="inputDepartureDate" th:text="'Ngày khởi hành *'"></label>
+                                <input class="form-control" type="date" id="inputDepartureDate" required
+                                       th:min="${today}" th:field="*{date}" th:value="${tour.departureDate}">
+                            </div>
+                            <div class="col-4">
+                                <label class="mb-1" for="inputDeparturePlace" th:text="'Nơi khởi hành *'"></label>
+                                <select id="inputDeparturePlace" class="form-select custom-select"
+                                        th:field="*{departurePlace}">
+                                    <option th:each="province:${provinces}" th:value="${province.getName()}"
+                                            th:text="${province.getName()}"></option>
+                                </select>
+                            </div>
+                            <div class="col-4">
+                                <label for="inputDestinationPlace" class="mb-1" th:text="'Nơi đến *'"></label>
+                                <select id="inputDestinationPlace" class="form-select custom-select"
+                                        th:field="*{destinationPlace}">
+                                    <option th:each="province:${provinces}" th:value="${province.getName()}"
+                                            th:text="${province.getName()}"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row gx-3 mb-3">
+                            <div class="col-6">
+                                <label class="mb-1" for="inputTourTicket1" th:text="'Giá tour *'"></label>
+                                <input class="form-control" type="number" id="inputTourTicket1" required
+                                       min="100000" step="1000" th:value="100000" th:field="*{unitPrice}">
+                            </div>
+                            <div class="col-6">
+                                <label class="mb-1" for="inputMaxSlot" th:text="'Số chỗ tối đa *'"></label>
+                                <input class="form-control" type="number" id="inputMaxSlot" required
+                                       min="10" th:value="10" th:field="*{maxSlot}">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="mb-1" for="inputDescription" th:text="'Mô tả'"></label>
+                            <textarea class="form-control" name="inputDescription" id="inputDescription" cols="30"
+                                      rows="5" placeholder="Mô tả chuyến du lịch"
+                                      th:field="*{description}"></textarea>
+                        </div>
+                        <button class="btn btn-primary" type="submit" th:text="#{label.createTour}"></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block layout:fragment="script">
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#tourImage').change(function () {
+                showImageThumbnail(this);
+            });
+        });
+
+        function showImageThumbnail(fileInput) {
+            for (const file in fileInput) {
+                let file = fileInput.files[0];
+
+                let reader = new FileReader();
+                let maxAllowedSize = 5 * 1024 * 1024;
+
+                if (file.size > maxAllowedSize) {
+                    alert('JPG hoặc PNG quá lớn!');
+                    fileInput.files[0].value = "";
+                } else {
+                    reader.onload = function (e) {
+                        $('#thumbnail').attr('src', e.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+
+        }
+    </script>
+</th:block>
 
 </body>
+
 </html>

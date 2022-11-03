@@ -39,12 +39,20 @@ public class Tour implements Serializable {
     @Column(name = "itinerary", nullable = false)
     private String itinerary;
 
-    @Column(name = "duration", nullable = false)
+    @Transient
     private String duration;
 
-    @Transient
+    public String getDuration() {
+        return days + " ngày " + nights + " đêm";
+    }
+
+    public void setDuration() {
+        this.duration = days + " ngày " + nights + " đêm";
+    }
+
+    @Column(name = "days", nullable = false)
     private Integer days;
-    @Transient
+    @Column(name = "nights", nullable = false)
     private Integer nights;
 
 
@@ -55,12 +63,15 @@ public class Tour implements Serializable {
     private Integer maxSlot;
 
     @Transient
-    public AtomicInteger getAvailableSlot() {
-        AtomicInteger count = new AtomicInteger();
+    public Integer getAvailableSlot() {
+        final int[] count = {0};
         bookings.forEach(booking -> {
-            count.addAndGet(booking.getCount());
+            booking.getBookingDetails().forEach(detail -> {
+                count[0] += detail.getQuantity();
+            });
         });
-        return count;
+        count[0] = maxSlot - count[0];
+        return count[0];
     }
 
     @Column(name = "transfer", nullable = false)

@@ -14,15 +14,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Source+Serif+Pro:wght@400;700&display=swap"
           rel="stylesheet">
 
-    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
-    <link rel="stylesheet" th:href="@{/css/owl.carousel.min.css}">
-    <link rel="stylesheet" th:href="@{/css/owl.theme.default.min.css}">
-    <link rel="stylesheet" th:href="@{/css/jquery.fancybox.min.css}">
-    <link rel="stylesheet" th:href="@{/fonts/icomoon/style.css}">
-    <link rel="stylesheet" th:href="@{/fonts/flaticon/font/flaticon.css}">
-    <link rel="stylesheet" th:href="@{/css/daterangepicker.css}">
-    <link rel="stylesheet" th:href="@{/css/aos.css}">
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" href="/static/css/owl.carousel.min.css" th:href="@{/css/owl.carousel.min.css}">
+    <link rel="stylesheet" href="/static/css/owl.theme.default.min.css" th:href="@{/css/owl.theme.default.min.css}">
+    <link rel="stylesheet" href="/static/css/jquery.fancybox.min.css" th:href="@{/css/jquery.fancybox.min.css}">
+    <link rel="stylesheet" href="/static/fonts/icomoon/style.css" th:href="@{/fonts/icomoon/style.css}">
+    <link rel="stylesheet" href="/static/fonts/flaticon/font/flaticon.css"
+          th:href="@{/fonts/flaticon/font/flaticon.css}">
+    <link rel="stylesheet" href="/static/css/daterangepicker.css" th:href="@{/css/daterangepicker.css}">
+    <link rel="stylesheet" href="/static/css/aos.css" th:href="@{/css/aos.css}">
+    <link rel="stylesheet" href="/static/css/style.css" th:href="@{/css/style.css}">
 
     <th:block layout:fragment="style"></th:block>
     <title></title>
@@ -52,24 +53,24 @@
 <div id="overlayer"></div>
 <div class="loader">
     <div class="spinner-border" role="status">
-        <span class="sr-only">Loading...</span>
+        <span class="sr-only">Đang tải...</span>
     </div>
 </div>
 
 <th:block layout:fragment="style"></th:block>
 
-<script th:src="@{/js/jquery-3.4.1.min.js}"></script>
-<script th:src="@{/js/popper.min.js}"></script>
-<script th:src="@{/js/bootstrap.min.js}"></script>
-<script th:src="@{/js/owl.carousel.min.js}"></script>
-<script th:src="@{/js/jquery.animateNumber.min.js}"></script>
-<script th:src="@{/js/jquery.waypoints.min.js}"></script>
-<script th:src="@{/js/jquery.fancybox.min.js}"></script>
-<script th:src="@{/js/aos.js}"></script>
-<script th:src="@{/js/moment.min.js}"></script>
-<script th:src="@{/js/daterangepicker.js}"></script>
-<script th:src="@{/js/typed.js}"></script>
-<script th:src="@{/js/custom.js}"></script>
+<script th:src="@{/js/jquery-3.4.1.min.js}" src="/static/js/jquery-3.4.1.min.js"></script>
+<script th:src="@{/js/popper.min.js}" src="/static/js/popper.min.js"></script>
+<script th:src="@{/js/bootstrap.min.js}" src="/static/js/bootstrap.min.js"></script>
+<script th:src="@{/js/owl.carousel.min.js}" src="/static/js/owl.carousel.min.js"></script>
+<script th:src="@{/js/jquery.animateNumber.min.js}" src="/static/js/jquery.animateNumber.min.js"></script>
+<script th:src="@{/js/jquery.waypoints.min.js}" src="/static/js/jquery.waypoints.min.js"></script>
+<script th:src="@{/js/jquery.fancybox.min.js}" src="/static/js/jquery.fancybox.min.js"></script>
+<script th:src="@{/js/aos.js}" src="/static/js/aos.js"></script>
+<script th:src="@{/js/moment.min.js}" src="/static/js/moment.min.js"></script>
+<script th:src="@{/js/daterangepicker.js}" src="/static/js/daterangepicker.js"></script>
+<script th:src="@{/js/typed.js}" src="/static/js/typed.js"></script>
+<script th:src="@{/js/custom.js}" src="/static/js/custom.js"></script>
 <script>
     $(function () {
         const slides = $('.slides'),

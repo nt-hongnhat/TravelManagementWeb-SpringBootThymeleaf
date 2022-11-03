@@ -16,15 +16,15 @@
                     <a th:href="@{/}" th:text="#{label.home}"></a>
                 </li>
                 <li class="has-children">
-                    <a href="#" th:text="#{label.categories}"></a>
+                    <a href="" th:text="#{label.categories}"></a>
                     <ul class="dropdown">
                         <th:block th:each="category:${categories}">
                             <li class="has-children">
-                                <a th:href="@{/{link}(link=${category.linkStatic})}"
-                                   th:text="${category.name}"></a>
+                                <a href="" th:text="${category.name}"></a>
                                 <ul class="dropdown">
                                     <th:block th:each="tourGroup:${category.tourGroups}">
-                                        <li><a th:href="@{/{link}(link=${tourGroup.linkStatic})}"
+                                        <li>
+                                            <a th:href="@{/{link}(link=${tourGroup.linkStatic})}"
                                                th:text="${tourGroup.name}"></a></li>
                                     </th:block>
                                 </ul>
@@ -34,30 +34,48 @@
                 </li>
                 <li><a th:href="@{/news}" th:text="#{label.news}"></a></li>
                 <li><a th:href="@{/about}" th:text="#{label.about}"></a></li>
-                <li><a th:href="@{/about}" th:text="#{label.contact}"></a></li>
-                <li class="dropdown no-arrow">
+                <li><a th:href="@{/contact}" th:text="#{label.contact}"></a></li>
+                <li class="dropdown">
                     <th:block th:if="${currentUser==null}">
                         <a th:href="@{/login}" th:text="#{label.login}"></a>
                     </th:block>
                     <th:block th:if="${currentUser != null}">
-                        <a class="nav-link dropdown-toggle" href="#" id="user" role="button"
+                        <a class="nav-link dropdown-toggle " href="#" id="user" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="mr-2 d-none d-lg-inline text-gray-600"
-                                  sec:authentication="principal.username" th:text="${currentUser.username}"></span>
+                            <span class="text-gray-900 mr-2 d-none d-lg-inline"
+                                  sec:authentication="name"></span>
                             <!--                            <img alt="" class="img-profile rounded-circle" style="width: 30px;"-->
                             <!--                                 th:src="@{${currentUser.getPhotosImagePath()}}" src="">-->
                         </a>
                         <!-- Dropdown - User Information -->
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                        <!--                        <div sec:authorize="isAuthenticated()">-->
+                        <!--                            This content is only shown to authenticated users.-->
+                        <!--                        </div>-->
+                        <!--                        <div sec:authorize="hasRole('ROLE_ADMIN')">-->
+                        <!--                            This content is only shown to administrators.-->
+                        <!--                        </div>-->
+                        <!--                        <div sec:authorize="hasRole('ROLE_USER')">-->
+                        <!--                            This content is only shown to users.-->
+                        <!--                        </div>-->
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in ui-state-hover"
                              aria-labelledby="user">
-                            <a class="dropdown-item" th:href="@{/profile}">
-                                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-600"></i>
+                            <a class="dropdown-item" sec:authorize-url="/dashboard/" th:href="@{/dashboard}">
+                                <i class="icon-dashboard"></i>
+                                <span th:text="'Dashboard'"></span>
+                            </a>
+                            <a class="dropdown-item" sec:authorize-url="/" th:href="@{/profile}">
+                                <i class="icon-user"></i>
                                 <span th:text="#{label.profile}"></span>
                             </a>
+                            <a class="dropdown-item" sec:authorize-url="/booking"
+                               th:href="@{/booking/history}">
+                                <i class="icon-history"></i>
+                                <span th:text="#{label.historyBooking}"></span>
+                            </a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" th:href="@{/logout}"
+                            <a class="dropdown-item text-danger" th:href="@{/logout}"
                                sec:authorize="isAuthenticated()">
-                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-600"></i>
+                                <i class="icon-sign-out"></i>
                                 <span th:text="#{label.logout}"></span>
                             </a>
 
@@ -80,7 +98,7 @@
     id="accordionSidebar">
     <!-- Sidebar - Brand -->
     <li>
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" th:href="@{/admin}">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" th:href="@{/dashboard}">
             <span class="sidebar-brand-icon rotate-n-15"><i class="fas fa-laugh-wink"></i></span>
             <span class="sidebar-brand-text mx-3">Travel Admin</span>
         </a>
@@ -114,9 +132,9 @@
         </a>
         <div id="collapseCategories" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" th:href="@{/admin/categories}" th:text="#{label.categories}"></a>
-                <a class="collapse-item" th:href="@{/admin/tours}" th:text="#{label.allList}"></a>
-                <a class="collapse-item" th:href="@{/admin/tours/create}" th:text="#{label.createTour}"></a>
+                <a class="collapse-item" th:href="@{/dashboard/categories}" th:text="#{label.categories}"></a>
+                <a class="collapse-item" th:href="@{/dashboard/tours}" th:text="#{label.allList}"></a>
+                <a class="collapse-item" th:href="@{/dashboard/tours/create}" th:text="#{label.createTour}"></a>
             </div>
         </div>
     </li>
@@ -131,10 +149,11 @@
         <div id="collapseUserManagement" class="collapse" aria-labelledby="headingUtilities"
              data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" th:href="@{/admin/accounts}" th:text="#{label.accountManagement}"></a>
-                <a class="collapse-item" th:href="@{/admin/employees}" th:text="#{label.employeeManagement}"></a>
-                <a class="collapse-item" th:href="@{/admin/customers}" th:text="#{label.customerManagement}"></a>
-                <a class="collapse-item" th:href="@{/admin/permissions}" th:text="#{label.permissionManagement}"></a>
+                <a class="collapse-item" th:href="@{/dashboard/accounts}" th:text="#{label.accountManagement}"></a>
+                <a class="collapse-item" th:href="@{/dashboard/employees}" th:text="#{label.employeeManagement}"></a>
+                <a class="collapse-item" th:href="@{/dashboard/customers}" th:text="#{label.customerManagement}"></a>
+                <a class="collapse-item" th:href="@{/dashboard/permissions}"
+                   th:text="#{label.permissionManagement}"></a>
             </div>
         </div>
     </li>
@@ -149,8 +168,8 @@
         <div id="collapseNews" class="collapse" aria-labelledby="headingUtilities"
              data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" th:href="@{/admin/news}" th:text="#{label.allList}"></a>
-                <a class="collapse-item" th:href="@{/admin/news/create}" th:text="#{label.createPosts}"></a>
+                <a class="collapse-item" th:href="@{/dashboard/News}" th:text="#{label.allList}"></a>
+                <a class="collapse-item" th:href="@{/dashboard/News/create}" th:text="#{label.createPosts}"></a>
             </div>
         </div>
     </li>
@@ -178,7 +197,7 @@
                 <h6 class="collapse-header">Login Screens:</h6>
                 <a class="collapse-item" th:href="@{/login}">Login</a>
                 <a class="collapse-item" th:href="@{/register}">Register</a>
-                <a class="collapse-item" th:href="@{/forgotPassword}">Forgot Password</a>
+                <a class="collapse-item" th:href="@{/forgot-password}">Forgot Password</a>
                 <div class="collapse-divider"></div>
                 <h6 class="collapse-header">Other Pages:</h6>
                 <a class="collapse-item" href="404.html">404 Page</a>
@@ -196,7 +215,7 @@
         </a>
         <div id="collapseUsers" class="collapse" aria-labelledby="headingPages" data-parent="#collapseUsers">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" th:href="@{/account}">Accounts</a>
+                <a class="collapse-item" th:href="@{/Account}">Accounts</a>
                 <a class="collapse-item" th:href="@{/customer}">Customers</a>
                 <a class="collapse-item" th:href="@{/employee}">Employees</a>
             </div>
@@ -339,7 +358,7 @@
                 </h6>
                 <a class="dropdown-item d-flex align-items-center" href="#">
                     <div class="dropdown-list-image mr-3">
-                        <img class="rounded-circle" th:src="@{/img/undraw_profile_1.svg}" alt="..." src="">
+                        <img class="rounded-circle" th:src="@{/img/undraw_profile_2.svg}" alt="..." src="">
                         <div class="status-indicator bg-success"></div>
                     </div>
                     <div class="font-weight-bold">
@@ -390,16 +409,17 @@
                 <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
             </div>
         </li>
-
         <div class="topbar-divider d-none d-sm-block"></div>
 
         <!-- Nav Item - User Information -->
         <li class="nav-item dropdown no-arrow">
+
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small"
-                      sec:authentication="principal.username"></span>
-                <img alt="" class="img-profile rounded-circle" th:src="@{/img/undraw_profile.svg}" src="">
+                      sec:authentication="name"></span>
+                <img alt="" class="img-profile rounded-circle" src="/avatar/38/Núi_%20(3).jpg"
+                     th:src="@{${avatar}}">
             </a>
             <!-- Dropdown - User Information -->
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"

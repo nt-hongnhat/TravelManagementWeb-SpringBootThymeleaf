@@ -47,13 +47,13 @@ public class TourTicket implements Serializable {
     private Surcharge surcharge;
 
 
-    @ManyToMany(mappedBy = "tourTickets")
-    @ToString.Exclude
-    private Set<Booking> bookings = new LinkedHashSet<>();
-
-
     @Transient
     private int quantity;
+
+    @OneToMany(mappedBy = "tourTicket", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private Set<BookingDetail> bookingDetails = new LinkedHashSet<>();
+
 
     @Override
     public boolean equals(Object o) {

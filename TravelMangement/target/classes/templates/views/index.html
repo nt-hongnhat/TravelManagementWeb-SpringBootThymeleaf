@@ -38,14 +38,6 @@
                                         </div>
                                     </div>
                                     <div class="row mb-2">
-                                        <!--                                        <div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-6">-->
-                                        <!--                                            <label for="duration">Thời gian đi</label>-->
-                                        <!--                                            <select name="duration" id="duration"-->
-                                        <!--                                                    class="form-control custom-select">-->
-                                        <!--                                                <option th:each="duration:${durations}" th:value="${duration}"-->
-                                        <!--                                                        th:text="${duration}"></option>-->
-                                        <!--                                            </select>-->
-                                        <!--                                        </div>-->
                                         <div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-6">
                                             <label for="departureDate">Ngày khởi hành</label>
                                             <input type="text" class="form-control" name="daterange" id="departureDate">
@@ -81,71 +73,69 @@
 </th:block>
 
 <th:block layout:fragment="content">
-    <div class="untree_co-section">
-        <div class="container">
-            <div class="row mb-5 justify-content-center">
-                <div class="col-lg-6 text-center">
-                    <h2 class="section-title text-center mb-3">Our Services</h2>
-                    <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there
-                       live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics,
-                       a large language ocean.</p>
-                </div>
-            </div>
-            <div class="row align-items-stretch">
-                <div class="col-lg-4 order-lg-1">
-                    <div class="h-100">
-                        <div class="frame h-100">
-                            <div class="feature-img-bg h-100"
-                                 style="background-image: url('/static/img/hero-slider-1.jpg');"></div>
-                        </div>
-                    </div>
-                </div>
+    <!--    <div class="untree_co-section">-->
+    <!--        <div class="container">-->
+    <!--            <div class="row mb-5 justify-content-center">-->
+    <!--                <div class="col-lg-6 text-center">-->
+    <!--                    <h2 class="section-title text-center mb-3">Dịch vụ của chúng tôi</h2>-->
+    <!--                    <p></p>-->
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--            <div class="row align-items-stretch">-->
+    <!--                <div class="col-lg-4 order-lg-1">-->
+    <!--                    <div class="h-100">-->
+    <!--                        <div class="frame h-100">-->
+    <!--                            <div class="feature-img-bg h-100"-->
+    <!--                                 style="background-image: url('/static/img/hero-slider-1.jpg');"></div>-->
+    <!--                        </div>-->
+    <!--                    </div>-->
+    <!--                </div>-->
 
-                <div class="col-6 col-sm-6 col-lg-4 feature-1-wrap d-md-flex flex-md-column order-lg-1">
+    <!--                <div class="col-6 col-sm-6 col-lg-4 feature-1-wrap d-md-flex flex-md-column order-lg-1">-->
 
-                    <div class="feature-1 d-md-flex">
-                        <div class="align-self-center">
-                            <span class="flaticon-house display-4 text-primary"></span>
-                            <h3>Beautiful Condo</h3>
-                            <p class="mb-0">Even the all-powerful Pointing has no control about the blind texts.</p>
-                        </div>
-                    </div>
+    <!--                    <div class="feature-1 d-md-flex">-->
+    <!--                        <div class="align-self-center">-->
+    <!--                            <span class="flaticon-house display-4 text-primary"></span>-->
+    <!--                            <h3>Beautiful Condo</h3>-->
+    <!--                            <p class="mb-0">Even the all-powerful Pointing has no control about the blind texts.</p>-->
+    <!--                        </div>-->
+    <!--                    </div>-->
 
-                    <div class="feature-1 ">
-                        <div class="align-self-center">
-                            <span class="flaticon-restaurant display-4 text-primary"></span>
-                            <h3>Restaurants & Cafe</h3>
-                            <p class="mb-0">Even the all-powerful Pointing has no control about the blind texts.</p>
-                        </div>
-                    </div>
+    <!--                    <div class="feature-1 ">-->
+    <!--                        <div class="align-self-center">-->
+    <!--                            <span class="flaticon-restaurant display-4 text-primary"></span>-->
+    <!--                            <h3>Restaurants & Cafe</h3>-->
+    <!--                            <p class="mb-0">Even the all-powerful Pointing has no control about the blind texts.</p>-->
+    <!--                        </div>-->
+    <!--                    </div>-->
 
-                </div>
+    <!--                </div>-->
 
-                <div class="col-6 col-sm-6 col-lg-4 feature-1-wrap d-md-flex flex-md-column order-lg-3">
+    <!--                <div class="col-6 col-sm-6 col-lg-4 feature-1-wrap d-md-flex flex-md-column order-lg-3">-->
 
-                    <div class="feature-1 d-md-flex">
-                        <div class="align-self-center">
-                            <span class="flaticon-mail display-4 text-primary"></span>
-                            <h3>Easy to Connect</h3>
-                            <p class="mb-0">Even the all-powerful Pointing has no control about the blind texts.</p>
-                        </div>
-                    </div>
+    <!--                    <div class="feature-1 d-md-flex">-->
+    <!--                        <div class="align-self-center">-->
+    <!--                            <span class="flaticon-mail display-4 text-primary"></span>-->
+    <!--                            <h3>Easy to Connect</h3>-->
+    <!--                            <p class="mb-0">Even the all-powerful Pointing has no control about the blind texts.</p>-->
+    <!--                        </div>-->
+    <!--                    </div>-->
 
-                    <div class="feature-1 d-md-flex">
-                        <div class="align-self-center">
-                            <span class="flaticon-phone-call display-4 text-primary"></span>
-                            <h3>24/7 Support</h3>
-                            <p class="mb-0">Even the all-powerful Pointing has no control about the blind texts.</p>
-                        </div>
-                    </div>
+    <!--                    <div class="feature-1 d-md-flex">-->
+    <!--                        <div class="align-self-center">-->
+    <!--                            <span class="flaticon-phone-call display-4 text-primary"></span>-->
+    <!--                            <h3>24/7 Support</h3>-->
+    <!--                            <p class="mb-0">Even the all-powerful Pointing has no control about the blind texts.</p>-->
+    <!--                        </div>-->
+    <!--                    </div>-->
 
-                </div>
+    <!--                </div>-->
 
-            </div>
-        </div>
-    </div>
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
 
-    <div class="untree_co-section count-numbers py-5">
+    <div class="untree_co-section count-numbers text-center py-5">
         <div class="container">
             <div class="row">
                 <div class="col-6 col-sm-6 col-md-6 col-lg-3">
@@ -185,49 +175,50 @@
         </div>
     </div>
 
-    <div class="untree_co-section">
-        <div class="container" th:each="category:${categories}" th:if="${category!=null}">
-            <div class="row text-center justify-content-center mb-5">
+    <div class="untree_co-section" th:each="category:${categories}" th:if="${categories!=null}">
+        <div class="container">
+            <div class="row text-center justify-content-center mb-5 mx-0">
                 <div class="col-lg-7">
                     <h2 class="section-title text-center" th:text="${category.getName()}"></h2>
+                    <p></p>
                 </div>
             </div>
 
-            <th:block th:each="tourGroup:${category.tourGroups}">
-                <div class="owl-carousel owl-3-slider" th:each="tour, iteratorStat:${tourGroup.tours}">
+            <div class="owl-carousel owl-3-slider owl-loading">
+                <th:block th:each="tourGroup:${category.tourGroups}">
+                    <!--                    <div class="col-lg-7">-->
+                    <!--                        <h2 class="section-title text-danger" th:text="${tourGroup.getName()}"></h2>-->
+                    <!--                    </div>-->
 
-                    <div class="item">
-                        <a class="media-thumb" href="" data-fancybox="gallery">
+                    <div class="item" th:each="tour:${tourGroup.tours}">
+                        <a class="media-thumb" href="" th:href="@{${tour.getPhotosImagePath()}}"
+                           data-fancybox="gallery">
                             <div class="media-text">
                                 <h3 th:text="${tour.getName()}"></h3>
                                 <span class="location" th:text="${tour.getItinerary()}"></span>
                             </div>
-                            <img src="" alt="Image" class="img-fluid" th:src="@{${tour.getPhotosImagePath()}}">
+                            <img th:src="@{${tour.getPhotosImagePath()}}" alt="Không có hình ảnh"
+                                 class="img-fluid" src="">
                         </a>
+                        <div class="d-flex align-items-center loc mb-2 mx-0">
+                            <span class="icon-room mr-3"></span>
+                            <span th:text="${tour.getDestinationPlace()}"></span>
+                        </div>
+                        <div class="d-flex align-items-center mx-0">
+                            <h3><a class="ui-state-hover" th:href="@{/tours/{id}(id=${tour.getId()})}"
+                                   th:text="${tour.getName()}"></a></h3>
+                        </div>
+                        <div class="d-flex align-items-center loc mb-2 price ml-auto">
+                            <span class="mr-1"><i class="icon-calendar"></i></span>
+                            <span th:text="'Ngày khởi hành: '+${#temporals.format(tour.getDepartureDate(), 'dd/MM/yyyy')}"></span>
+                        </div>
+                        <div class="d-flex align-items-center loc mb-2 price ml-auto text-danger font-weight-bolder">
+                            <span class="mr-1"><i class="icon-tag"></i></span>
+                            <span th:text="${#numbers.formatCurrency(tour.getUnitPrice())}"></span>
+                        </div>
                     </div>
-
-                    <!--                    <div class="item">-->
-                    <!--                        <a class="media-thumb" href="" data-fancybox="gallery">-->
-                    <!--                            <div class="media-text">-->
-                    <!--                                <h3>Oia</h3>-->
-                    <!--                                <span class="location">Greece</span>-->
-                    <!--                            </div>-->
-                    <!--                            <img src="" alt="Image" class="img-fluid">-->
-                    <!--                        </a>-->
-                    <!--                    </div>-->
-
-                    <!--                    <div class="item">-->
-                    <!--                        <a class="media-thumb" href="" data-fancybox="gallery">-->
-                    <!--                            <div class="media-text">-->
-                    <!--                                <h3>Perhentian Islands</h3>-->
-                    <!--                                <span class="location">Malaysia</span>-->
-                    <!--                            </div>-->
-                    <!--                            <img src="" alt="Image" class="img-fluid">-->
-                    <!--                        </a>-->
-                    <!--                    </div>-->
-
-                </div>
-            </th:block>
+                </th:block>
+            </div>
         </div>
     </div>
 
@@ -235,7 +226,7 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-7 text-center">
-                    <h2 class="section-title text-center mb-5">Ý kiến khách hàng</h2>
+                    <h2 class="section-title text-center mb-5 mx-0">Ý kiến khách hàng</h2>
 
                     <div class="owl-single owl-carousel no-nav">
                         <div class="testimonial mx-auto" th:each="feedback:${feedbacks}">
@@ -255,53 +246,54 @@
         </div>
     </div>
 
-    <div class="untree_co-section testimonial-section mt-5">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-7 text-center">
-                    <h2 class="section-title text-center mb-5">Địa điểm tham quan</h2>
+    <!--    <div class="untree_co-section testimonial-section mt-5">-->
+    <!--        <div class="container">-->
+    <!--            <div class="row justify-content-center">-->
+    <!--                <div class="col-lg-7 text-center">-->
+    <!--                    <h2 class="section-title text-center mb-5">Địa điểm tham quan</h2>-->
 
-                    <div class="owl-single owl-carousel no-nav">
-                        <div class="testimonial mx-auto">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-6 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0"
-                                         th:each="place, iStat:${places}" th:if="${iStat.index<4}">
-                                        <div class="media-1">
-                                            <a href="#" class="d-block mb-3"><img th:src="${place.getImages()}"
-                                                                                  alt="Image"
-                                                                                  class="img-fluid" src=""></a>
-                                            <div class="d-flex align-items-center loc mb-2">
-                                                <span class="icon-room mr-3"></span>
-                                                <span th:text="${place.getDistrict().getName()}"></span>
-                                            </div>
-                                            <div class="d-flex align-items-center">
-                                                <div>
-                                                    <h3><a href="#" th:text="${place.getName()}"></a></h3>
-                                                    <div class="ml-auto h-25 text-justify"
-                                                         th:text="${place.getDescription().substring(0, 100)+'...'}"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!--                    <div class="owl-single owl-carousel no-nav">-->
+    <!--                        <div class="testimonial mx-auto">-->
+    <!--                            <div class="container">-->
+    <!--                                <div class="row">-->
+    <!--                                    <div class="col-6 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0"-->
+    <!--                                         th:each="place, iStat:${places}" th:if="${iStat.index<4}">-->
+    <!--                                        <div class="media-1">-->
+    <!--                                            <a href="#" class="d-block mb-3"><img th:src="${place.getImages()}"-->
+    <!--                                                                                  alt="Image"-->
+    <!--                                                                                  class="img-fluid" src=""></a>-->
+    <!--                                            <div class="d-flex align-items-center loc mb-2">-->
+    <!--                                                <span class="icon-room mr-3"></span>-->
+    <!--                                                <span th:text="${place.getDistrict().getName()}"></span>-->
+    <!--                                            </div>-->
+    <!--                                            <div class="d-flex align-items-center">-->
+    <!--                                                <div>-->
+    <!--                                                    <h3><a href="#" th:text="${place.getName()}"></a></h3>-->
+    <!--                                                    <div class="ml-auto h-25 text-justify"-->
+    <!--                                                         th:text="${place.getDescription().substring(0, 100)+'...'}"></div>-->
+    <!--                                                </div>-->
+    <!--                                            </div>-->
+    <!--                                        </div>-->
+    <!--                                    </div>-->
+    <!--                                </div>-->
+    <!--                            </div>-->
+    <!--                        </div>-->
+    <!--                    </div>-->
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
     <div class="untree_co-section">
         <div class="container">
             <div class="row justify-content-center text-center mb-5">
                 <div class="col-lg-6">
-                    <h2 class="section-title text-center mb-3">Địa điểm nổi tiếng</h2>
+                    <h2 class="section-title text-center mb-3">Địa điểm tham quan</h2>
                     <p></p>
                 </div>
             </div>
             <div class="row">
-                <div class="col-6 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0" th:each="place:${places}">
+                <div class="col-6 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0" th:each="place, iterStat:${places}"
+                     th:if="${iterStat.index<4}">
                     <div class="media-1">
                         <a href="#" class="d-block mb-3"><img th:src="${place.getImages()}" alt="Image"
                                                               class="img-fluid" src=""></a>

@@ -3,16 +3,16 @@ Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,Bli
 Chart.defaults.global.defaultFontColor = '#858796';
 
 $(document).ready(function () {
-    console.log(keySet);
-    console.log(values);
-    const ctx = document.getElementById("bookingAreaChart");
+    console.log(keySetArea);
+    console.log(valuesArea);
+    const ctx = document.getElementById("myAreaChart");
     const myLineChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: keySet,
+            labels: keySetArea,
             datasets: [{
-                label: "Tổng tiền",
-                lineTension: 0.3,
+                label: "Doanh thu",
+                lineTension: 0.25,
                 backgroundColor: "rgba(78, 115, 223, 0.05)",
                 borderColor: "rgba(78, 115, 223, 1)",
                 pointRadius: 3,
@@ -23,7 +23,7 @@ $(document).ready(function () {
                 pointHoverBorderColor: "rgba(78, 115, 223, 1)",
                 pointHitRadius: 10,
                 pointBorderWidth: 2,
-                data: values,
+                data: valuesArea,
             }],
         },
         options: {
@@ -86,7 +86,7 @@ $(document).ready(function () {
                 caretPadding: 10,
                 callbacks: {
                     label: function (tooltipItem, chart) {
-                        var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+                        const datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
                         return datasetLabel + ': ' + number_format(tooltipItem.yLabel) + 'đ';
                     }
                 }
@@ -101,13 +101,13 @@ function number_format(number, decimals, dec_point, thousands_sep) {
     // *     example: number_format(1234.56, 2, ',', ' ');
     // *     return: '1 234,56'
     number = (number + '').replace(',', '').replace(' ', '');
-    var n = !isFinite(+number) ? 0 : +number,
+    let n = !isFinite(+number) ? 0 : +number,
         prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
         sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
         dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
         s = '',
         toFixedFix = function (n, prec) {
-            var k = Math.pow(10, prec);
+            const k = Math.pow(10, prec);
             return '' + Math.round(n * k) / k;
         };
     // Fix for IE parseFloat(0.55).toFixed(0) = 0;

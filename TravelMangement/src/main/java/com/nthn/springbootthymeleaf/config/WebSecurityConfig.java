@@ -1,8 +1,10 @@
 package com.nthn.springbootthymeleaf.config;
 
 import com.nthn.springbootthymeleaf.config.handlers.LoginSuccessHandler;
+import com.nthn.springbootthymeleaf.config.handlers.LogoutSuccessHandler;
 import com.nthn.springbootthymeleaf.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -10,14 +12,19 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
+import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
@@ -29,7 +36,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
     @Autowired
-    private AuthenticationSuccessHandler successHandler;
+    private LoginSuccessHandler loginSuccessHandler;
+
+    @Autowired
+    public LogoutSuccessHandler logoutSuccessHandler;
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -44,10 +54,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return authenticationProvider;
     }
 
-    @Bean
-    public AuthenticationSuccessHandler successHandler() {
-        return new LoginSuccessHandler();
-    }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -62,14 +68,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
 
         // Các trang không yêu cầu login
-        http.authorizeRequests().antMatchers("/", "/login", "/logout", "/register", "/tours", "/news").permitAll();
+        http.authorizeRequests()
+                .antMatchers("/", "/login", "/logout", "/register", "/tours/**", "/news/**")
+                .permitAll();
         // Trang /profile yêu cầu phải login với vai trò CUSTOMER, EMPLOYEE hoặc ADMIN.
         // Nếu chưa login, nó sẽ redirect tới trang /login.
-        http.authorizeRequests().antMatchers("/profile", "/booking", "/comment")
-                .access("hasAnyRole('CUSTOMER', 'EMPLOYEE', 'ADMIN')");
+        http.authorizeRequests()
+                .antMatchers("/profile", "/booking/**", "/comment").authenticated();
+//                .hasAnyRole("CUSTOMER", "EMPLOYEE", "ADMIN");
 
         // Trang chỉ dành cho ADMIN
-        http.authorizeRequests().antMatchers("/admin/").access("hasRole('ADMIN')");
+        http.authorizeRequests().antMatchers("/dashboard/**").hasAuthority("ADMIN");
 
         // Khi người dùng đã login, với vai trò XX.
         // Nhưng truy cập vào trang yêu cầu vai trò YY,
@@ -83,16 +92,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 .defaultSuccessUrl("/")
                 .failureUrl("/login?error")
-                .successHandler(this.successHandler)
+                .successHandler(loginSuccessHandler)
                 .usernameParameter("username")//
                 .passwordParameter("password")
                 // Cấu hình cho Logout Page.
                 .and()
                 .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .invalidateHttpSession(true)
-                .clearAuthentication(true)
-                .logoutSuccessUrl("/login?logout")
+                .logoutSuccessHandler(logoutSuccessHandler)
+//                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+//                .invalidateHttpSession(true)
+//                .clearAuthentication(true)
+//                .logoutSuccessUrl("/login?logout")
                 .permitAll();
 
         // Cấu hình Remember Me.

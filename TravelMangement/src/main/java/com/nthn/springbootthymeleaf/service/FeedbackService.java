@@ -8,6 +8,8 @@ import java.util.Map;
 public interface FeedbackService {
     Integer save(Feedback feedback);
 
+    Feedback add(int tourId, int accountId, String description, double rating);
+
     void delete(Integer id);
 
     void update(Integer id, Feedback feedback);

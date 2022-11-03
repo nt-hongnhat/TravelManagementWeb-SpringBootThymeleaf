@@ -1,20 +1,20 @@
 package com.nthn.springbootthymeleaf.pojo;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.LinkedHashSet;
 import java.util.Objects;
-import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
 @Entity
 @Table(name = "customer")
 public class Customer implements Serializable {
@@ -26,39 +26,24 @@ public class Customer implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Account account;
-
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id")
-    public Account getAccount() {
-        return account;
-    }
-
     @Column(name = "fullname", nullable = false)
     private String fullname;
-
     @Column(name = "gender")
     private String gender;
-
     @Column(name = "identified", nullable = false, length = 15)
     private String identified;
-
     @Column(name = "nationality")
     private String nationality;
-
     @Column(name = "phone")
     private String phone;
-
     @Column(name = "address")
     private String address;
-
     @Column(name = "active")
     private Boolean active = true;
 
-    @OneToMany(mappedBy = "customer", orphanRemoval = false)
-    @ToString.Exclude
-    private Set<Booking> bookings = new LinkedHashSet<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id")
+    private Account account;
 
 
     @Override
@@ -74,4 +59,8 @@ public class Customer implements Serializable {
         return getClass().hashCode();
     }
 
+    @Override
+    public String toString() {
+        return String.format("fullname = %s, gender = %s, identified = %s, nationality = %s, phone = %s, address = %s", fullname, gender, identified, nationality, phone, address);
+    }
 }

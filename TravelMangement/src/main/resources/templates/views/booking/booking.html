@@ -39,34 +39,35 @@
                         <h3 class="section-title" th:text="${tour.getName()}">
                         </h3>
                         <div class="row">
-                            <div class="col-4">Mã tour</div>
+                            <div class="col-4 font-weight-bold">Mã tour</div>
                             <div class="col-8" th:text="${tour.getId()}"></div>
                         </div>
                         <div class="row">
-                            <div class="col-4">Thời gian</div>
+                            <div class="col-4 font-weight-bold">Thời gian</div>
                             <div class="col-8" th:text="${tour.getDuration()}"></div>
                         </div>
                         <div class="row">
-                            <div class="col-4">Giá</div>
+                            <div class="col-4 font-weight-bold">Giá</div>
                             <div class="col-8" th:text="${#numbers.formatCurrency(tour.getUnitPrice())}"></div>
                         </div>
                         <div class="row">
-                            <div class="col-4">Khởi hành</div>
+                            <div class="col-4 font-weight-bold">Khởi hành</div>
                             <div class="col-8" th:text="'Hàng ngày'"></div>
                         </div>
                         <div class="row">
-                            <div class="col-4">Di chuyển</div>
+                            <div class="col-4 font-weight-bold">Di chuyển</div>
                             <div class="col-8" th:text="${tour.getTransfer()}"></div>
                         </div>
                         <div class="row">
-                            <div class="col-4">Xuất phát</div>
+                            <div class="col-4 font-weight-bold">Xuất phát</div>
                             <div class="col-8" th:text="${tour.getDeparturePlace()}"></div>
                         </div>
                         <div class="row">
-                            <div class="col-4">Số chỗ còn</div>
-                            <div class="col-8" th:text="${tour.getMaxSlot()}"></div>
+                            <div class="col-4  font-weight-bold">Số chỗ còn</div>
+                            <div class="col-8" th:text="${tour.getAvailableSlot()}"></div>
                         </div>
                     </div>
+
                 </div>
             </div>
 
@@ -116,74 +117,101 @@
                                 <div class="form-group col-md-6">
                                     <label class="text-black" for="fullname" th:text="|#{label.fullName} *|"></label>
                                     <input type="text" class="form-control" id="fullname" required autofocus
-                                           th:field="${customer.fullname}">
+                                           th:value="*{fullName}" th:field="*{fullName}">
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label class="text-black" for="identifiedCard"
                                            th:text="|#{label.identifiedcard} *|"></label>
                                     <input type="text" class="form-control" id="identifiedCard" required
-                                           th:field="${customer.identified}">
+                                           th:value="*{identified}" th:field="*{identified}">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label class="text-black" for="phone" th:text="|#{label.phone} *|"></label>
                                     <input type="text" class="form-control" id="phone" maxlength="10" required
-                                           th:field="${customer.phone}">
+                                           th:value="*{phone}" th:field="*{phone}">
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label class="text-black" for="address"
-                                           th:text="#{label.address}"></label>
+                                    <label class="text-black" for="address" th:text="#{label.address}"></label>
                                     <input type="text" class="form-control" id="address"
-                                           th:field="${customer.address}">
+                                           th:value="*{address}" th:field="*{address}">
                                 </div>
                             </div>
                             <div class="row">
+                                <!--                                <div class="form-group col-md-3"-->
+                                <!--                                     th:each="bookingDetail, iteratStat:${booking.bookingDetails}">-->
+                                <!--                                    <span class="text-black" th:text="${bookingDetail.tourTicket.name}"></span>-->
+                                <!--                                    <label class="text-black" th:for="${bookingDetail.tourTicket.id}">-->
+                                <!--                                        <input th:type="number" class="form-control" value="1"-->
+                                <!--                                               th:name="${bookingDetail.tourTicket.id}"-->
+                                <!--                                               th:min="${iteratStat.index<1}?1:0" th:value="${iteratStat.index<1}?1:0">-->
+                                <!--                                    </label>-->
+                                <!--                                </div>-->
+                                <!--                                <div class="form-group col-md-3" th:each="tourTicket, iteratStat:${tourTickets}"-->
+                                <!--                                     th:object="${booking.bookingDetails.get(__${iteratStat.index}__)}">-->
+                                <!--                                    <label class="text-black"-->
+                                <!--                                           th:for="${tourTicket.id}"-->
+                                <!--                                           th:text="${tourTicket.name}"></label>-->
+                                <!--                                    <label class="text-black">-->
+                                <!--                                        <input th:type="number" class="form-control" value="1"-->
+                                <!--                                               th:name="${tourTicket.id}" th:id="${tourTicket.id}"-->
+                                <!--                                               th:min="${iteratStat.index<1}?1:0"-->
+                                <!--                                               th:value="${iteratStat.index<1}?1:0"-->
+                                <!--                                               th:field="*{quan}">-->
+                                <!--                                    </label>-->
+                                <!--                                </div>-->
+
                                 <div class="form-group col-md-3">
                                     <label class="text-black" for="numberAdult" th:text="'Người lớn (trên 11 tuổi) *'">
                                     </label>
                                     <input type="number" class="form-control" id="numberAdult" min="1"
-                                           th:field="*{numberAdult}">
+                                           th:value="*{numberAdult}" th:field="*{numberAdult}">
                                 </div>
-                                <div class="form-group col-md-3">
-                                    <label class="text-black" for="numberChildren"
-                                           th:text="'Trẻ em (5 - 11 tuổi)'">
+                                <div class="form-group col-md-3" th:if="${tourTickets.size()>1}">
+                                    <label class="text-black" for="numberChildren" th:text="'Trẻ em (5 - 11 tuổi)'">
                                     </label>
                                     <input type="number" class="form-control" id="numberChildren" min="0"
-                                           th:field="*{numberChildren}">
+                                           th:value="*{numberChildren}" th:field="*{numberChildren}">
                                 </div>
-                                <div class="form-group col-md-3">
-                                    <label class="text-black" for="numberYoungChildren"
-                                           th:text="'Trẻ nhỏ (2-5 tuổi)	'">
+                                <div class="form-group col-md-3" th:if="${tourTickets.size()>2}">
+                                    <label class="text-black" for="numberYoungChildren" th:text="'Trẻ nhỏ (2-5 tuổi)'">
                                     </label>
                                     <input type="number" class="form-control" id="numberYoungChildren" min="0"
-                                           th:field="*{numberYoungChildren}">
+                                           th:value="*{numberYoungChildren}" th:field="*{numberYoungChildren}">
                                 </div>
-                                <div class="form-group col-md-3">
-                                    <label class="text-black" for="numberInfants"
-                                           th:text="'Sơ sinh (<2 tuổi)'">
+                                <div class="form-group col-md-3" th:if="${tourTickets.size()>3}">
+                                    <label class="text-black" for="numberInfants" th:text="'Sơ sinh (<2 tuổi)'">
                                     </label>
                                     <input type="number" class="form-control" id="numberInfants" min="0"
-                                           th:field="*{numberInfants}">
+                                           th:value="*{numberInfants}" th:field="*{numberInfants}">
+                                </div>
+                                <div id="output"></div>
+                                <!--                                <script>-->
+                                <!--                                    let numberPeople = 0;-->
+                                <!--                                    let maxSlot = [[${maxSlot}]];-->
+                                <!--                                    numberPeople = Number.parseInt(document.getElementById("numberAdult").value)-->
+                                <!--                                        + Number.parseInt(document.getElementById("numberChildren").value)-->
+                                <!--                                        + Number.parseInt(document.getElementById("numberYoungChildren").value)-->
+                                <!--                                        + Number.parseInt(document.getElementById("numberInfants").value);-->
+                                <!--                                    -->
+                                <!--                                    function setValue(id) {-->
+                                <!--                                        document.getElementById("output").innerText = numberPeople;-->
+                                <!--                                    }-->
+
+                                <!--                                    if (numberPeople > maxSlot) {-->
+                                <!--                                        alert(numberPeople + " > " + maxSlot);-->
+                                <!--                                    }-->
+                                <!--                                </script>-->
+                            </div>
+                            <div class="row text-center">
+                                <div class="col-md-6 mx-auto w-25">
+                                    <button id="btnBooking" type="submit" class="btn btn-primary w-50"
+                                            th:text="#{label.booking}"></button>
                                 </div>
                             </div>
-
-                            <button type="submit" class="btn btn-primary" th:text="#{label.booking}"></button>
                         </form>
                     </div> <!-- END .custom-block -->
-                </div>
-                <div class="col-lg-4">
-                    <div class="custom-block aos-init" data-aos="fade-up">
-                        <!--                            <h2 class="section-title">Social Icons</h2>-->
-                        <!--                            <ul class="list-unstyled social-icons light">-->
-                        <!--                                <li><a href="#"><span class="icon-facebook"></span></a></li>-->
-                        <!--                                <li><a href="#"><span class="icon-twitter"></span></a></li>-->
-                        <!--                                <li><a href="#"><span class="icon-linkedin"></span></a></li>-->
-                        <!--                                <li><a href="#"><span class="icon-google"></span></a></li>-->
-                        <!--                                <li><a href="#"><span class="icon-play"></span></a></li>-->
-                        <!--                            </ul>-->
-                    </div> <!-- END .custom-block -->
-
                 </div>
             </div>
 

@@ -1,4 +1,4 @@
-package com.nthn.springbootthymeleaf.controller;
+package com.nthn.springbootthymeleaf.controller.admin;
 
 import com.nthn.springbootthymeleaf.pojo.Permission;
 import com.nthn.springbootthymeleaf.service.PermissionService;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/admin/permissions")
+@RequestMapping("/dashboard/permissions")
 public class PermissionController {
     @Autowired
     private PermissionService permissionService;

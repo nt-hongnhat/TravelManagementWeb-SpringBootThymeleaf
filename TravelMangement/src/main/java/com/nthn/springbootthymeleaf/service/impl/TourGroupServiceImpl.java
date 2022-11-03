@@ -30,7 +30,7 @@ public class TourGroupServiceImpl implements TourGroupService {
 
     @Override
     public TourGroup getTourGroup(Integer id) {
-        return tourGroupRepository.getReferenceById(id);
+        return tourGroupRepository.findById(id).get();
     }
 
     @Override

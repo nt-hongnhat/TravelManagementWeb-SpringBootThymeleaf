@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import javax.validation.constraints.NotEmpty;
+
 @Repository
 
 public interface CustomerRepository extends JpaRepository<Customer, Integer>, JpaSpecificationExecutor<Customer> {
@@ -18,5 +20,9 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer>, Jp
 
     @Query("select c from Customer c where c.identified = ?1")
     Customer getCustomerByIdentified(String identified);
+
+
+    @Query("select c from Customer c where c.account.id = ?1")
+    Customer findByAccountId(Integer id);
 
 }

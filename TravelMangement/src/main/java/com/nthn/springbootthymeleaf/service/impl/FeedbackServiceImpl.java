@@ -31,6 +31,16 @@ public class FeedbackServiceImpl implements FeedbackService {
         return bean.getId();
     }
 
+    @Override
+    public Feedback add(int tourId, int accountId, String description, double rating) {
+        Feedback feedback = new Feedback();
+        feedback.getTour().setId(tourId);
+        feedback.getAccount().setId(accountId);
+        feedback.setDescription(description);
+        feedback.setRating(rating);
+        return feedbackRepository.save(feedback);
+    }
+
     public void delete(Integer id) {
         feedbackRepository.deleteById(id);
     }

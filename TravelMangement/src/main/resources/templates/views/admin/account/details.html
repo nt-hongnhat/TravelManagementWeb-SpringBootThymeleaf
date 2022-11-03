@@ -7,8 +7,8 @@
 <body>
 <h1 class="mt-4" layout:fragment="page-heading" th:text="#{label.accountManagement}"></h1>
 <ol class="breadcrumb" layout:fragment="breadcrumb">
-    <li class="breadcrumb-item"><a th:href="@{/admin}" th:text="#{label.home}"></a></li>
-    <li class="breadcrumb-item"><a th:href="@{/admin/accounts}" th:text="#{label.accountManagement}"></a></li>
+    <li class="breadcrumb-item"><a th:href="@{/dashboard}" th:text="#{label.home}"></a></li>
+    <li class="breadcrumb-item"><a th:href="@{/dashboard/accounts}" th:text="#{label.accountManagement}"></a></li>
     <li class="breadcrumb-item active" aria-current="page" th:text="#{label.accountDetails}"></li>
 </ol>
 
@@ -48,7 +48,7 @@
                         <div class="alert alert-info" th:text="${success}"></div>
                     </div>
                     <form method="post" action="" id="formAccount" enctype="multipart/form-data"
-                          th:action="@{/admin/accounts/{id}/edit(id=${account.getId()})}"
+                          th:action="@{/dashboard/accounts/{id}/edit(id=${account.getId()})}"
                           th:object="${account}">
                         <div class="row gx-3 mb-3">
                             <!-- Form Group (id)-->
@@ -97,6 +97,16 @@
                             <label class="mb-1" for="inputEmailAddress" th:text="#{label.email}"></label>
                             <input class="form-control" id="inputEmailAddress" type="email"
                                    th:value="*{email}" th:field="*{email}">
+                        </div>
+                        <div class="mb-3" hidden>
+                            <label class="mb-1" for="password"></label>
+                            <input class="form-control" id="password" type="hidden"
+                                   th:value="*{password}" th:field="*{password}">
+                        </div>
+                        <div class="mb-3" hidden>
+                            <label class="mb-1" for="image"></label>
+                            <input class="form-control" id="image" type="hidden"
+                                   th:value="*{avatarUrl}" th:field="*{avatarUrl}">
                         </div>
                         <div class="row gx-3 mb-3">
                             <!-- Form Group (Group Selection Checkboxes)-->

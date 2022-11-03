@@ -7,8 +7,8 @@
 <body>
 <h1 class="mt-4" layout:fragment="page-heading" th:text="#{label.tourManagement}"></h1>
 <ol class="breadcrumb" layout:fragment="breadcrumb">
-    <li class="breadcrumb-item"><a th:href="@{/admin}" th:text="#{label.home}"></a></li>
-    <li class="breadcrumb-item"><a th:href="@{/admin/tours}" th:text="#{label.tourManagement}"></a></li>
+    <li class="breadcrumb-item"><a th:href="@{/dashboard}" th:text="#{label.home}"></a></li>
+    <li class="breadcrumb-item"><a th:href="@{/dashboard/tours}" th:text="#{label.tourManagement}"></a></li>
     <li class="breadcrumb-item active" aria-current="page" th:text="#{label.createTour}"></li>
 </ol>
 
@@ -44,10 +44,16 @@
                         <div class="alert alert-success" th:text="${success}"></div>
                     </div>
                     <form method="post" action="" enctype="multipart/form-data" id="formTour"
-                          th:action="@{/admin/tours/create}" th:object="${newTour}">
+                          th:action="@{/dashboard/tours/create}" th:object="${newTour}">
+                        <!--                        <div class="mb-3" hidden="hidden">-->
+                        <!--                            <label for="inputId"></label>-->
+                        <!--                            <input class="form-control" id="inputId" type="text"-->
+                        <!--                                   th:field="*{id}" hidden="hidden">-->
+                        <!--                        </div>-->
                         <div class="mb-3">
                             <label for="selectTourGroup" class="mb-1" th:text="'Nhóm tour'"></label>
                             <select id="selectTourGroup" class="form-select custom-select" th:field="*{tourGroup.id}">
+                                <option value="" th:text="'Chọn nhóm tour'" disabled selected></option>
                                 <option th:each="tourGroup:${tourGroups}" th:value="${tourGroup.id}"
                                         th:text="${tourGroup.getName()}"></option>
                             </select>

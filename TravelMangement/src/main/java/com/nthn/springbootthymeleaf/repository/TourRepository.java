@@ -20,15 +20,18 @@ public interface TourRepository extends JpaRepository<Tour, Integer>, JpaSpecifi
 
     @Query("select t from Tour t where t.tourGroup.id = ?1")
     List<Tour> findByTourGroupId(Integer id);
-
-    @Query("select t from Tour t where t.duration = ?1")
-    List<Tour> findByDuration(String duration);
+//
+//    @Query("select t from Tour t where t.duration = ?1")
+//    List<Tour> findByDuration(String duration);
 
     @Query("select t from Tour t where t.tourGroup.linkStatic = ?1")
     Page<Tour> findByTourGroup(String tourGroupLink, Pageable pageable);
 
     @Query("select t from Tour t where t.tourGroup.category.linkStatic = ?1")
     Page<Tour> findByCategory(String categoryLink, Pageable pageable);
+
+    @Query("select t from Tour t where t.tourGroup.id = ?1")
+    Page<Tour> findByTourGroupId(Integer tourGroupId, Pageable pageable);
 
 //    //
 ////    @Query("""
@@ -91,4 +94,15 @@ public interface TourRepository extends JpaRepository<Tour, Integer>, JpaSpecifi
 
     @Query("select t from Tour t where t.tourGroup in ?1")
     Page<Tour> getByTourGroupIn(Set<TourGroup> tourGroups, Pageable pageable);
+
+    @Query("select year (t.departureDate), count(t) from Tour t group by year (t.departureDate)")
+    List<Object> countToursByDepartureDateYear();
+
+    @Query("select month(t.departureDate), count(t) from Tour t where year( t.departureDate) = ?1 group by month (t.departureDate)")
+    List<Object> countToursByDepartureDateMonth(int year);
+
+    @Query("select count(t) from Tour t where day(t.departureDate) = ?1")
+    List<Object> countToursByDepartureDateDayOfMonth(int month);
+
+
 }

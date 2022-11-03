@@ -8,8 +8,8 @@
 <h1 class="mt-4" layout:fragment="page-heading" th:text="#{label.tourManagement}"></h1>
 
 <ol class="breadcrumb" layout:fragment="breadcrumb">
-    <li class="breadcrumb-item"><a href="#" th:text="#{label.home}">Home</a></li>
-    <li class="breadcrumb-item active" aria-current="page" th:text="#{label.tourManagement}">Tour Management</li>
+    <li class="breadcrumb-item"><a href="#" th:text="#{label.home}"></a></li>
+    <li class="breadcrumb-item active" aria-current="page" th:text="#{label.tourManagement}"></li>
 </ol>
 
 <div class="card shadow mb-4" layout:fragment="page-content">
@@ -24,7 +24,8 @@
                 </div>
 
                 <div class="col-12 col-xl-auto">
-                    <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" th:href="@{/admin/categories}">
+                    <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+                       th:href="@{/dashboard/categories}">
                         <i class="fas fa-list-alt"></i>
                         <span th:text="#{label.categoriesManagement}"></span>
                     </a>
@@ -65,8 +66,8 @@
                     <td class="align-middle" th:text="${tour.getAvailableSlot().intValue()}"></td>
 
                     <td class="align-middle text-center text-nowrap">
-                        <a class="badge badge-primary px-2 py-1" data-toggle="modal"
-                           data-target="#editModal" th:href="@{${#request.getRequestURL()}+'/'+${tour.id}+'/edit'}">
+                        <a class="badge badge-primary px-2 py-1"
+                           th:href="@{${#request.getRequestURL()}+'/'+${tour.id}+'/details'}">
                             <i class="fas fa-edit fa-w-3"></i>
                             <span th:text="#{label.edit}"></span>
                         </a>

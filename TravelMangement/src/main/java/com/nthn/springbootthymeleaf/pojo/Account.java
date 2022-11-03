@@ -1,18 +1,22 @@
 package com.nthn.springbootthymeleaf.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.hibernate.Hibernate;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Objects;
+import java.util.*;
 
 @Getter
 @Setter
@@ -31,27 +35,30 @@ public class Account implements Serializable {
     private Integer id;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "permission_id")
     private Permission permission;
 
+    @NotEmpty(message = "NotEmpty.account.userName")
     @Column(name = "username", nullable = false)
     private String username;
 
+    @NotNull(message = "NotEmpty.account.password")
     @Column(name = "password", nullable = false)
     private String password;
 
     @Transient
-    private String confirm = getPassword();
+    private String confirmPassword = getPassword();
 
-    @NotBlank
+    @NotEmpty(message = "NotEmpty.account.firstName")
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @NotBlank
+    @NotBlank(message = "NotEmpty.account.lastName")
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Email
+    @Email(message = "Pattern.account.email")
     @Column(name = "email")
     private String email;
 
@@ -71,6 +78,11 @@ public class Account implements Serializable {
     private String resetToken;
     @Transient
     private MultipartFile multipartFile;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "account", orphanRemoval = true)
+    private Set<Comment> comments = new LinkedHashSet<>();
+
 
     @Transient
     public String getPhotosImagePath() {
@@ -92,8 +104,4 @@ public class Account implements Serializable {
         return getClass().hashCode();
     }
 
-    @Override
-    public String toString() {
-        return String.format("Username: %s; Permission: %s", getUsername(), permission.getName());
-    }
 }

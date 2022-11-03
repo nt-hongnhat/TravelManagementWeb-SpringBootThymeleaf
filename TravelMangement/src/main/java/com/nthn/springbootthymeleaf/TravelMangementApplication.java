@@ -17,6 +17,7 @@ public class TravelMangementApplication {
 //        manager.setCloudinary(cloudinary);
 //        manager.init();
 
+
         System.out.println("TravelMangementApplication Run....");
     }
 

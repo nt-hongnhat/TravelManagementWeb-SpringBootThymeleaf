@@ -25,6 +25,16 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.save(customer);
     }
 
+    @Override
+    public Customer add(String fullName, String identified, String phone, String address) {
+        Customer customer = new Customer();
+        customer.setFullname(fullName);
+        customer.setIdentified(identified);
+        customer.setPhone(phone);
+        customer.setAddress(address);
+        return this.save(customer);
+    }
+
     public void delete(Integer id) {
         customerRepository.deleteById(id);
     }
@@ -58,9 +68,14 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.countAllByNationality(nationality);
     }
 
+    @Override
+    public Customer getCustomerByAccount(Integer id) {
+        return customerRepository.findByAccountId(id);
+    }
 
     private Customer requireOne(Integer id) {
         return customerRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Resource not found: " + id));
+                .orElseThrow(() -> new NoSuchElementException("Customer not found: " + id));
     }
+
 }

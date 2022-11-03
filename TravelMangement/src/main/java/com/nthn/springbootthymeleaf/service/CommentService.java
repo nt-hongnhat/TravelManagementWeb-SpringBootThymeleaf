@@ -2,9 +2,10 @@ package com.nthn.springbootthymeleaf.service;
 
 import com.nthn.springbootthymeleaf.pojo.Comment;
 
-import java.util.List;
-
 public interface CommentService {
+
+    int addComment(Comment comment);
+
     Integer save(Comment comment);
 
     Comment read(Integer id);

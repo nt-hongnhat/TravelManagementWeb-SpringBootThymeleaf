@@ -93,9 +93,6 @@
                             <div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-6">
                                 <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
                             </div>
-                            <div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-6">
-                                <span th:text="'Kết quả tìm thấy: '"></span>
-                            </div>
                         </div>
                     </form>
                 </div>
@@ -108,70 +105,84 @@
     <div class="untree_co-section">
         <div class="container">
             <div class="row justify-content-center mx-0 mb-5">
-                <div class="row justify-content-center align-baseline mx-0 mb-5">
-                    <div class="col-6 col-sm-6 col-md-6 col-lg-4 mb-4" th:each="tour:${tours}">
-                        <div class="media-1">
-                            <a class="media-thumb d-block mb-3" th:href="@{${tour.getPhotosImagePath()}}"
-                               data-fancybox="gallery">
-                                <div class="media-text">
-                                    <h3 class="text-justify" th:text="${tour.getName()}"></h3>
-                                    <span class="location" th:text="${tour.getItinerary()}"></span>
-                                </div>
-                                <img th:src="@{${tour.getPhotosImagePath()}}" alt="Không có hình ảnh"
-                                     class="img-fluid" src="">
-                            </a>
-                            <div class="d-flex align-items-center loc mb-2 mx-0">
-                                <span class="icon-room mr-3"></span>
-                                <span th:text="${tour.getDeparturePlace()}"></span>
-                            </div>
-                            <div class="d-flex align-items-center mx-0">
-                                <h3><a class="ui-state-hover" th:href="@{/tours/{id}(id=${tour.getId()})}"
-                                       th:text="${tour.getName()}"></a></h3>
-                            </div>
-                            <div class="d-flex align-items-center loc mb-2 price ml-auto">
-                                <span class="mr-1"><i class="icon-calendar"></i></span>
-                                <span th:text="${#temporals.format(tour.getDepartureDate(), 'dd/MM/yyyy')}"></span>
-                            </div>
-                            <div class="d-flex align-items-center loc mb-2 price ml-auto">
-                                <span class="mr-1"><i class="icon-tag"></i></span>
-                                <span th:text="${#numbers.formatCurrency(tour.getUnitPrice())}"></span>
-                            </div>
 
+                <th:block th:if="${tours.size()>0}">
+                    <div class="col-lg-6 text-center">
+                        <h3 class="section-title text-center mb-3"
+                            th:text="${tours.size()} + ' chuyến du lịch được tìm thấy'"></h3>
+                        <p></p>
+                    </div>
+                    <div class="row justify-content-center align-baseline mx-0 mb-5">
+                        <div class="col-6 col-sm-6 col-md-6 col-lg-4 mb-4" th:each="tour:${tours}">
+                            <div class="media-1">
+                                <a class="media-thumb d-block mb-3" th:href="@{${tour.getPhotosImagePath()}}"
+                                   data-fancybox="gallery">
+                                    <div class="media-text">
+                                        <h3 class="text-justify" th:text="${tour.getName()}"></h3>
+                                        <span class="location" th:text="${tour.getItinerary()}"></span>
+                                    </div>
+                                    <img th:src="@{${tour.getPhotosImagePath()}}" alt="Không có hình ảnh"
+                                         class="img-fluid" src="">
+                                </a>
+                                <div class="d-flex align-items-center loc mb-2 mx-0">
+                                    <span class="icon-room mr-3"></span>
+                                    <span th:text="${tour.getDestinationPlace()}"></span>
+                                </div>
+                                <div class="d-flex align-items-center mx-0">
+                                    <h3><a class="ui-state-hover" th:href="@{/tours/{id}(id=${tour.getId()})}"
+                                           th:text="${tour.getName()}"></a></h3>
+                                </div>
+                                <div class="d-flex align-items-center loc mb-2 price ml-auto">
+                                    <span class="mr-1"><i class="icon-calendar"></i></span>
+                                    <span th:text="${#temporals.format(tour.getDepartureDate(), 'dd/MM/yyyy')}"></span>
+                                </div>
+                                <div class="d-flex align-items-center loc mb-2 price ml-auto">
+                                    <span class="mr-1"><i class="icon-tag"></i></span>
+                                    <span th:text="${#numbers.formatCurrency(tour.getUnitPrice())}"></span>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
-                </div>
-                <nav th:if="${totalPages > 1}" aria-label="Page navigation example">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item" th:if="${currentPage>1}">
-                            <a class="page-link" th:href="@{/tours(page=${currentPage}-1)}" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                                <span class="sr-only">Trước</span>
-                            </a>
-                        </li>
-                        <th:block th:if="${totalPages > 0}" class="pagination"
-                                  th:each="pageNumber : ${pageNumbers}">
-                            <li class="page-item">
-                                <a class="page-link" th:text="${pageNumber}"
-                                   th:classappend="${pageNumber==currentPage}?'active text-black'"
-
-                                   th:href="@{/tours(page=${pageNumber})}"></a>
+                    <nav th:if="${totalPages > 1}" aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item" th:if="${currentPage>1}">
+                                <a class="page-link" th:href="@{/tours(page=${currentPage}-1)}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">Trước</span>
+                                </a>
                             </li>
-                        </th:block>
+                            <th:block th:if="${totalPages > 0}" class="pagination"
+                                      th:each="pageNumber : ${pageNumbers}">
+                                <li class="page-item">
+                                    <a class="page-link" th:text="${pageNumber}"
+                                       th:classappend="${pageNumber==currentPage}?'active text-black'"
 
-                        <li class="page-item" th:if="${currentPage<totalPages}">
-                            <a class="page-link" th:href="@{/tours(page=${currentPage}+1)}" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                                <span class="sr-only">Sau</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
+                                       th:href="@{/tours(page=${pageNumber})}"></a>
+                                </li>
+                            </th:block>
+
+                            <li class="page-item" th:if="${currentPage<totalPages}">
+                                <a class="page-link" th:href="@{/tours(page=${currentPage}+1)}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only">Sau</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </th:block>
+                <th:block th:if="${tours.size()==0}">
+                    <div class="col-lg-6 text-center">
+                        <h3 class="section-title text-center mb-3"
+                            th:text="'Không tìm thấy chuyến du lịch nào phù hợp! Hãy thử lại'"></h3>
+                        <p></p>
+                    </div>
+                </th:block>
+
             </div>
 
         </div>
-
     </div>
-
 </th:block>
 </body>
 </html>

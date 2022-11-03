@@ -1,4 +1,4 @@
-package com.nthn.springbootthymeleaf.controller;
+package com.nthn.springbootthymeleaf.controller.admin;
 
 import com.nthn.springbootthymeleaf.pojo.Tour;
 import com.nthn.springbootthymeleaf.pojo.TourTicket;
@@ -20,13 +20,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Controller
-@RequestMapping("/admin/tours")
+@RequestMapping("/dashboard/tours")
 public class TourController {
     @Autowired
     private TourService tourService;
@@ -86,7 +88,10 @@ public class TourController {
     }
 
     @PostMapping("/create")
-    public String save(@RequestParam("tourImage") MultipartFile multipartFile, @Validated @ModelAttribute("newTour") Tour newTour, @ModelAttribute("tourTickets") List<TourTicket> tourTickets, Model model, BindingResult result, final RedirectAttributes redirectAttributes) throws IOException {
+    public String save(@RequestParam("tourImage") MultipartFile multipartFile,
+                       @Validated @ModelAttribute("newTour") Tour newTour,
+                       @ModelAttribute("tourTickets") List<TourTicket> tourTickets, Model model, BindingResult result,
+                       final RedirectAttributes redirectAttributes) throws IOException {
         System.out.println("New: " + newTour);
         System.out.println(multipartFile.getOriginalFilename());
         System.out.println(tourTickets.toString());
@@ -95,7 +100,7 @@ public class TourController {
         if (result.hasErrors()) {
             System.out.println(result.getAllErrors());
             redirectAttributes.addFlashAttribute("errorMessage", "Lỗi!!!");
-            return "redirect:/admin/tours/create?error";
+            return "redirect:/dashboard/tours/create?error";
         }
 
         Tour tourSaved;
@@ -125,19 +130,22 @@ public class TourController {
 
         } catch (Exception exception) {
             redirectAttributes.addFlashAttribute("errorMessage", "Lỗi: " + exception.getMessage());
-            return "redirect:/admin/tours/create?error";
+            return "redirect:/dashboard/tours/create?error";
         }
 
         redirectAttributes.addFlashAttribute("success", "Tạo tour thành công!");
-        return "redirect:/admin/tours/create?success";
+        return "redirect:/dashboard/tours/create?success";
     }
 
 
     @GetMapping("/{id}/details")
     public String details(Model model, @PathVariable("id") Integer tourId) {
         Tour tour = tourService.getById(tourId);
-
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        tour.setDate(formatter.format(tour.getDepartureDate()));
+        System.out.println("DATE: " + tour.getDate());
         model.addAttribute("tour", tour);
+        model.addAttribute("title", tour.getName());
         return "views/admin/tour/details";
     }
 
@@ -145,7 +153,7 @@ public class TourController {
     @DeleteMapping("/{id}/delete")
     public String deleteTourById(@PathVariable("id") Integer id) {
         tourService.delete(id);
-        return "redirect:/admin/tours/";
+        return "redirect:/dashboard/tours/";
     }
 
 

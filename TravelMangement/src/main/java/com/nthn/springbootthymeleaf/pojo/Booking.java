@@ -1,17 +1,17 @@
 package com.nthn.springbootthymeleaf.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.awt.print.Book;
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.LinkedHashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -21,7 +21,6 @@ import java.util.Set;
 @Accessors(chain = true)
 @Table(name = "booking")
 public class Booking implements Serializable {
-
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -52,30 +51,15 @@ public class Booking implements Serializable {
     private Tour tour;
 
 
-    @OneToMany(orphanRemoval = true)
-    @JoinColumn(name = "booking_id", insertable = false, updatable = false)
+    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
-    private Set<BookingDetail> bookingDetails = new LinkedHashSet<>();
-
-    @ManyToMany
-    @JoinTable(name = "booking_detail",
-            joinColumns = @JoinColumn(name = "booking_id"),
-            inverseJoinColumns = @JoinColumn(name = "tour_ticket_id"))
-    @ToString.Exclude
-    private Set<TourTicket> tourTickets = new LinkedHashSet<>();
+    private List<BookingDetail> bookingDetails = new ArrayList<BookingDetail>();
 
 
+    //    @OneToMany(mappedBy = "booking", orphanRemoval = true)
+//    private Set<BookingDetail> bookingDetails = new LinkedHashSet<>();
     @Transient
-    private int count;
-    @Transient
-    private int numberAdult = 1;
-    @Transient
-    private int numberChildren = 0;
-    @Transient
-    private int numberYoungChildren = 0;
-    @Transient
-    private int numberInfants = 0;
-
+    private Integer count = 0;
 
     public int getCount() {
         bookingDetails.forEach(bookingDetail -> {
@@ -90,6 +74,15 @@ public class Booking implements Serializable {
             System.out.println(bookingDetail.getTourTicket().getUnitPrice() + "--------" + bookingDetail.getQuantity());
         });
     }
+
+    @Transient
+    private Integer numberAdult = 1;
+    @Transient
+    private Integer numberChildren = 0;
+    @Transient
+    private Integer numberYoungChildren = 0;
+    @Transient
+    private Integer numberInfants = 0;
 
     @Override
     public boolean equals(Object o) {

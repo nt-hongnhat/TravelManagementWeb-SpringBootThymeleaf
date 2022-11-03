@@ -1,26 +1,46 @@
-package com.nthn.springbootthymeleaf.controller;
+package com.nthn.springbootthymeleaf.controller.admin;
 
+import com.nthn.springbootthymeleaf.pojo.Account;
 import com.nthn.springbootthymeleaf.pojo.Category;
+import com.nthn.springbootthymeleaf.service.AccountService;
 import com.nthn.springbootthymeleaf.service.CategoryService;
+import com.nthn.springbootthymeleaf.service.ProvinceService;
 import com.nthn.springbootthymeleaf.service.TourGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
-@RequestMapping("/admin/categories")
+@RequestMapping("/dashboard/categories")
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
-
+    @Autowired
+    private AccountService accountService;
     @Autowired
     private TourGroupService tourGroupService;
+    @Autowired
+    private ProvinceService provinceService;
+
+    @ModelAttribute
+    public void commonAttributes(Model model, HttpSession httpSession) {
+        User currentUser = (User) httpSession.getAttribute("currentUser");
+
+        Account account = accountService.getAccountByUsername(currentUser.getUsername());
+        model.addAttribute("categories", this.categoryService.getCategories(""));
+        model.addAttribute("provinces", this.provinceService.getProvinces(""));
+        model.addAttribute("currentUser", httpSession.getAttribute("currentUser"));
+        model.addAttribute("avatar", account.getPhotosImagePath());
+    }
 
     @GetMapping
     public String index(Model model) {

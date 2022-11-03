@@ -2,6 +2,7 @@ package com.nthn.springbootthymeleaf.service.impl;
 
 import com.nthn.springbootthymeleaf.pojo.Comment;
 import com.nthn.springbootthymeleaf.repository.CommentRepository;
+import com.nthn.springbootthymeleaf.repository.NewsRepository;
 import com.nthn.springbootthymeleaf.service.CommentService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +15,25 @@ public class CommentServiceImpl implements CommentService {
 
     @Autowired
     private CommentRepository commentRepository;
+    @Autowired
+    private NewsRepository newsRepository;
 
+    @Override
+    public int addComment(Comment comment) {
+//        News news = newsRepository.findById(comment.getNews().getId()).orElseThrow();
+//        comment.setCreatedDate(LocalDateTime.now());
+        Comment comment1 = commentRepository.save(comment);
+        return comment1.getId();
+    }
+
+    @Override
     // CREATE
     public Integer save(Comment comment) {
         comment = commentRepository.save(comment);
         return comment.getId();
     }
 
-
+    @Override
     // READ
     public Comment read(Integer id) {
         return requireOne(id);

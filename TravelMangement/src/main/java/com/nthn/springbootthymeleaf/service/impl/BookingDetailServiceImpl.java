@@ -3,6 +3,7 @@ package com.nthn.springbootthymeleaf.service.impl;
 import com.nthn.springbootthymeleaf.pojo.BookingDetail;
 import com.nthn.springbootthymeleaf.repository.BookingDetailRepository;
 import com.nthn.springbootthymeleaf.service.BookingDetailService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,7 @@ public class BookingDetailServiceImpl implements BookingDetailService {
 
     @Override
     public BookingDetail save(BookingDetail bookingDetail) {
+      
         return bookingDetailRepository.save(bookingDetail);
     }
 }

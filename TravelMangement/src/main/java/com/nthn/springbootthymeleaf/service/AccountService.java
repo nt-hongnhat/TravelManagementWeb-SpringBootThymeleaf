@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.security.auth.login.AccountNotFoundException;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -23,86 +24,29 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Service
-@Transactional
-public class AccountService implements UserDetailsService {
-
-    @Autowired
-    private AccountRepository accountRepository;
-    @Autowired
-    private PermissionRepository permissionRepository;
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-
-    public Account create(Account account) {
-        account.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
-        account.setCreateTime(LocalDateTime.now());
-        return accountRepository.save(account);
-    }
+public interface AccountService extends UserDetailsService {
+    Account create(Account account);
 
     // Register an account with permission customer
-    public Account register(Account account) {
-        String password = account.getPassword();
-        account.setPassword(this.bCryptPasswordEncoder.encode(password));
-        account.setPermission(permissionRepository.findByName("CUSTOMER"));
-        account.setCreateTime(LocalDateTime.now());
-        return accountRepository.save(account);
-    }
+    Account register(Account account);
 
+    boolean matchPassword(String confirm, String password);
 
-    public boolean matchPassword(String confirm, String password) {
-        confirm = bCryptPasswordEncoder.encode(confirm);
-        return bCryptPasswordEncoder.matches(confirm, password);
-    }
+    Account getAccount(Integer id);
 
-    public Account getAccount(Integer id) {
-        Optional<Account> account = accountRepository.findById(id);
-        return account.orElse(null);
-    }
+    Account getAccountByUsername(String username);
 
+    Account getAccountByEmail(String email);
 
-    public Account getAccount(String username) {
-        return accountRepository.findByUsername(username);
-    }
+    List<Account> getAccounts(String keyword);
 
-    public List<Account> getAccounts(String keyword) {
-        List<Account> accounts;
-        if (keyword == null) {
+    boolean update(Integer id, Account account);
 
-            accounts = accountRepository.findAll().stream().filter(Account::getActive).collect(Collectors.toList());
-            return accounts;
+    boolean delete(Integer id);
 
-        } else return accountRepository.findAllByUsernameContaining(keyword);
-    }
+    Account getByResetPasswordToken(String token);
 
-    public boolean update(Integer id, Account account) {
-        Account original = this.getAccount(id);
-        original.setFirstName(account.getFirstName());
-        original.setLastName(account.getLastName());
-        original.setPermission(account.getPermission());
-        original.setActive(account.getActive());
-        original.setAvatarUrl(account.getAvatarUrl());
-        accountRepository.save(original);
-        return accountRepository.existsById(id);
-    }
+    void updateResetPasswordToken(String token, String email) throws AccountNotFoundException;
 
-    public boolean delete(Integer id) {
-        Account account = getAccount(id);
-        account.setActive(false);
-        return update(id, account);
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Account account = accountRepository.findByUsername(username);
-        if (account == null) {
-            System.out.println("Account not found! " + username);
-            throw new UsernameNotFoundException("Account " + username + " was not found in the database");
-        }
-        System.out.println("Found User: " + account);
-        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority(account.getPermission().getName()));
-        return new User(account.getUsername(), account.getPassword(), grantedAuthorities);
-    }
+    void updatePassword(Account account, String password);
 }

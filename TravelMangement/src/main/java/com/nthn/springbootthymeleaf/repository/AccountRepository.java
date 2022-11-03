@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
+import javax.validation.constraints.Email;
 import java.util.List;
 
 public interface AccountRepository extends JpaRepository<Account, Integer>, JpaSpecificationExecutor<Account> {
@@ -19,4 +20,10 @@ public interface AccountRepository extends JpaRepository<Account, Integer>, JpaS
 
     @Query("select a from Account a where a.active = ?1")
     List<Account> findAllByActive(Integer active);
+
+    @Query("select a from Account a where a.email = ?1")
+    Account findByEmail(@Email String email);
+
+    @Query("select a from Account a where a.resetToken = ?1")
+    Account findByResetToken(String resetToken);
 }

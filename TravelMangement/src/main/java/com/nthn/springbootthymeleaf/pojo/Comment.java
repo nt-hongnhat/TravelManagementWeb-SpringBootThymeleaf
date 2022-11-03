@@ -1,19 +1,22 @@
 package com.nthn.springbootthymeleaf.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import lombok.experimental.Accessors;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
-@ToString
+@RequiredArgsConstructor
 @Entity
+//@Accessors(chain = true)
 @Table(name = "comment")
 public class Comment implements Serializable {
 
@@ -25,13 +28,22 @@ public class Comment implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Account account;
-
-    @Column(name = "rating", nullable = false)
-    private Double rating;
 
     @Column(name = "content", nullable = false)
     private String content;
+
+    @Column(name = "created_date", nullable = false)
+    private LocalDateTime createdDate = LocalDateTime.now();
+
+    @ManyToOne
+    @JoinColumn(name = "account_id")
+    @JsonProperty("account")
+    private Account account;
+
+    @ManyToOne
+    @JoinColumn(name = "news_id", nullable = false)
+    @JsonIgnore
+    private News news;
 
     @Override
     public boolean equals(Object o) {
@@ -44,20 +56,5 @@ public class Comment implements Serializable {
     @Override
     public int hashCode() {
         return getClass().hashCode();
-    }
-
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    public Account getAccount() {
-        return account;
-    }
-
-    private News news;
-
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "news_id", nullable = false)
-    public News getNews() {
-        return news;
     }
 }

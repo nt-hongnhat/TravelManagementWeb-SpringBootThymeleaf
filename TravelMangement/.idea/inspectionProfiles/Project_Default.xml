@@ -14,19 +14,20 @@
     </inspection_tool>
     <inspection_tool class="DuplicatedCode" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <Languages>
-        <language minSize="98" name="Java" />
+        <language minSize="158" name="Java" />
         <language minSize="191" name="JavaScript" />
       </Languages>
     </inspection_tool>
     <inspection_tool class="HtmlUnknownAttribute" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="myValues">
         <value>
-          <list size="5">
+          <list size="6">
             <item index="0" class="java.lang.String" itemvalue="xsi:schemalocation" />
             <item index="1" class="java.lang.String" itemvalue="layout:title-pattern" />
             <item index="2" class="java.lang.String" itemvalue="layout:fragment" />
             <item index="3" class="java.lang.String" itemvalue="sec:authentication" />
             <item index="4" class="java.lang.String" itemvalue="sec:authorize" />
+            <item index="5" class="java.lang.String" itemvalue="sec:authorize-url" />
           </list>
         </value>
       </option>
