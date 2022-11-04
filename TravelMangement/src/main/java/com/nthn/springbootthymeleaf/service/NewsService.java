@@ -14,7 +14,7 @@ public interface NewsService {
     List<News> getNews(String keyword);
 
 
-    Integer save(News news);
+    News save(News news);
 
     void delete(Integer id);
 

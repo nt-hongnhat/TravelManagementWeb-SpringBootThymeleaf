@@ -1,10 +1,12 @@
 package com.nthn.springbootthymeleaf.controller.admin;
 
+import com.nthn.springbootthymeleaf.pojo.Account;
 import com.nthn.springbootthymeleaf.pojo.Tour;
 import com.nthn.springbootthymeleaf.pojo.TourTicket;
 import com.nthn.springbootthymeleaf.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -59,12 +62,16 @@ public class TourController {
     private PlacesService placesService;
 
     @ModelAttribute
-    public void commonAttributes(Model model) {
+    public void commonAttributes(Model model, HttpSession httpSession) {
         LocalDateTime today = LocalDateTime.now();
+        User currentUser = (User) httpSession.getAttribute("currentUser");
+        Account account = accountService.getAccountByUsername(currentUser.getUsername());
         model.addAttribute("today", today);
         model.addAttribute("categories", categoryService.getCategories());
         model.addAttribute("tourGroups", tourGroupService.getTourGroups());
         model.addAttribute("provinces", provinceService.getProvinces());
+        model.addAttribute("currentUser", httpSession.getAttribute("currentUser"));
+        model.addAttribute("avatar", account.getPhotosImagePath());
     }
 
     @GetMapping

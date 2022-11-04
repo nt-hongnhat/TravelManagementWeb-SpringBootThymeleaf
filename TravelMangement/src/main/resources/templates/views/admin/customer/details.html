@@ -7,8 +7,8 @@
 <body>
 <h1 class="mt-4" layout:fragment="page-heading" th:text="#{label.customerProfile}"></h1>
 <ol class="breadcrumb" layout:fragment="breadcrumb">
-    <li class="breadcrumb-item"><a th:href="@{/admin}" th:text="#{label.home}"></a></li>
-    <li class="breadcrumb-item"><a th:href="@{/admin/customers}" th:text="#{label.customerManagement}"></a></li>
+    <li class="breadcrumb-item"><a th:href="@{/dashboard}" th:text="#{label.home}"></a></li>
+    <li class="breadcrumb-item"><a th:href="@{/dashboard/customers}" th:text="#{label.customerManagement}"></a></li>
     <li class="breadcrumb-item active" aria-current="page" th:text="#{label.customerProfile}"></li>
 </ol>
 
@@ -35,7 +35,7 @@
                         <div class="row gx-3 mb-3">
                             <div class="col-md-12">
                                 <label class="small mb-1" for="customerId" th:text="'Mã khách hàng'"></label>
-                                <input class="form-control bg-transparent" id="customerId" type="text" readonly
+                                <input class="form-control bg-transparent" id="customerId" type="text" readonly disabled
                                        th:field="*{id}">
                             </div>
                         </div>
@@ -61,7 +61,7 @@
                                 <label class="small mb-1" for="inputIdentifiedCard"
                                        th:text="#{label.identifiedcard}"></label>
                                 <input class="form-control" id="inputIdentifiedCard" type="text" minlength="12"
-                                       maxlength="15" required th:field="*{getIdentified}">
+                                       maxlength="15" required th:field="*{identified}">
                             </div>
                         </div>
                         <!-- Form Row -->
@@ -87,8 +87,11 @@
 
                             <div class="col-md-12">
                                 <label class="small mb-1" for="inputAddress" th:text="#{label.address}"></label>
-                                <input class="form-control" id="inputAddress" type="text" maxlength="255"
-                                       required th:field="*{address}">
+                                <!--                                <input class="form-control" id="inputAddress" type="text" maxlength="255"-->
+                                <!--                                       required th:field="*{address}">-->
+                                <textarea class="form-control" name="address" id="inputAddress" maxlength="255"
+                                          cols="30" rows="2" required
+                                          th:field="*{address}"></textarea>
                             </div>
                         </div>
                         <!-- Submit button-->
@@ -122,47 +125,64 @@
                             const values = [[${values}]];
                         </script>
                     </div>
+                    <hr>
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="totalTable" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>Ngày/tháng/năm</th>
+                                <th>Tổng tiền</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="data:${totals}">
+                                <td th:text="${data.getKey()}"></td>
+                                <td th:text="${#numbers.formatCurrency(data.getValue())}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-
-        </div>
-    </div>
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary" th:text="#{label.historyBooking}"></h6>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    <thead>
-                    <tr>
-                        <th th:text="#{label.id}"></th>
-                        <th th:text="'Tên tour'"></th>
-                        <th th:text="'Ngày đặt'"></th>
-                        <th th:text="'Tổng tiền'"></th>
-                        <th th:text="'Trạng thái'"></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="booking:${bookings}">
-                        <td th:text="${booking.getId()}"></td>
-                        <td th:text="${booking.getTour().getName()}"></td>
-                        <td class="text-nowrap"
-                            th:text="${#temporals.format(booking.getBookingDate(), 'dd-MM-yyyy')}"></td>
-                        <td class="text-nowrap" th:text="${#numbers.formatCurrency(booking.getTotal())}"></td>
-                        <td>
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary" th:text="#{label.historyBooking}"></h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th th:text="#{label.id}"></th>
+                                <th th:text="'Tên tour'"></th>
+                                <th th:text="'Ngày đặt'"></th>
+                                <th th:text="'Tổng tiền'"></th>
+                                <th th:text="'Trạng thái'"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="booking:${bookings}">
+                                <td th:text="${booking.getId()}"></td>
+                                <td th:text="${booking.getTour().getName()}"></td>
+                                <td class="text-nowrap"
+                                    th:text="${#temporals.format(booking.getBookingDate(), 'dd-MM-yyyy')}"></td>
+                                <td class="text-nowrap" th:text="${#numbers.formatCurrency(booking.getTotal())}"></td>
+                                <td>
                             <span th:text="${booking.payment==true}?'Đã thanh toán':'Chưa thanh toán'"
                                   th:class="${booking.payment==false}?'badge badge-success px-2 py-1':'badge badge-secondary px-2 py-1'"></span>
 
-                        </td>
+                                </td>
 
-                    </tr>
-                    </tbody>
-                </table>
+                            </tr>
+                            </tbody>
+                        </table>
 
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
 </th:block>
 
 </body>

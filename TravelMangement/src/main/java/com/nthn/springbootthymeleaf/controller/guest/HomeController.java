@@ -361,7 +361,10 @@ public class HomeController {
 
             model.addAttribute("pageNumbers", pageNumbers);
         }
-
+        News news1 = news.stream().max((o1, o2) -> (o1.getViews() + o1.getLike()) - (o2.getViews() + o2.getLike())).get();
+//        List<News> newsList= new ArrayList<>();
+//        news.stream().filter(news2 -> news2.);
+        model.addAttribute("topNews", news1);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("totalItems", totalItems);
@@ -376,12 +379,19 @@ public class HomeController {
     @GetMapping("/news/{id}")
     public String detail(@PathVariable("id") Integer id, Model model, Principal principal) {
         News news = newsService.getById(id);
+        System.out.println(news);
+
         List<Comment> comments = news.getComments();
         if (principal != null) {
             model.addAttribute("account", accountService.getAccountByUsername(principal.getName()));
             System.out.println(accountService.getAccountByUsername(principal.getName()));
-
         }
+
+        System.out.println(news.getViews());
+//        newsService.update(news.getId(), news);
+        news = newsService.getById(id);
+        System.out.println(news);
+
         model.addAttribute("news", news);
         model.addAttribute("comments", comments);
 //        model.addAttribute("endpoint", "http://localhost:8080/Travel/api/news/comments");

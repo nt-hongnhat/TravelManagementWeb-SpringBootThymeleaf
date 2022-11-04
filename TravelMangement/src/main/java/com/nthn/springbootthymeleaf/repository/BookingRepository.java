@@ -35,7 +35,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer>, JpaS
     @Query("select month(b.bookingDate), sum(b.total) from Booking b where b.customer.id=?1 and month(b.bookingDate) between ?2 and ?3 group by b.bookingDate order by b.bookingDate")
     List<Object[]> sumBookingTotalByCustomerId(Integer customerId, Integer fromMonth, Integer toMonth);
 
-    @Query("select b.bookingDate, sum(b.total) from Booking b where b.customer.id=?1 and month(b.bookingDate) =?2 and year(b.bookingDate)=?3 group by b.bookingDate order by b.bookingDate")
+    @Query("select day (b.bookingDate), sum(b.total) from Booking b where b.customer.id=?1 and month(b.bookingDate) =?2 and year(b.bookingDate)=?3 group by day (b.bookingDate) order by b.bookingDate")
     List<Object[]> sumBookingTotalInMonthByCustomerId(Integer customerId, Integer month, Integer year);
 
     @Query("select b.bookingDate, sum(b.total) from Booking b where b.customer.id = ?1 and b.bookingDate between ?2 and ?3 group by b.bookingDate order by b.bookingDate")

@@ -69,7 +69,8 @@
                         <!--                        <td th:text="${account.createTime}"></td>-->
                         <td class="align-middle"
                             th:text="${#temporals.format(account.createTime, 'hh:mm:ss dd/MM/yyyy')}"></td>
-                        <td th:text="${#temporals.format(account.lastLogin, 'hh:mm:ss dd/MM/yyyy')}"></td>
+                        <td class="align-middle"
+                            th:text="${#temporals.format(account.lastLogin, 'hh:mm:ss dd/MM/yyyy')}"></td>
                         <td class="align-middle">
                             <span th:text="${account.active==true}?'Đang hoạt động':'Không hoạt động'"
                                   th:class="${account.active==true}?'badge badge-success px-2 py-1':'badge badge-secondary px-2 py-1'"></span>

@@ -5,10 +5,10 @@
     <title th:text="'Thêm khách hàng'"></title>
 </head>
 <body>
-<h1 class="mt-4" layout:fragment="page-heading" th:text="#{label.accountManagement}"></h1>
+<h1 class="mt-4" layout:fragment="page-heading" th:text="#{label.customerManagement}"></h1>
 <ol class="breadcrumb" layout:fragment="breadcrumb">
-    <li class="breadcrumb-item"><a th:href="@{/admin}" th:text="#{label.home}"></a></li>
-    <li class="breadcrumb-item"><a th:href="@{/admin/customers}" th:text="#{label.customerManagement}"></a></li>
+    <li class="breadcrumb-item"><a th:href="@{/dashboard}" th:text="#{label.home}"></a></li>
+    <li class="breadcrumb-item"><a th:href="@{/dashboard/customers}" th:text="#{label.customerManagement}"></a></li>
     <li class="breadcrumb-item active" aria-current="page" th:text="'Thêm khách hàng'"></li>
 </ol>
 
@@ -30,7 +30,7 @@
                     <div class="col-md-6">
                         <label class="mb-1" for="inputFullName" th:text="#{label.fullName}+'*'"></label>
                         <input class="form-control" id="inputFullName" type="text" autofocus required
-                               th:field="*{fullname}">
+                               placeholder="Nhập họ và tên..." th:field="*{fullname}">
                     </div>
                     <div class="col-md-6">
                         <label class="mb-1" th:text="#{label.gender}"></label>
@@ -50,12 +50,12 @@
                         <label class="mb-1" for="inputIdentifiedCard"
                                th:text="#{label.identifiedcard}+'*'"></label>
                         <input class="form-control" id="inputIdentifiedCard" type="text" minlength="12"
-                               maxlength="15" required th:field="*{getIdentified}">
+                               placeholder="Nhập số CMND hoặc CCCD..." maxlength="15" required th:field="*{identified}">
                     </div>
                     <div class="col-md-6">
                         <label class="mb-1" for="inputPhone" th:text="#{label.phone}+'*'"></label>
                         <input class="form-control" id="inputPhone" type="text" minlength="10" maxlength="15"
-                               required th:field="*{phone}">
+                               placeholder="Nhập số điện thoại liên lạc..." required th:field="*{phone}">
                     </div>
                 </div>   <!-- Form Row -->
                 <div class="row gx-3 mb-3">
@@ -71,7 +71,7 @@
                     <div class="col-md-6">
                         <label class="mb-1" for="inputAddress" th:text="#{label.address}"></label>
                         <input class="form-control" id="inputAddress" type="text" maxlength="255"
-                               required th:field="*{address}">
+                               placeholder="Nhập địa chỉ..." required th:field="*{address}">
                     </div>
                 </div>
                 <!-- Submit button-->

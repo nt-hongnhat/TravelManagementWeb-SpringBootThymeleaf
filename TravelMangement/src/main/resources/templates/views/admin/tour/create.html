@@ -52,8 +52,8 @@
                         <!--                        </div>-->
                         <div class="mb-3">
                             <label for="selectTourGroup" class="mb-1" th:text="'Nhóm tour'"></label>
-                            <select id="selectTourGroup" class="form-select custom-select" th:field="*{tourGroup.id}">
-                                <option value="" th:text="'Chọn nhóm tour'" disabled selected></option>
+                            <select id="selectTourGroup" class="form-select custom-select"
+                                    th:field="${newTour.tourGroup.id}">
                                 <option th:each="tourGroup:${tourGroups}" th:value="${tourGroup.id}"
                                         th:text="${tourGroup.getName()}"></option>
                             </select>
@@ -126,7 +126,7 @@
                         <div class="mb-3">
                             <label class="mb-1" for="inputDescription" th:text="'Mô tả'"></label>
                             <textarea class="form-control" name="inputDescription" id="inputDescription" cols="30"
-                                      rows="5" placeholder="Mô tả chuyến du lịch"
+                                      rows="3" placeholder="Mô tả chuyến du lịch"
                                       th:field="*{description}"></textarea>
                         </div>
                         <button class="btn btn-primary" type="submit" th:text="#{label.createTour}"></button>

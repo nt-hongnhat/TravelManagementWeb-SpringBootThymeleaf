@@ -9,7 +9,7 @@
 <ol class="breadcrumb" layout:fragment="breadcrumb">
     <li class="breadcrumb-item"><a th:href="@{/dashboard}" th:text="#{label.home}"></a></li>
     <li class="breadcrumb-item"><a th:href="@{/dashboard/tours}" th:text="#{label.tourManagement}"></a></li>
-    <li class="breadcrumb-item active" aria-current="page" th:text="#{label.createTour}"></li>
+    <li class="breadcrumb-item active" aria-current="page" th:text="'Chỉnh sửa tour'"></li>
 </ol>
 
 <div class="table-responsive" layout:fragment="page-content">
@@ -129,7 +129,7 @@
                                       rows="5" placeholder="Mô tả chuyến du lịch"
                                       th:field="*{description}"></textarea>
                         </div>
-                        <button class="btn btn-primary" type="submit" th:text="#{label.createTour}"></button>
+                        <button class="btn btn-primary" type="submit" th:text="#{label.saveChanges}"></button>
                     </form>
                 </div>
             </div>

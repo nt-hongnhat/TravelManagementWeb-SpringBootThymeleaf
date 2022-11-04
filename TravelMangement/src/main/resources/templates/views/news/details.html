@@ -65,7 +65,38 @@
                                         <span class="font-weight-bold"
                                               th:text="${comment.getAccount().getLastName() + ' ' +comment.getAccount().getFirstName()}"></span>
                                             <span class="comment-create-date small font-italic"
-                                                  th:text="${comment.getCreatedDate()}"></span>
+                                            >[[${comment.createdDate}]]</span>
+                                            <script th:inline="javascript">
+                                                moment.updateLocale('vi', {
+                                                    relativeTime: {
+                                                        future: "trong %s",
+                                                        past: "%s trước",
+                                                        s: 'vài giây',
+                                                        ss: '%d giây',
+                                                        m: "một phút",
+                                                        mm: "%d phút",
+                                                        h: "một giờ",
+                                                        hh: "%d giờ",
+                                                        d: "một ngày",
+                                                        dd: "%d ngày",
+                                                        w: "một tuần",
+                                                        ww: "%d tuần",
+                                                        M: "một tháng",
+                                                        MM: "%d tháng",
+                                                        y: "một năm",
+                                                        yy: "%d năm"
+                                                    }
+                                                });
+                                                moment.locale('vi');
+                                                window.onload = function () {
+                                                    let dates = document.querySelectorAll(".comment-create-date");
+
+                                                    for (let i = 0; i < dates.length; i++) {
+                                                        let d = dates[i];
+                                                        d.innerText = moment(d.innerText).fromNow();
+                                                    }
+                                                }
+                                            </script>
                                         </div>
                                         <p th:text="${comment.getContent()}"></p>
                                     </div>
@@ -76,6 +107,7 @@
                                 <div class="d-flex mb-4">
                                     <div class="flex-shrink-0">
                                         <img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg"
+                                             th:src="@{${account.getPhotosImagePath()}}" width="50px" height="50px"
                                              alt="..."/>
                                     </div>
                                     <div class="ms-3 row justify-content-around mx-0">
@@ -167,7 +199,7 @@
 </th:block>
 
 <th:block layout:fragment="script">
- 
+
 </th:block>
 </body>
 </html>

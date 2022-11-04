@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,11 +19,13 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -41,6 +44,14 @@ public class CustomerController {
     @Autowired
     private BookingService bookingService;
 
+    @ModelAttribute
+    public void commonAttribute(Model model, HttpSession httpSession) {
+        User currentUser = (User) httpSession.getAttribute("currentUser");
+        Account account = accountService.getAccountByUsername(currentUser.getUsername());
+        model.addAttribute("currentUser", httpSession.getAttribute("currentUser"));
+        model.addAttribute("avatar", account.getPhotosImagePath());
+    }
+
     // Hiển thị danh sách khách hàng
     // GET: /customer
     @GetMapping
@@ -48,7 +59,6 @@ public class CustomerController {
         List<Customer> customers = customerService.getCustomers();
         long countByNationality_0 = customerService.countAllByNationality("Việt Nam");
         long countByNationality_1 = customerService.countAllByNationality("Nước ngoài");
-
         model.addAttribute("customers", customers);
         model.addAttribute("countByNationality_VN", countByNationality_0);
         model.addAttribute("countByNationality_NN", countByNationality_1);
@@ -109,14 +119,17 @@ public class CustomerController {
         List<Object[]> stats = bookingService.sumBookingTotalInMonthByCustomerId(id, month, year);
 
 
-        Map<Integer, BigDecimal> totals = new LinkedHashMap<>();
-
-
-        stats.forEach(stat -> {
-
-            totals.put(((LocalDateTime) stat[0]).getDayOfMonth(), (BigDecimal) stat[1]);
-
-        });
+        Map<String, BigDecimal> totals = new LinkedHashMap<>();
+        for (int i = 0; i < now.getDayOfMonth(); i++) {
+            int x = i;
+            stats.forEach(stat -> {
+                if ((Integer) stat[0] == x) {
+                    totals.put(LocalDate.of(year, month, (Integer) stat[0]).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), (BigDecimal) stat[1]);
+                } else {
+                    totals.put(LocalDate.of(year, month, x + 1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), BigDecimal.valueOf(0));
+                }
+            });
+        }
 
 
         model.addAttribute("customer", customer);
@@ -127,7 +140,7 @@ public class CustomerController {
             Arrays.stream(o).toList().forEach(System.out::println);
         });
 
-
+        model.addAttribute("totals", totals);
         model.addAttribute("keySet", totals.keySet());
         model.addAttribute("values", totals.values());
 

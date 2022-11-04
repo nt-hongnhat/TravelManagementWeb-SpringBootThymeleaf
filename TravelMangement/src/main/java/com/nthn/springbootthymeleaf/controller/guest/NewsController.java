@@ -59,9 +59,4 @@ public class NewsController {
     }
 
 
-    // POST: /news/{id}
-    @PostMapping("/{id}")
-    public String comment(@PathVariable("id") Integer id, Comment comment) {
-        return null;
-    }
 }

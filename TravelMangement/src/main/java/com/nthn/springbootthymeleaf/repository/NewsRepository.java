@@ -9,8 +9,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
 
 public interface NewsRepository extends JpaRepository<News, Integer>, JpaSpecificationExecutor<News> {
@@ -22,5 +20,5 @@ public interface NewsRepository extends JpaRepository<News, Integer>, JpaSpecifi
     @Query("select n from News n where n.tourGroup.id = ?1")
     Page<News> findAllByTourGroupId(Integer tourGroupId, Pageable pageable);
 
-    
+
 }

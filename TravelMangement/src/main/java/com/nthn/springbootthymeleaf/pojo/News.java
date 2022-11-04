@@ -1,6 +1,9 @@
 package com.nthn.springbootthymeleaf.pojo;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.hibernate.Hibernate;
 
@@ -14,7 +17,6 @@ import java.util.Objects;
 
 @Getter
 @Setter
-@ToString
 @RequiredArgsConstructor
 @Entity
 @Accessors(chain = true)
@@ -46,7 +48,7 @@ public class News implements Serializable {
     private String description;
 
     @Column(name = "active", nullable = false)
-    private Boolean active = Boolean.FALSE;
+    private Boolean active = Boolean.TRUE;
 
     @Column(name = "images")
     private String images;
@@ -67,12 +69,25 @@ public class News implements Serializable {
         News news = (News) o;
         return id != null && Objects.equals(id, news.id);
     }
-    
+
     @OneToMany(mappedBy = "news")
     private List<Comment> comments = new ArrayList<>();
 
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "id = " + id + ", " +
+                "title = " + title + ", " +
+                "createDate = " + createDate + ", " +
+                "views = " + views + ", " +
+                "like = " + like + ", " +
+                "description = " + description + ", " +
+                "active = " + active + ", " +
+                "images = " + images + ")";
     }
 }

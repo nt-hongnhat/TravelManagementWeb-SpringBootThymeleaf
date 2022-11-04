@@ -53,8 +53,6 @@ public class AdminController {
         model.addAttribute("revenueMonthly", statisticService.getRevenueMonthly(now.getMonth().getValue(), now.getYear()).get(0));
         model.addAttribute("now", now);
         model.addAttribute("revenueAnnual", statisticService.getRevenueAnnual(now.getYear()).get(0));
-        List<Object[]> objects = statisticService.getRevenueMonthlyByYear(now.getYear());
-        objects.forEach(objects1 -> System.out.println("Object: " + Arrays.toString(objects1)));
     }
 
     @GetMapping
@@ -69,14 +67,14 @@ public class AdminController {
         LocalDateTime now = LocalDateTime.now();
 
         List<Object[]> objects = statisticService.getRevenueMonthlyByYear(now.getYear());
-        Map<String, BigDecimal> chartAreaData = new LinkedHashMap<>();
+        Map<Integer, BigDecimal> chartAreaData = new LinkedHashMap<>();
         for (int i = 0; i < 12; i++) {
             BigDecimal total = (BigDecimal) statisticService.getRevenueMonthly(i + 1, now.getYear()).get(0)[1];
             if (total == null) {
                 total = BigDecimal.valueOf(0);
             }
             int month = i + 1;
-            chartAreaData.put("Tháng " + month, total);
+            chartAreaData.put(month, total);
         }
         chartAreaData.forEach((month, bigDecimal) -> System.out.println("chartDataArea: " + month + "=" + bigDecimal));
         model.addAttribute("chartAreaData", chartAreaData);
