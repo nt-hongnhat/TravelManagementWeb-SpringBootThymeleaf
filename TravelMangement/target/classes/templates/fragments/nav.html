@@ -22,10 +22,13 @@
                             <li class="has-children">
                                 <a href="" th:text="${category.name}"></a>
                                 <ul class="dropdown">
-                                    <th:block th:each="tourGroup:${category.tourGroups}">
+                                   <li>a</li>
+                                   <li>b</li>
+                                   <li>c</li>
+                                    <th:block th:each="group:${category.groups}">
                                         <li>
-                                            <a th:href="@{/{link}(link=${tourGroup.linkStatic})}"
-                                               th:text="${tourGroup.name}"></a></li>
+                                            <a th:href="@{/{link}(link=${group.url})}"
+                                               th:text="${group.name}"></a></li>
                                     </th:block>
                                 </ul>
                             </li>
@@ -38,6 +41,7 @@
                 <li class="dropdown">
                     <th:block th:if="${currentUser==null}">
                         <a th:href="@{/login}" th:text="#{label.login}"></a>
+                        <a th:href="@{/register}" th:text="#{label.signup}"></a>
                     </th:block>
                     <th:block th:if="${currentUser != null}">
                         <a class="nav-link dropdown-toggle " href="#" id="user" role="button"
@@ -100,7 +104,7 @@
     <li>
         <a class="sidebar-brand d-flex align-items-center justify-content-center" th:href="@{/dashboard}">
             <span class="sidebar-brand-icon rotate-n-15"><i class="fas fa-laugh-wink"></i></span>
-            <span class="sidebar-brand-text mx-3">Travel Admin</span>
+            <span class="sidebar-brand-text mx-3">Travel Dashboard</span>
         </a>
     </li>
     <!-- Divider -->

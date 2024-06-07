@@ -13,7 +13,6 @@
 
     <!-- Style CSS -->
     <th:block th:replace="~{/views/auth/login::style}"></th:block>
-
 </head>
 
 <body class="bg-gradient-primary">
@@ -26,56 +25,56 @@
             <div class="row">
                 <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
                 <div class="col-lg-7">
-                    <div class="p-5">
+                    <div class="p-5 mx-5">
                         <div class="text-center">
                             <h1 class="h4 text-gray-900 mb-4" th:text="'Đăng ký tài khoản'"></h1>
                         </div>
-                        <div th:if="${param.error}">
-                            <div class="alert alert-danger">
-                                <ul>
-                                    <li th:each="error:${getAllErrors}"
-                                        th:text="${error.getDefaultMessage()}"></li>
-                                </ul>
+                        <div th:if="${param.success}">
+                            <div class="alert alert-info">
+                                Đăng ký thành công. <a th:href="@{/login}" th:text="'Đăng nhập!'"></a>
                             </div>
                         </div>
-                        <div th:if="${param.success}">
-                            <div class="alert alert-info" th:text="${success}"></div>
-                        </div>
-                        <form th:action="@{/register}" th:object="${accountRegistration}" method="post" class="user">
-                            <fieldset class="form-group row">
-                                <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <label for="firstName">Tên</label>
-                                    <input type="text" class="form-control " id="firstName" placeholder="Tên" autofocus
-                                           th:value="${accountRegistration.getFirstName()}" th:field="*{firstName}">
-                                </div>
-                                <div class="col-sm-6">
-                                    <label for="lastName">Họ và chữ lót</label>
-                                    <input type="text" class="form-control" id="lastName" placeholder="Họ và chữ lót"
-                                           th:value="${accountRegistration.getLastName()}" th:field="*{lastName}">
-                                </div>
-                            </fieldset>
+                        <form th:action="@{/register}" th:object="${account}" method="post"
+                              class="user needs-validation" novalidate>
                             <fieldset class="form-group">
-                                <label for="email">Địa chỉ email</label>
-                                <input type="email" class="form-control" id="email" placeholder="Địa chỉ email"
-                                       th:value="${accountRegistration.getEmail()}" th:field="*{email}">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control" id="email" th:value="${account.email}" th:field="${account.email}" autofocus required>
+                                <div class="invalid-feedback">Email không được bỏ trống</div>
+                                <div class="text-danger small" th:if="${emailErrors!=null}">
+                                    <div th:each="error:${emailErrors}"
+                                         th:text="${error.getDefaultMessage()}"></div>
+                                </div>
                             </fieldset>
                             <fieldset class="form-group">
                                 <label for="username">Tên đăng nhập</label>
-                                <input type="text" class="form-control" id="username" placeholder="Tên đăng nhập"
-                                       th:value="${accountRegistration.getUsername()}" th:field="*{username}">
+                                <input type="text" class="form-control" id="username"
+                                       th:value="*{username}" th:field="*{username}" required>
+                                <div class="invalid-feedback">Tên đăng nhập không được bỏ trống</div>
+                                <div class="text-danger small" th:if="${usernameErrors!=null}">
+                                    <div th:each="error:${usernameErrors}"
+                                         th:text="${error.getDefaultMessage()}"></div>
+                                </div>
                             </fieldset>
+                            <fieldset class="form-group">
+                                <label for="password">Mật khẩu</label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" id="password" th:field="*{password}"
+                                           required>
+                                    <span class="m-auto px-2"><i class="fa fa-eye-slash"
+                                                                 onclick="showPassword(this, 'password')"></i></span>
+                                    <div class="invalid-feedback">Mật khẩu không được bỏ trống</div>
+                                </div>
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <label for="confirm">Xác nhận mật khẩu</label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control is-invalid" id="confirm" required
+                                           th:field="*{confirmPassword}">
+                                    <span class="m-auto px-2"><i class="fa fa-eye-slash"
+                                                                 onclick="showPassword(this, 'confirm')"></i></span>
+                                    <div class="invalid-feedback">Mật khẩu không trùng khớp</div>
+                                </div>
 
-                            <fieldset class="form-group row">
-                                <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <label for="password">Mật khẩu</label>
-                                    <input type="password" class="form-control " id="password"
-                                           placeholder="Nhập mật khẩu" th:field="*{password}">
-                                </div>
-                                <div class="col-sm-6">
-                                    <label for="confirm">Xác nhận mật khẩu</label>
-                                    <input type="password" class="form-control" id="confirm"
-                                           placeholder="Nhập lại mật khẩu" th:field="*{confirmPassword}">
-                                </div>
                             </fieldset>
                             <fieldset class="form-group">
                                 <button type="submit" class="btn btn-primary btn-user btn-block"
@@ -84,9 +83,6 @@
                             </fieldset>
                         </form>
                         <hr>
-                        <div class="text-center">
-                            <a class="small" href="forgot-password.html" th:text="#{label.forgotPasword}"></a>
-                        </div>
                         <div class="text-center">
                             <a class="small" th:href="@{/login}" th:text="'Đã có tài khoản? Đăng nhập!'"></a>
                         </div>
@@ -101,6 +97,49 @@
 <!-- Script -->
 <th:block th:replace="~{/views/auth/login::script}"></th:block>
 
+<script>
+    function showPassword(toggle, id) {
+        const password = document.getElementById(id);
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        if (type === 'text')
+            toggle.classList.replace('fa-eye-slash', 'fa-eye')
+        else
+            toggle.classList.replace('fa-eye', 'fa-eye-slash')
+        password.setAttribute('type', type);
+    }
+
+    (function () {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+
+    const confirmInput = document.querySelector('#confirm')
+    confirmInput.addEventListener('input', () => {
+        const password = document.getElementById("password").value
+        const confirm = confirmInput.value
+        if (password === confirm) {
+            confirmInput.classList.replace('is-invalid', 'is-valid')
+        } else {
+            confirmInput.classList.replace('is-valid', 'is-invalid')
+        }
+
+    })
+</script>
 </body>
 
 </html>

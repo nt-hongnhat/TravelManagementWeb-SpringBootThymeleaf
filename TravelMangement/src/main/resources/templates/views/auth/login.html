@@ -50,34 +50,37 @@
                                 <div th:if="${param.logout}">
                                     <div class="alert alert-info">Bạn vừa đăng xuất.</div>
                                 </div>
-                                <form action="" class="user" method="post" name="formLogin"
-                                      th:action="@{/login}">
+                                <form action="" class="user needs-validation" method="post" name="formLogin"
+                                      th:action="@{/login}" novalidate>
                                     <div class="form-group">
                                         <label for="username" th:text="#{label.username}"></label>
                                         <input type="text" class="form-control form-control-user"
-                                               id="username" name="username" th:placeholder="#{label.username}">
+                                               id="username" name="username" autofocus required>
+                                        <div class="invalid-feedback">Tên đăng nhập không được bỏ trống</div>
+
                                     </div>
                                     <div class="form-group">
                                         <label for="password" th:text="#{label.password}"></label>
                                         <input type="password" class="form-control form-control-user"
-                                               id="password" name="password" th:placeholder="#{label.password}">
+                                               id="password" name="password" required>
+                                        <div class="invalid-feedback">Mật khẩu không được bỏ trống</div>
                                     </div>
-                                    <div class="form-group">
-                                        <div class="custom-control custom-checkbox small">
-                                            <input type="checkbox" class="custom-control-input" id="customCheck">
-                                            <label class="custom-control-label" for="customCheck"
-                                                   th:text="#{label.remember}"></label>
-                                        </div>
-                                    </div>
+<!--                                    <div class="form-group">-->
+<!--                                        <div class="custom-control custom-checkbox small">-->
+<!--                                            <input type="checkbox" class="custom-control-input" id="customCheck">-->
+<!--                                            <label class="custom-control-label" for="customCheck"-->
+<!--                                                   th:text="#{label.remember}"></label>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
                                     <button type="submit" class="btn btn-primary btn-user btn-block"
                                             th:text="#{label.login}"></button>
-                                    <hr>
-                                    <a href="../index.html" class="btn btn-google btn-user btn-block">
-                                        <i class="fab fa-google fa-fw"></i>Đăng nhập với Google
-                                    </a>
-                                    <a href="https://www.facebook.com/" class="btn btn-facebook btn-user btn-block">
-                                        <i class="fab fa-facebook-f fa-fw"></i>Đăng nhập với Facebook
-                                    </a>
+<!--                                    <hr>-->
+<!--                                    <a href="../index.html" class="btn btn-google btn-user btn-block">-->
+<!--                                        <i class="fab fa-google fa-fw"></i>Đăng nhập với Google-->
+<!--                                    </a>-->
+<!--                                    <a href="https://www.facebook.com/" class="btn btn-facebook btn-user btn-block">-->
+<!--                                        <i class="fab fa-facebook-f fa-fw"></i>Đăng nhập với Facebook-->
+<!--                                    </a>-->
                                 </form>
                                 <hr>
                                 <div class="text-center">
@@ -107,7 +110,27 @@
     <!-- Custom scripts for all pages-->
     <script th:src="@{/js/sb-admin-2.min.js}"></script>
 </th:block>
+<script >
+    (function () {
+        'use strict'
 
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+</script>
 </body>
 
 </html>

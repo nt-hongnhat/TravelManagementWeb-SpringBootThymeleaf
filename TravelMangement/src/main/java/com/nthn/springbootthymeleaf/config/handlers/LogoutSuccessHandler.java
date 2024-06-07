@@ -13,11 +13,6 @@ import java.io.IOException;
 public class LogoutSuccessHandler implements org.springframework.security.web.authentication.logout.LogoutSuccessHandler {
 
     /**
-     * @param request
-     * @param response
-     * @param authentication
-     * @throws IOException
-     * @throws ServletException
      */
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {

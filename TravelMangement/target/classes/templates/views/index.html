@@ -18,42 +18,42 @@
 
                         <div class="row">
                             <div class="col-12">
-                                <form class="form" method="get" th:action="@{/tours}" th:object="${searchTourDTO}">
-                                    <div class="row mb-2">
-                                        <div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-6">
-                                            <label for="departure">Nơi khởi hành</label>
-                                            <select name="departure" id="departure" class="form-control custom-select"
-                                                    th:field="*{departurePlace}">
-                                                <option th:each="departure:${departurePlaces}" th:value="${departure}"
-                                                        th:text="${departure}"></option>
-                                            </select>
-                                        </div>
-                                        <div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-6">
-                                            <label for="destination">Nơi đến</label>
-                                            <select name="destination" id="destination"
-                                                    class="form-control custom-select" th:field="*{destinationPlace}">
-                                                <option th:each="province:${provinces}" th:value="${province.getName()}"
-                                                        th:text="${province.getName()}"></option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-2">
-                                        <div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-6">
-                                            <label for="departureDate">Ngày khởi hành</label>
-                                            <input type="text" class="form-control" name="daterange" id="departureDate">
-                                        </div>
-                                        <div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-6">
-                                            <label for="numberPeople">Số người</label>
-                                            <input type="number" name="numberPeople" id="numberPeople"
-                                                   class="form-control" min="1" th:value="1" th:field="*{numberPeople}">
-                                        </div>
-                                    </div>
-                                    <div class="row mb-2 align-items-center">
-                                        <div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-6">
-                                            <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
-                                        </div>
-                                    </div>
-                                </form>
+<!--                                <form class="form" method="get" th:action="@{/tours}" th:object="${searchTourDTO}">-->
+<!--                                    <div class="row mb-2">-->
+<!--                                        <div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-6">-->
+<!--                                            <label for="departure">Nơi khởi hành</label>-->
+<!--                                            <select name="departure" id="departure" class="form-control custom-select"-->
+<!--                                                    th:field="*{departurePlace}">-->
+<!--                                                <option th:each="departure:${departurePlaces}" th:value="${departure}"-->
+<!--                                                        th:text="${departure}"></option>-->
+<!--                                            </select>-->
+<!--                                        </div>-->
+<!--                                        <div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-6">-->
+<!--                                            <label for="destination">Nơi đến</label>-->
+<!--                                            <select name="destination" id="destination"-->
+<!--                                                    class="form-control custom-select" th:field="*{destinationPlace}">-->
+<!--                                                <option th:each="province:${provinces}" th:value="${province.getName()}"-->
+<!--                                                        th:text="${province.getName()}"></option>-->
+<!--                                            </select>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <div class="row mb-2">-->
+<!--                                        <div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-6">-->
+<!--                                            <label for="departureDate">Ngày khởi hành</label>-->
+<!--                                            <input type="text" class="form-control" name="daterange" id="departureDate">-->
+<!--                                        </div>-->
+<!--                                        <div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-6">-->
+<!--                                            <label for="numberPeople">Số người</label>-->
+<!--                                            <input type="number" name="numberPeople" id="numberPeople"-->
+<!--                                                   class="form-control" min="1" th:value="1" th:field="*{numberPeople}">-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <div class="row mb-2 align-items-center">-->
+<!--                                        <div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-6">-->
+<!--                                            <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </form>-->
                             </div>
                         </div>
                     </div>
@@ -141,7 +141,7 @@
                 <div class="col-6 col-sm-6 col-md-6 col-lg-3">
                     <div class="counter-wrap">
                         <div class="counter">
-                            <span class="text-center" th:value="${countTours}" th:data-number="${countTours}"></span>
+<!--                            <span class="text-center" th:value="${countTours}" th:data-number="${countTours}"></span>-->
                         </div>
                         <span class="caption">Chuyến du lịch</span>
                     </div>
@@ -149,8 +149,8 @@
                 <div class="col-6 col-sm-6 col-md-6 col-lg-3">
                     <div class="counter-wrap">
                         <div class="counter">
-                            <span class="text-center" th:value="${countTourist}"
-                                  th:data-number="${countTourist}"></span>
+<!--                            <span class="text-center" th:value="${countTourist}"-->
+<!--                                  th:data-number="${countTourist}"></span>-->
                         </div>
                         <span class="caption">Khách du lịch</span>
                     </div>
@@ -158,7 +158,7 @@
                 <div class="col-6 col-sm-6 col-md-6 col-lg-3">
                     <div class="counter-wrap">
                         <div class="counter">
-                            <span class="text-center" th:value="${countNews}" th:data-number="${countNews}"></span>
+<!--                            <span class="text-center" th:value="${countNews}" th:data-number="${countNews}"></span>-->
                         </div>
                         <span class="caption">Tin tức</span>
                     </div>
@@ -166,7 +166,7 @@
                 <div class="col-6 col-sm-6 col-md-6 col-lg-3">
                     <div class="counter-wrap">
                         <div class="counter">
-                            <span class="text-center" th:value="${countPlaces}" th:data-number="${countPlaces}"></span>
+<!--                            <span class="text-center" th:value="${countPlaces}" th:data-number="${countPlaces}"></span>-->
                         </div>
                         <span class="caption">Địa điểm tham quan</span>
                     </div>
@@ -185,66 +185,66 @@
             </div>
 
             <div class="owl-carousel owl-3-slider owl-loading">
-                <th:block th:each="tourGroup:${category.tourGroups}">
-                    <!--                    <div class="col-lg-7">-->
-                    <!--                        <h2 class="section-title text-danger" th:text="${tourGroup.getName()}"></h2>-->
-                    <!--                    </div>-->
+<!--                <th:block th:each="tourGroup:${category.groups}">-->
+<!--                    &lt;!&ndash;                    <div class="col-lg-7">&ndash;&gt;-->
+<!--                    &lt;!&ndash;                        <h2 class="section-title text-danger" th:text="${tourGroup.getName()}"></h2>&ndash;&gt;-->
+<!--                    &lt;!&ndash;                    </div>&ndash;&gt;-->
 
-                    <div class="item" th:each="tour:${tourGroup.tours}">
-                        <a class="media-thumb" href="" th:href="@{${tour.getPhotosImagePath()}}"
-                           data-fancybox="gallery">
-                            <div class="media-text">
-                                <h3 th:text="${tour.getName()}"></h3>
-                                <span class="location" th:text="${tour.getItinerary()}"></span>
-                            </div>
-                            <img th:src="@{${tour.getPhotosImagePath()}}" alt="Không có hình ảnh"
-                                 class="img-fluid" src="">
-                        </a>
-                        <div class="d-flex align-items-center loc mb-2 mx-0">
-                            <span class="icon-room mr-3"></span>
-                            <span th:text="${tour.getDestinationPlace()}"></span>
-                        </div>
-                        <div class="d-flex align-items-center mx-0">
-                            <h3><a class="ui-state-hover" th:href="@{/tours/{id}(id=${tour.getId()})}"
-                                   th:text="${tour.getName()}"></a></h3>
-                        </div>
-                        <div class="d-flex align-items-center loc mb-2 price ml-auto">
-                            <span class="mr-1"><i class="icon-calendar"></i></span>
-                            <span th:text="'Ngày khởi hành: '+${#temporals.format(tour.getDepartureDate(), 'dd/MM/yyyy')}"></span>
-                        </div>
-                        <div class="d-flex align-items-center loc mb-2 price ml-auto text-danger font-weight-bolder">
-                            <span class="mr-1"><i class="icon-tag"></i></span>
-                            <span th:text="${#numbers.formatCurrency(tour.getUnitPrice())}"></span>
-                        </div>
-                    </div>
-                </th:block>
+<!--&lt;!&ndash;                    <div class="item" th:each="tour:${tourGroup.tours}">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <a class="media-thumb" href="" th:href="@{${tour.getPhotosImagePath()}}"&ndash;&gt;-->
+<!--&lt;!&ndash;                           data-fancybox="gallery">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <div class="media-text">&ndash;&gt;-->
+<!--&lt;!&ndash;                                <h3 th:text="${tour.getName()}"></h3>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <span class="location" th:text="${tour.getItinerary()}"></span>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <img th:src="@{${tour.getPhotosImagePath()}}" alt="Không có hình ảnh"&ndash;&gt;-->
+<!--&lt;!&ndash;                                 class="img-fluid" src="">&ndash;&gt;-->
+<!--&lt;!&ndash;                        </a>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <div class="d-flex align-items-center loc mb-2 mx-0">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <span class="icon-room mr-3"></span>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <span th:text="${tour.getDestinationPlace()}"></span>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <div class="d-flex align-items-center mx-0">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <h3><a class="ui-state-hover" th:href="@{/tours/{id}(id=${tour.getId()})}"&ndash;&gt;-->
+<!--&lt;!&ndash;                                   th:text="${tour.getName()}"></a></h3>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <div class="d-flex align-items-center loc mb-2 price ml-auto">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <span class="mr-1"><i class="icon-calendar"></i></span>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <span th:text="'Ngày khởi hành: '+${#temporals.format(tour.getDepartureDate(), 'dd/MM/yyyy')}"></span>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <div class="d-flex align-items-center loc mb-2 price ml-auto text-danger font-weight-bolder">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <span class="mr-1"><i class="icon-tag"></i></span>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <span th:text="${#numbers.formatCurrency(tour.getUnitPrice())}"></span>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--                </th:block>-->
             </div>
         </div>
     </div>
 
-    <div class="untree_co-section testimonial-section mt-5">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-7 text-center">
-                    <h2 class="section-title text-center mb-5 mx-0">Ý kiến khách hàng</h2>
+<!--    <div class="untree_co-section testimonial-section mt-5">-->
+<!--        <div class="container">-->
+<!--            <div class="row justify-content-center">-->
+<!--                <div class="col-lg-7 text-center">-->
+<!--                    <h2 class="section-title text-center mb-5 mx-0">Ý kiến khách hàng</h2>-->
 
-                    <div class="owl-single owl-carousel no-nav">
-                        <div class="testimonial mx-auto" th:each="feedback:${feedbacks}">
-                            <figure class="img-wrap">
-                                <img th:src="@{${feedback.getAccount().getPhotosImagePath()}}" alt="Image"
-                                     class="" src="" height="70px">
-                            </figure>
-                            <h3 class="name"
-                                th:text="${feedback.getAccount().getLastName()+ ' ' +feedback.getAccount().getFirstName() }"></h3>
-                            <blockquote>
-                                <q th:text="${feedback.getDescription()}">&ldquo;&rdquo;</q>
-                            </blockquote>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<!--                    <div class="owl-single owl-carousel no-nav">-->
+<!--                        <div class="testimonial mx-auto" th:each="feedback:${feedbacks}">-->
+<!--                            <figure class="img-wrap">-->
+<!--                                <img th:src="@{${feedback.getAccount().getPhotosImagePath()}}" alt="Image"-->
+<!--                                     class="" src="" height="70px">-->
+<!--                            </figure>-->
+<!--                            <h3 class="name"-->
+<!--                                th:text="${feedback.getAccount().getLastName()+ ' ' +feedback.getAccount().getFirstName() }"></h3>-->
+<!--                            <blockquote>-->
+<!--                                <q th:text="${feedback.getDescription()}">&ldquo;&rdquo;</q>-->
+<!--                            </blockquote>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
 
     <!--    <div class="untree_co-section testimonial-section mt-5">-->
     <!--        <div class="container">-->
@@ -291,26 +291,26 @@
                     <p></p>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-6 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0" th:each="place, iterStat:${places}"
-                     th:if="${iterStat.index<4}">
-                    <div class="media-1">
-                        <a href="#" class="d-block mb-3"><img th:src="${place.getImages()}" alt="Image"
-                                                              class="img-fluid" src=""></a>
-                        <div class="d-flex align-items-center loc mb-2">
-                            <span class="icon-room mr-3"></span>
-                            <span th:text="${place.getDistrict().getName()}"></span>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <div>
-                                <h3><a href="#" th:text="${place.getName()}"></a></h3>
-                                <div class="ml-auto h-25 text-justify"
-                                     th:text="${place.getDescription().substring(0, 100)+'...'}"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<!--            <div class="row">-->
+<!--                <div class="col-6 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0" th:each="place, iterStat:${places}"-->
+<!--                     th:if="${iterStat.index<4}">-->
+<!--                    <div class="media-1">-->
+<!--                        <a href="#" class="d-block mb-3"><img th:src="${place.getImages()}" alt="Image"-->
+<!--                                                              class="img-fluid" src=""></a>-->
+<!--                        <div class="d-flex align-items-center loc mb-2">-->
+<!--                            <span class="icon-room mr-3"></span>-->
+<!--                            <span th:text="${place.getDistrict().getName()}"></span>-->
+<!--                        </div>-->
+<!--                        <div class="d-flex align-items-center">-->
+<!--                            <div>-->
+<!--                                <h3><a href="#" th:text="${place.getName()}"></a></h3>-->
+<!--                                <div class="ml-auto h-25 text-justify"-->
+<!--                                     th:text="${place.getDescription().substring(0, 100)+'...'}"></div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
         </div>
     </div>
 

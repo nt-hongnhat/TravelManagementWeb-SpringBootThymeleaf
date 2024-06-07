@@ -18,7 +18,7 @@ public class TravelMangementApplication {
 //        manager.init();
 
 
-        System.out.println("TravelMangementApplication Run....");
+        System.out.println(" Running....");
     }
 
 }
