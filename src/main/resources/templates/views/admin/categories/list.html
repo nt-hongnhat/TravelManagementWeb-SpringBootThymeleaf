@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{layouts/layout-admin}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{label.categoriesManagement}"></title>
+</head>
+<body>
+<h1 class="mt-4" layout:fragment="page-heading" th:text="#{label.categoriesManagement}"></h1>
+<ol class="breadcrumb" layout:fragment="breadcrumb">
+    <li class="breadcrumb-item"><a th:href="@{/dashboard}" th:text="#{label.home}"></a></li>
+    <li aria-current="page" class="breadcrumb-item active" th:text="#{label.categoriesManagement}"></li>
+</ol>
+<th:block layout:fragment="page-content">
+    <div class="d-flex flex-row flex-wrap">
+        <!-- Roitation Utilities -->
+        <div class="container-xl px-4 col-6" th:each="category:${categories}">
+            <!-- Knowledge base category-->
+            <div class="d-flex flex-row justify-content-between">
+                <h2 class="mb-0 mt-5" >
+                    <a class="text-decoration-none text-muted " th:href="@{/dashboard/categories/{id}(id=${category.id})}" th:text="${category.name}"></a>
+                </h2>
+                <div class="mb-0 mt-5">
+                    <a class="d-none d-sm-inline-block btn btn-sm btn-outline-primary shadow-sm"
+                       th:href="@{/dashboard/categories/{id}/create(id=${category.id})}">
+                        <i class="fa fa-plus-square"></i>
+                        <span>Thêm nhóm tour</span>
+                    </a>
+                </div>
+            </div>
+            <hr class="mt-2 mb-4">
+            <!-- Knowledge base item-->
+            <a class="card card-img shadow mb-4 text-decoration-none" th:each="tourGroup:${category.getTourGroups()}" th:href="@{/dashboard/categories/{id}(id=${tourGroup.id})}">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="h5 card-title mb-0" th:text="${tourGroup.name}"></div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right flex-shrink-0 ms-4"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</th:block>
+
+</body>
+
+</html>

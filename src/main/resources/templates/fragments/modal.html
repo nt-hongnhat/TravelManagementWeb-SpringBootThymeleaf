@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+<div layout:fragment="logout" class="modal fade" id="logoutModal" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Bạn có muốn Đăng xuất?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Chọn "Đăng xuất" bên dưới nếu bạn sẵn sàng kết thúc.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Huỷ</button>
+                <a class="btn btn-primary" sec:authorize="isAuthenticated()"
+                   th:href="@{/logout}"
+                   th:text="#{label.logout}"></a>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:fragment="create(model, titleModal, labelCreate)" class="modal fade" id="createModal" tabindex="-1"
+     role="dialog"
+     aria-labelledby="titleModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl " role="document">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <h5 class="modal-title" th:text="${titleModal}"></h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+
+            <div class="modal-body" th:insert="~{::bodyModal}">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">
+                    Huỷ
+                </button>
+                <a class="btn btn-primary"
+                   th:href="@{/admin/{model}/create(model=${model})}" th:text="${labelCreate}"></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="edit(model, id, titleModal)" class="modal fade" id="editModal" tabindex="-1" role="dialog"
+     aria-labelledby="titleModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl " role="document">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <h5 class="modal-title" id="titleModal" th:text="${titleModal}"></h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+
+            <div class="modal-body" th:insert="~{::bodyModal}">HELLO
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">
+                    Huỷ
+                </button>
+                <a class="btn btn-primary"
+                   th:href="@{/admin/{model}/{id}/edit(model=${model}, id=${id})}" th:text="#{label.saveChanges}"></a>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:fragment="delete(model, id, variable)" class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Bạn có chắc muốn Xoá?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body text-wrap">Chọn "Xoá" bên dưới nếu bạn sẵn sàng xoá <span class="font-weight-bold" th:text="${variable}"></span></div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Huỷ</button>
+                <a class="btn btn-primary"
+                   th:href="@{/dashboard/{model}/{id}/delete(model=${model}, id=${id})}">Xoá</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div layout:fragment="cta-section" class="py-5 cta-section">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-12">
+                <h2 class="mb-2 text-white">Cho phép bạn khám phá những điều tốt nhất.<br>Liên lạc với chúng tôi ngay!
+                </h2>
+                <p class="mb-4 lead text-white text-white-opacity"></p>
+                <p class="mb-0">
+                    <a href="" th:href="@{/contact}" class="btn btn-outline-white text-white btn-md font-weight-bold">Liên
+                                                                                                                      lạc</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+

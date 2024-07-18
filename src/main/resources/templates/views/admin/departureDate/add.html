@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{layouts/layout-admin}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="'Thêm tour mới'"></title>
+</head>
+<body>
+<h1 class="mt-4" layout:fragment="page-heading" th:text="#{label.departure_date.add}"></h1>
+<ol class="breadcrumb" layout:fragment="breadcrumb">
+    <li class="breadcrumb-item"><a th:href="@{/dashboard}" th:text="#{label.home}"></a></li>
+    <li class="breadcrumb-item"><a th:href="@{/dashboard/tours}" th:text="#{label.tourManagement}"></a></li>
+    <li aria-current="page" class="breadcrumb-item active" th:text="#{label.departure_date.add}"></li>
+</ol>
+
+<div class="w-100" layout:fragment="page-content">
+    <div class="row">
+        <div class="col-xl-8">
+            <div class="card mb-4">
+                <div class="card-header" th:text="'Thông tin ngày khởi hành'"></div>
+                <div class="card-body">
+                    <div th:if="${param.error}">
+                        <div class="alert alert-danger" th:text="${errorMessage}"></div>
+                    </div>
+                    <div th:if="${param.success}">
+                        <div class="alert alert-success" th:text="${successMessage}"></div>
+                    </div>
+                    <form action="" class="needs-validation" enctype="application/x-www-form-urlencoded"
+                          method="post" novalidate th:action="@{/dashboard/tours/{id}/departure-date/add(id=${departureDate.tour.id})}"
+                          th:object="${departureDate}">
+                        <div class="row gx-3 mb-3">
+                            <fieldset class="col-md-6">
+                                <label class="small mb-1" for="selectTourGroup">
+                                    <span th:text="|Chọn tour|"></span>
+                                    <span class="ml-1 text-danger">*</span>
+                                </label>
+                                <select autofocus class="form-select custom-select" id="selectTourGroup"
+                                        th:field="*{tour.id}">
+                                    <option th:each="tour:${tours}" th:text="${tour.name}"
+                                            th:value="${tour.id}"></option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="small mb-1">
+                                <span th:text="#{label.departureDate}"></span>
+                                <span class="ml-1 text-danger">*</span>
+                            </label>
+                            <div class="d-flex flex-row flex-nowrap  justify-content-between">
+                                <fieldset>
+                                    <label>
+                                        <input class="form-control"
+                                               required th:min="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"
+                                               th:field="*{valueDate}"
+                                               type="date">
+                                    </label>
+                                    <div class="invalid-feedback">
+                                        <span th:text="#{NotEmpty}"></span>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary active" th:text="#{label.departure_date.add}" type="submit"></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block layout:fragment="script">
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#tourImage').change(function () {
+                showImageThumbnail(this);
+            });
+        });
+        (function () {
+            'use strict'
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.querySelectorAll('.needs-validation')
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+
+        function showImageThumbnail(fileInput) {
+            for (const file in fileInput) {
+                let file = fileInput.files[0];
+
+                let reader = new FileReader();
+                let maxAllowedSize = 5 * 1024 * 1024;
+
+                if (file.size > maxAllowedSize) {
+                    alert('JPG hoặc PNG quá lớn!');
+                    fileInput.files[0].value = "";
+                } else {
+                    reader.onload = function (e) {
+                        $('#thumbnail').attr('src', e.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+
+        }
+    </script>
+</th:block>
+
+</body>
+
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{layouts/layout-admin}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${account.getId()==null}?#{label.createAccount}:#{label.accountDetails}"></title>
+</head>
+<body>
+<h1 class="mt-4" layout:fragment="page-heading"
+    th:text="${account.getId()==null}?#{label.createAccount}:#{label.accountEdit}"></h1>
+<ol class="breadcrumb" layout:fragment="breadcrumb">
+    <li class="breadcrumb-item"><a th:href="@{/dashboard}" th:text="#{label.home}"></a></li>
+    <li class="breadcrumb-item"><a th:href="@{/dashboard/accounts}" th:text="#{label.accountManagement}"></a></li>
+    <li aria-current="page" class="breadcrumb-item active"
+        th:text="${account.getId()==null}?#{label.createAccount}:#{label.accountEdit}"></li>
+</ol>
+
+<div layout:fragment="page-content">
+    <form action="" enctype="multipart/form-data" id="formAccount" method="post"
+          th:action="@{/dashboard/accounts/save}"
+          th:object="${account}">
+        <div class="row">
+            <div class="col-xl-4">
+                <!-- Profile picture card-->
+                <div class="card mb-4 mb-xl-0">
+                    <div class="card-header">Hình đại diện</div>
+                    <div class="card-body text-center">
+                        <!-- Profile picture image-->
+                        <img alt="" class="mx-auto img-account-profile rounded-circle mb-3"
+                             height="300px" id="thumbnailAvatar" src=""
+                             style="image-rendering: high-quality" th:src="*{avatarUrl}"
+                             width="300px">
+                        <!-- Profile picture upload button-->
+                        <div class="custom-file w-auto">
+                            <label class="custom-file-label" for="avatar" th:text="'Tải lên'"></label>
+                            <input accept="image/png, image/jpeg" class="custom-file-input" form="formAccount"
+                                   id="avatar" name="image"
+                                   type="file"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-8">
+                <!-- Account details card-->
+                <div class="card mb-4">
+                    <div class="card-header" th:text="#{label.accountDetails}"></div>
+                    <div class="card-body">
+                        <div th:if="${param.error}">
+                            <div class="alert alert-danger" th:text="${errorMessage}"></div>
+                        </div>
+                        <div th:if="${param.success}">
+                            <div class="alert alert-info" th:text="${successMessage}"></div>
+                        </div>
+                        <div class="d-flex flex-wrap justify-content-between">
+                            <!-- Form Group (id)-->
+                            <fieldset class="form-group col-md-6">
+                                <label class="small mb-1" for="inputId">
+                                    <span class="font-weight-bold" th:text="#{label.id}"></span>
+                                    <span class="text-danger ml-1">*</span>
+                                </label>
+                                <input class="form-control" id="inputId" placeholder="Mã tự tạo" readonly
+                                       th:field="*{id}" th:value="*{id}" type="number">
+                            </fieldset>
+                            <!-- Form Group (username)-->
+                            <fieldset class="form-group col-md-6">
+                                <label class="small mb-1" for="username">
+                                    <span class="font-weight-bold" th:text="#{label.username}"></span>
+                                    <span class="text-danger ml-1">*</span>
+                                </label>
+                                <input autofocus class="form-control" id="username" placeholder="Nhập tên đăng nhập"
+                                       required
+                                       th:field="*{username}" th:value="*{username}" type="text">
+                            </fieldset>
+                            <!-- Form Group (last name)-->
+                            <fieldset class="form-group col-md-6">
+                                <label class="small mb-1" for="inputLastName">
+                                    <span class="font-weight-bold" th:text="#{label.lastName}"></span>
+                                    <span class="text-danger ml-1">*</span>
+                                </label>
+                                <input class="form-control" id="inputLastName" placeholder="Nhập họ và chữ lót"
+                                       required th:field="*{lastName}" th:value="*{lastName}" type="text">
+                            </fieldset>
+                            <!-- Form Group (first name)-->
+                            <fieldset class="form-group col-md-6">
+                                <label class="small mb-1" for="inputFirstName">
+                                    <span class="font-weight-bold" th:text="#{label.firstName}"></span>
+                                    <span class="text-danger ml-1">*</span>
+                                </label>
+                                <input class="form-control" id="inputFirstName" placeholder="Nhập tên"
+                                       required th:field="*{firstName}" th:value="*{firstName}" type="text">
+                            </fieldset>
+                            <!-- Form Group (email address)-->
+                            <fieldset class="form-group col-md-12">
+                                <label class="small mb-1" for="inputEmailAddress">
+                                    <span class="font-weight-bold" th:text="#{label.email}"></span>
+                                    <span class="text-danger ml-1">*</span>
+                                </label>
+                                <input class="form-control" id="inputEmailAddress" placeholder="Nhập địa chỉ email"
+                                       required th:field="*{email}" th:value="*{email}" type="email">
+                            </fieldset>
+                            <!-- Form Group (password)-->
+                            <fieldset class="form-group col-md-6">
+                                <label class="small mb-1" for="inputPassword">
+                                    <span class="font-weight-bold" th:text="#{label.password}"></span>
+                                    <span class="text-danger ml-1">*</span>
+                                </label>
+                                <input class="form-control" id="inputPassword" placeholder="Nhập mật khẩu" required
+                                       th:field="*{password}" th:value="*{password}" type="password">
+                            </fieldset>
+                            <!-- Form Group (confirm password)-->
+                            <fieldset class="form-group col-md-6">
+                                <label class="small mb-1" for="inputConfirmPassword">
+                                    <span class="font-weight-bold" th:text="#{label.confirmPassword}"></span>
+                                    <span class="text-danger ml-1">*</span>
+                                </label>
+                                <input class="form-control" id="inputConfirmPassword" placeholder="Nhập lại mật khẩu"
+                                       required
+                                       th:field="*{confirmPassword}" th:value="*{confirmPassword}" type="password">
+                            </fieldset>
+                            <!-- Form Group (Roles)-->
+                            <fieldset class="form-group col-md-6">
+                                <label class="small mb-1" for="selectPermission">
+                                    <span class="font-weight-bold" th:text="#{label.permission}"></span>
+                                    <span class="text-danger ml-1">*</span>
+                                </label>
+                                <select class="form-control custom-select" id="selectPermission"
+                                        th:field="*{permission.id}">
+                                    <option th:each="permission:${permissions}"
+                                            th:selected="${permission.id==account.permission.id}"
+                                            th:text="${permission.name}" th:value="${permission.id}"></option>
+                                </select>
+                            </fieldset>
+                            <!-- Form Group (Group Selection Checkboxes)-->
+                            <fieldset class="form-group col-md-6">
+                                <label class="small mb-1">
+                                    <span class="font-weight-bold" th:text="|#{label.active}|"></span>
+                                    <span class="text-danger ml-1"></span>
+                                </label>
+                                <div class="form-check">
+                                    <label class="d-block form-check-label" for="active">
+                                        <input class="form-check-input" id="active" name="activeAccount"
+                                               th:checked="${account.active==true}" th:field="*{active}" type="radio"
+                                               value="true">
+                                        <span>Đang hoạt động</span>
+                                    </label>
+                                    <label class="form-check-label" for="block">
+                                        <input class="form-check-input" id="block" name="activeAccount"
+                                               th:checked="${account.active==false}"
+                                               th:field="*{active}" type="radio" value="false">
+                                        <span>Không hoạt động</span>
+                                    </label>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <!-- Submit button-->
+                        <div class="col-md-6">
+                            <button class="btn btn-outline-secondary" th:text="#{label.undo}" type="reset"></button>
+                            <button class="btn btn-primary "
+                                    th:text="${account.id==null}?#{label.createAccount}:#{label.saveChanges}"
+                                    type="submit"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+<th:block layout:fragment="script">
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#avatar').change(function () {
+                showImageThumbnail(this);
+            });
+        });
+
+        function showImageThumbnail(fileInput) {
+            let file = fileInput.files[0];
+
+            let reader = new FileReader();
+            let maxAllowedSize = 5 * 1024 * 1024;
+
+            if (file.size > maxAllowedSize) {
+                alert('JPG hoặc PNG quá lớn!');
+                fileInput.files[0].value = "";
+            } else {
+                reader.onload = function (e) {
+                    $('#thumbnailAvatar').attr('src', e.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+</th:block>
+
+</body>
+
+</html>

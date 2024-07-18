@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{layouts/layout-admin}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="|Chi tiết đặt tour|"></title>
+</head>
+<body>
+<h1 class="mt-4" layout:fragment="page-heading" th:text="|Chi tiết đặt tour|"></h1>
+
+<ol class="breadcrumb" layout:fragment="breadcrumb">
+    <li class="breadcrumb-item"><a th:href="@{/dashboard}" th:text="#{label.home}"></a></li>
+    <li class="breadcrumb-item"><a th:href="@{/dashboard/bookings}" th:text="#{label.booking.manage}"></a></li>
+    <li aria-current="page" class="breadcrumb-item active" th:text="|Chi tiết đặt tour|"></li>
+</ol>
+
+<div class="" layout:fragment="page-content">
+    <div class="container-xl px-4 mt-4">
+        <div class="row justify-content-around">
+            <div class="col-xl-8">
+                <div class="card mb-4">
+                    <div class="card-header">Thông tin đặt tour</div>
+                    <div class="card-body">
+                        <form class="needs-validation" method="post" novalidate
+                              th:action="@{/dashboard/bookings/{id}(id=${booking.id})}"
+                              th:object="${booking}">
+
+                            <div class="row">
+                                <div class="col-md-12 alert alert-success" th:if="${param.success}"
+                                     th:text="${success}"></div>
+                                <h5 class="text-dark col-md-12 font-weight-bold">Thông tin khách hàng</h5>
+                                <fieldset class="form-group col-md-6">
+                                    <label class="small mb-1" for="lastName"
+                                           th:text="|#{label.lastName} *|"></label>
+                                    <input class="form-control" id="lastName" readonly
+                                           th:field="*{customer.lastname}"
+                                           th:value="*{customer.lastname}" type="text">
+                                    <div class="invalid-feedback">Không được bỏ trống</div>
+                                </fieldset>
+                                <div class="form-group col-md-6">
+                                    <label class="small mb-1" for="firstName"
+                                           th:text="|#{label.firstName} *|"></label>
+                                    <input autofocus class="form-control" id="firstName" readonly
+                                           th:field="*{customer.firstname}"
+                                           th:value="*{customer.firstname}" type="text">
+                                    <div class="invalid-feedback">Không được bỏ trống</div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label class="small mb-1" for="phone" th:text="|#{label.phone} *|"></label>
+                                    <input class="form-control" id="phone" maxlength="10" readonly
+                                           th:field="*{customer.phone}"
+                                           th:value="*{customer.phone}" type="text">
+                                    <div class="invalid-feedback">Không được bỏ trống</div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label class="small mb-1" for="address"
+                                           th:text="|#{label.address} *|"></label>
+                                    <textarea class="form-control" id="address" readonly
+                                              th:field="*{customer.address}"
+                                              th:value="*{customer.address}"></textarea>
+                                </div>
+                                <h5 class="text-dark col-md-12 font-weight-bold">Thông tin vé</h5>
+                                <div class="form-group col-md-12">
+                                    <label class="small mb-1" for="selectTour">Tour *</label>
+                                    <select class="form-control custom-select" id="selectTour"
+                                            name="tour" readonly="readonly"
+                                            th:field="*{departureDate.tour.id}">
+                                        <option th:each="tour:${tours}"
+                                                th:text="${tour.name}"
+                                                th:value="${tour.id}"></option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="small mb-1" for="departureDate">Ngày khởi hành *</label>
+                                    <select class="form-control custom-select" id="departureDate"
+                                            name="departureDate"
+                                            th:field="*{departureDate.id}">
+                                        <option th:each="departureDate:${booking.departureDate.tour.departureDates}"
+                                                th:text="${#temporals.format(departureDate.date, 'dd/MM/yyyy')}"
+                                                th:value="${departureDate.id}"></option>
+                                    </select>
+                                </div>
+                                <fieldset class="form-group col-md-6"
+                                          th:each="bookingDetail, iteratStat:*{bookingDetails}">
+                                    <label class="small mb-1" th:for="${bookingDetail.tourTicket.id}"
+                                           th:text="${bookingDetail.tourTicket.name}">
+                                    </label>
+                                    <input class="form-control" readonly
+                                           th:field="*{bookingDetails[__${iteratStat.index}__].quantity}"
+                                           th:id="${bookingDetail.tourTicket.id}"
+                                           th:max="${bookingDetail.tourTicket.maxSlot}"
+                                           th:min="${iteratStat.index<1}?1:0"
+                                           th:value="${iteratStat.index<1}?1:0"
+                                           type="number">
+                                    <label hidden="hidden">
+                                        <input class="form-control" readonly
+                                               th:field="*{bookingDetails[__${iteratStat.index}__].unitPrice}"
+                                               th:value="${bookingDetail.unitPrice}" type="number">
+                                    </label>
+                                    <div class="invalid-feedback">Chỉ còn <span
+                                            th:text="${bookingDetail.tourTicket.maxSlot}"></span> vé
+                                    </div>
+                                </fieldset>
+                                <div class="form-group col-md-12">
+                                    <label class="small mb-1" for="total" th:text="|#{label.booking.total} *|"></label>
+                                    <input class="form-control" id="total" maxlength="10"
+                                           readonly th:field="*{total}"
+                                           th:value="*{total}" type="number">
+                                    <div class="invalid-feedback">Không được bỏ trống</div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label class="small mb-1" for="quantity"
+                                           th:text="|#{label.booking.quantity} *|"></label>
+                                    <input class="form-control" id="quantity" maxlength="10" readonly
+                                           required th:field="*{quantity}"
+                                           th:value="*{quantity}" type="number">
+                                    <div class="invalid-feedback">Không được bỏ trống</div>
+                                </div>
+
+                                <div class="form-group col-md-12">
+                                    <label class="small mb-1" for="payment"
+                                           th:text="|#{label.booking.payment} *|"></label>
+                                    <select class="form-control custom-select" id="payment"
+                                            name="departureDate"
+                                            th:field="*{payment}">
+                                        <option th:text="|Chưa thanh toán|" th:value="${null}"></option>
+                                        <option th:each="payment:${payments}"
+                                                th:text="${payment.name}"
+                                                th:value="${payment}"></option>
+                                    </select>
+                                </div>
+                                <!-- Submit button-->
+                                <div class="form-group col-md-12">
+                                    <button class="btn btn-outline-secondary" th:text="#{label.undo}"
+                                            type="reset"></button>
+                                    <button class="btn btn-primary" th:text="#{label.saveChanges}"
+                                            type="submit"></button>
+                                </div>
+                            </div>
+                            <script>
+                                (function () {
+                                    'use strict'
+
+                                    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                                    var forms = document.querySelectorAll('.needs-validation')
+
+                                    // Loop over them and prevent submission
+                                    Array.prototype.slice.call(forms)
+                                        .forEach(function (form) {
+                                            form.addEventListener('submit', function (event) {
+                                                if (!form.checkValidity()) {
+                                                    event.preventDefault()
+                                                    event.stopPropagation()
+                                                }
+
+                                                form.classList.add('was-validated')
+                                            }, false)
+                                        })
+                                })()
+
+                            </script>
+
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

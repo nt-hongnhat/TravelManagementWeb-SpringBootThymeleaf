@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{layouts/layout-user}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{label.profile}"></title>
+    <th:block layout:fragment="style">
+        <link href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css" rel="stylesheet">
+        <link href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet">
+    </th:block>
+</head>
+<body>
+<th:block layout:fragment="banner">
+    <div class="hero hero-inner">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-12">
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="content">
+    <div class="container-xl px-4 mt-4">
+        <div class="row">
+            <div class="col-xl-4">
+                <!-- Profile picture card-->
+                <div class="card mb-4 mb-xl-0">
+                    <div class="card-header">Hình đại diện</div>
+                    <div class="card-body text-center">
+                        <!-- Profile picture image-->
+                        <img alt="" class="mx-auto img-account-profile rounded-circle mb-3"
+                             height="300px" id="thumbnailAvatar" src=""
+                             style="image-rendering: high-quality" th:src="${account.avatarUrl}"
+                             width="300px">
+                        <!-- Profile picture upload button-->
+                        <div class="custom-file w-auto">
+                            <label class="custom-file-label" for="avatar" th:text="'Tải lên'"></label>
+                            <input accept="image/png, image/jpeg" class="custom-file-input" form="formAccount"
+                                   id="avatar" name="image"
+                                   type="file"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-8">
+                <div class="card mb-4">
+                    <div class="card-header h5 text-primary" th:text="#{label.profile}"></div>
+                    <div class="card-body">
+                        <form class="needs-validation" id="formAccount" method="post" novalidate
+                              th:action="@{/profile/update-account/{id}(id=${account.id})}"
+                              th:object="${account}">
+                            <h6 class="text-primary" th:text="#{label.accountDetails}"></h6>
+                            <!-- Form Group (id)-->
+                            <div class="mb-3" hidden="hidden">
+                                <label class="small mb-1" for="inputId">
+                                    <span th:text="#{label.id}"></span>
+                                    <span class="text-danger ml-1">*</span>
+                                </label>
+                                <input class="form-control" id="inputId"
+                                       readonly th:field="*{id}"
+                                       th:value="${currentUser.id}" type="text">
+                            </div>
+                            <!-- Form Group (username)-->
+                            <div class="mb-3">
+                                <label class="small mb-1" for="inputUsername">
+                                    <span th:text="#{label.username}"></span>
+                                    <span class="text-danger ml-1">*</span>
+                                </label>
+                                <input class="form-control" id="inputUsername"
+                                       required th:field="*{username}"
+                                       th:value="*{username}" type="text">
+                            </div>
+                            <!-- Form Row-->
+                            <div class="row gx-3 mb-3" th:if="${account.customer==null}">
+                                <!-- Form Group (last name)-->
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputLastName">
+                                        <span th:text="#{label.lastName}"></span>
+                                        <span class="text-danger ml-1">*</span>
+                                    </label>
+                                    <input class="form-control" id="inputLastName"
+                                           readonly
+                                           th:field="*{lastName}" type="text">
+                                </div>
+                                <!-- Form Group (first name)-->
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputFirstName">
+                                        <span th:text="#{label.firstName}"></span>
+                                        <span class="text-danger ml-1">*</span>
+                                    </label>
+                                    <input class="form-control" id="inputFirstName"
+                                           readonly
+                                           th:field="*{firstName}" type="text">
+                                </div>
+                            </div>
+                            <!-- Form Group (email address)-->
+                            <div class="mb-3">
+                                <label class="small mb-1" for="inputEmailAddress">
+                                    <span th:text="#{label.email}"></span>
+                                    <span class="text-danger ml-1">*</span>
+                                </label>
+                                <input class="form-control" id="inputEmailAddress"
+                                       th:field="*{email}" th:value="*{email}" type="email">
+                            </div>
+                            <!-- Form Row-->
+                            <div class="row gx-3 mb-3">
+                                <!-- Form Group (password)-->
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputPassword">
+                                        <span th:text="#{label.password}"></span>
+                                        <span class="text-danger ml-1">*</span>
+                                    </label>
+                                    <input class="form-control" id="inputPassword"
+                                           required
+                                           th:field="*{password}" type="password">
+                                    <div class="invalid-feedback" th:text="#{NotEmpty}"></div>
+                                </div>
+                            </div>
+                            <!-- Save changes button-->
+                            <button class="btn btn-primary" th:text="#{label.saveChanges}" type="submit"></button>
+                        </form>
+                    </div>
+                </div>
+                <!-- Account details card-->
+                <div class="card mb-4">
+                    <div class="card-header h5 text-primary" th:text="#{label.profile}"></div>
+                    <div class="card-body">
+                        <form class="needs-validation" id="formCustomer" method="post" novalidate
+                              th:action="@{/profile/update-customer/{id}(id=${customer.id})}"
+                              th:object="${customer}">
+                            <div class="alert alert-success" th:if="${param.success}">
+                                <span th:text="${successMessage}"></span>
+                            </div>
+                            <div class="alert alert-danger" th:if="${param.error}">
+                                <span th:text="${errors}"></span>
+                            </div>
+                            <!-- Form Group (customer id)-->
+                            <div class="col-md-6" hidden="hidden">
+                                <label class="small mb-1" for="inputCustomerId">
+                                    <span th:text="#{label.id}"></span>
+                                    <span class="text-danger ml-1">*</span>
+                                </label>
+                                <input class="form-control" id="inputCustomerId"
+                                       required th:field="*{id}"
+                                       th:value="*{id}" type="tel">
+                            </div>
+                            <!-- Form Row-->
+                            <div class="row gx-3 mb-3">
+                                <!-- Form Group (last name)-->
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputCustomerLastName">
+                                        <span th:text="#{label.lastName}"></span>
+                                        <span class="text-danger ml-1">*</span>
+                                    </label>
+                                    <input class="form-control" id="inputCustomerLastName"
+                                           required
+                                           th:field="*{lastname}" type="text">
+                                </div>
+                                <!-- Form Group (first name)-->
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputCustomerFirstName">
+                                        <span th:text="#{label.firstName}"></span>
+                                        <span class="text-danger ml-1">*</span>
+                                    </label>
+                                    <input class="form-control" id="inputCustomerFirstName"
+                                           required
+                                           th:field="*{firstname}"
+                                           type="text">
+                                </div>
+                            </div>
+                            <!-- Form Row-->
+                            <div class="row gx-3 mb-3">
+                                <!-- Form Group (gender)-->
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputGender">
+                                        <span th:text="#{label.gender}"></span>
+                                        <span class="text-danger ml-1">*</span>
+                                    </label>
+                                    <select class="form-control" id="inputGender" name="" th:field="*{gender}">
+                                        <option value="Nam">Nam</option>
+                                        <option value="Nữ">Nữ</option>
+                                        <option value="Khác">Khác</option>
+                                    </select>
+                                </div>
+                                <!-- Form Group (phone)-->
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputPhone">
+                                        <span th:text="#{label.phone}"></span>
+                                        <span class="text-danger ml-1">*</span>
+                                    </label>
+                                    <input class="form-control" id="inputPhone"
+                                           required th:field="*{phone}"
+                                           th:value="*{phone}" type="tel">
+                                </div>
+                            </div>
+                            <!-- Form Group (customer address)-->
+                            <div class="mb-3">
+                                <label class="small mb-1" for="inputAddress">
+                                    <span th:text="#{label.address}"></span>
+                                    <span class="text-danger ml-1">*</span>
+                                </label>
+                                <input class="form-control" id="inputAddress" required
+                                       th:field="*{address}" th:value="*{address}" type="text">
+                            </div>
+                            <!-- Save changes button-->
+                            <button class="btn btn-primary" th:text="#{label.saveChanges}" type="submit"></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+<th:block layout:fragment="script">
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#avatar').change(function () {
+                showImageThumbnail(this);
+            });
+        });
+
+        function showImageThumbnail(fileInput) {
+            let file = fileInput.files[0];
+
+            let reader = new FileReader();
+            let maxAllowedSize = 5 * 1024 * 1024;
+
+            if (file.size > maxAllowedSize) {
+                alert('JPG hoặc PNG quá lớn!');
+                fileInput.files[0].value = "";
+            } else {
+                reader.onload = function (e) {
+                    $('#thumbnailAvatar').attr('src', e.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+</th:block>
+</body>
+</html>

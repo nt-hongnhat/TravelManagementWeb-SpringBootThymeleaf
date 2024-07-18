@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{layouts/layout-admin}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${tour.name}"></title>
+</head>
+<body>
+<!--<h1 class="mt-4" layout:fragment="page-heading" th:text="#{label.tour.edit}"></h1>-->
+<ol class="breadcrumb" layout:fragment="breadcrumb">
+    <li class="breadcrumb-item"><a th:href="@{/dashboard}" th:text="#{label.home}"></a></li>
+    <li class="breadcrumb-item"><a th:href="@{/dashboard/tours}" th:text="#{label.tourManagement}"></a></li>
+    <li aria-current="page" class="breadcrumb-item active" th:text="#{label.tour.edit}"></li>
+</ol>
+
+<div class="w-100" layout:fragment="page-content">
+    <div class="mb-4">
+        <form action="" class="needs-validation " enctype="multipart/form-data" id="formTour"
+              method="post" novalidate th:action="@{/dashboard/tours/{id}(id=${tour.id})}" th:object="${tour}">
+            <div class="row d-flex flex-wrap">
+                <div class="col-xl-6">
+                    <div class="card mb-4">
+                        <div class="card-header text-primary font-weight-bold" th:text="#{label.tour.details}">
+                        </div>
+                        <div class="card-body">
+                            <div th:if="${param.error}">
+                                <div class="alert alert-danger" th:text="${errorMessage}"></div>
+                            </div>
+                            <div th:if="${param.success}">
+                                <div class="alert alert-success" th:text="${success}"></div>
+                            </div>
+                            <div class="d-flex flex-wrap">
+                                <fieldset class="form-group col-md-6">
+                                    <label class="small mb-1" for="inputId">
+                                        <span th:text="#{label.tour.id}"></span>
+                                        <span class="ml-1 text-danger">*</span>
+                                    </label>
+                                    <input class="form-control" id="inputId" readonly th:field="*{id}" th:value="*{id}"
+                                           type="number">
+                                </fieldset>
+                                <fieldset class="form-group col-md-6">
+                                    <label class="small mb-1" for="selectTourGroup">
+                                        <span th:text="#{label.tour.group}"></span>
+                                        <span class="ml-1 text-danger">*</span>
+                                    </label>
+                                    <select class="form-select custom-select" id="selectTourGroup"
+                                            th:field="*{tourGroup.id}" th:value="*{tourGroup.id}">
+                                        <option th:each="tourGroup:${tourGroups}" th:text="${tourGroup.name}"
+                                                th:value="${tourGroup.id}"></option>
+                                    </select>
+                                </fieldset>
+                                <fieldset class="form-group col-md-12">
+                                    <label class="small mb-1" for="inputTourName">
+                                        <span th:text="#{label.tour.name}"></span>
+                                        <span class="ml-1 text-danger">*</span>
+                                    </label>
+                                    <textarea class="form-control" id="inputTourName" maxlength="255" name="tourName"
+                                              required rows="3" th:field="*{name}"
+                                              th:value="*{name}"></textarea>
+                                    <div class="invalid-feedback" th:text="#{NotEmpty}"></div>
+
+                                </fieldset>
+                                <fieldset class="form-group col-md-12">
+                                    <label class="small mb-1" for="inputItinerary">
+                                        <span th:text="#{label.tour.itinerary}"></span>
+                                        <span class="ml-1 text-danger">*</span>
+                                    </label>
+                                    <textarea class="form-control" cols="30" id="inputItinerary"
+                                              name="tourName" required rows="2" th:field="*{itinerary}"
+                                              th:value="*{itinerary}"></textarea>
+                                    <div class="invalid-feedback" th:text="#{NotEmpty}"></div>
+
+                                </fieldset>
+                                <fieldset class="form-group col-md-6">
+                                    <label class="small mb-1" for="inputDeparturePlace">
+                                        <span th:text="#{label.tour.departure_place}"></span>
+                                        <span class="ml-1 text-danger">*</span>
+                                    </label>
+                                    <select class="form-select custom-select" id="inputDeparturePlace"
+                                            th:field="*{departurePlace}">
+                                        <option th:each="province:${departurePlaces}" th:text="${province.name}"
+                                                th:value="${province.name}"></option>
+                                    </select></fieldset>
+                                <fieldset class="form-group col-md-6">
+                                    <label class="small mb-1" for="inputDestination">
+                                        <span th:text="#{label.tour.destination}"></span>
+                                        <span class="ml-1 text-danger">*</span>
+                                    </label>
+                                    <select class="form-select custom-select" id="inputDestination"
+                                            th:field="*{destination}">
+                                        <option th:each="province:${provinces}" th:text="${province.name}"
+                                                th:value="${province.name}"></option>
+                                    </select>
+                                </fieldset>
+                                <fieldset class="form-group col-md-6">
+                                    <label class="small mb-1" for="inputDuration">
+                                        <span th:text="#{label.tour.duration}"></span>
+                                        <span class="ml-1 text-danger">*</span>
+                                    </label>
+                                    <input class="form-control" id="inputDuration" readonly th:field="*{duration}"
+                                           th:value="*{duration}" type="text">
+                                </fieldset>
+                                <fieldset class="form-group col-md-6">
+                                    <label class="small mb-1" for="inputTransfer">
+                                        <span th:text="#{label.tour.transfer}"></span>
+                                        <span class="ml-1 text-danger">*</span>
+                                    </label>
+                                    <input class="form-control" id="inputTransfer" required th:field="*{transfer}"
+                                           type="text">
+                                    <div class="invalid-feedback" th:text="#{NotEmpty}"></div>
+                                </fieldset>
+                                <fieldset class="form-group col-md-6">
+                                    <label class="small mb-1">
+                                        <span th:text="#{label.tour.price}"></span>
+                                        <span class="ml-1 text-danger">*</span>
+                                    </label>
+                                    <input class="form-control" id="inputUnitPrice" required
+                                           step="1000"
+                                           th:field="*{unitPrice}"
+                                           th:min="1000" th:value="*{unitPrice}"
+                                           type="number">
+                                    <div class="invalid-feedback" th:text="#{NotEmpty}"></div>
+                                </fieldset>
+                                <fieldset class="form-group col-md-6">
+                                    <label class="small mb-1">
+                                        <span th:text="#{label.tour.maxSlot}"></span>
+                                        <span class="ml-1 text-danger">*</span>
+                                    </label>
+                                    <input class="form-control" id="tourMaxSlot" readonly
+                                           step="1000"
+                                           th:field="*{maxSlot}"
+                                           th:min="1000" th:value="*{maxSlot}"
+                                           type="number">
+                                    <div class="invalid-feedback" th:text="#{NotEmpty}"></div>
+                                </fieldset>
+                                <fieldset class="form-group col-md-12">
+                                    <label class="small mb-1" for="inputDescription" th:text="'Mô tả'"></label>
+                                    <textarea class="form-control" id="inputDescription" name="inputDescription"
+                                              rows="10"
+                                              th:field="*{description}"></textarea>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6">
+                    <div class="card mb-4">
+                        <a aria-controls="pictures" aria-expanded="false"
+                           class="d-block card-header text-decoration-none collapsed" data-toggle="collapse"
+                           href="#pictures" role="button">
+                            <span class="text-primary font-weight-bold" th:text="'Hình ảnh'"></span>
+                        </a>
+                        <div class="card-body text-center collapse" id="pictures">
+                            <!-- Profile picture image-->
+                            <div class="row gx-3 mb-3 flex-wrap justify-content-around" id="listImage">
+                                <div class="col-3 p-1" th:each="picture, iStat:${#strings.listSplit(tour.image, ' ')}">
+                                    <img alt="" class="w-100 h-auto rounded"
+                                         src="" style="image-rendering: high-quality"
+                                         th:id="|image${iStat.index}|" th:src="${picture}">
+                                </div>
+                            </div>
+                            <!-- Profile picture upload button-->
+                            <div class="custom-file w-auto">
+                                <label class="custom-file-label" for="images" th:text="'Tải lên'"></label>
+                                <input accept="image/png, image/jpeg" class="custom-file-input" form="formTour"
+                                       id="images" multiple
+                                       name="images" type="file"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-6">
+                    <div class="card mb-4">
+                        <a aria-controls="tourDepartureDate" aria-expanded="false"
+                           class="d-block card-header text-decoration-none collapsed" data-toggle="collapse"
+                           href="#tourDepartureDate" role="button">
+                            <span class="text-primary font-weight-bold" th:text="#{label.departureDate}"></span>
+                        </a>
+                        <div class="card-body collapse" id="tourDepartureDate">
+                            <div class="d-flex flex-row flex-nowrap justify-content-around text-center small mb-1">
+                                <div class="flex-md-shrink-0" th:text="#{label.departure_date.date}"></div>
+                                <div class="" th:text="#{label.departure_date.availableSlot}"></div>
+                                <div class="" th:text="#{label.departure_date.orderSlot}"></div>
+                                <div class="" th:text="|Xoá|"></div>
+                            </div>
+                            <div class="d-flex flex-row flex-nowrap justify-content-around form-group"
+                                 th:each="departureDate, iStat:${tour.departureDates}">
+                                <fieldset class="" hidden="hidden">
+                                    <input class="form-control"
+                                           th:field="*{departureDates[__${iStat.index}__].id}"
+                                           th:id="|departureDate${departureDate.id}|"
+                                           type="number">
+                                </fieldset>
+                                <fieldset class="">
+                                    <input class="form-control"
+                                           th:field="*{departureDates[__${iStat.index}__].valueDate}"
+                                           th:id="|departureDate${departureDate.id}|"
+                                           th:readonly="${departureDate.availableSlot==0}"
+                                           type="date">
+                                </fieldset>
+                                <fieldset class="">
+                                    <input class="form-control" readonly
+                                           th:field="*{departureDates[__${iStat.index}__].availableSlot}"
+                                           th:id="|departureDate${departureDate.id}|"
+                                           type="number">
+                                </fieldset>
+                                <fieldset class="">
+                                    <input class="form-control" readonly
+                                           th:field="*{departureDates[__${iStat.index}__].orderSlot}"
+                                           th:id="|departureDate${departureDate.id}|"
+                                           type="number">
+                                </fieldset>
+                                <div>
+                                    <a class="d-none d-sm-inline-block btn btn-sm btn-outline-danger shadow-sm"
+                                       th:href="@{/dashboard/tours/{tourId}/departure-date/{departureDateId}(departureDateId=${departureDate.id}, tourId=${tour.id})}">
+                                        <span class=""><i class="fas fa-trash"></i></span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div>
+                                <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+                                   th:href="@{/dashboard/tours/{id}/departure-date/add(id=${tour.id})}"><span
+                                        th:text="#{label.departure_date.add}"></span></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mb-4">
+                        <a aria-controls="tourTicket" aria-expanded="false"
+                           class="d-block card-header text-decoration-none collapsed" data-toggle="collapse"
+                           href="#tourTicket" role="button">
+                            <span class=" text-primary font-weight-bold" th:text="#{label.tour.priceDetail}"></span>
+                        </a>
+                        <div class="card-body collapse" id="tourTicket">
+                            <div class="d-flex flex-row flex-nowrap justify-content-around text-center mb-1">
+                                <div class="small" hidden="hidden">
+                                    <span th:text="|Mã vé|"></span>
+                                    <span class="ml-1 text-danger">*</span>
+                                </div>
+                                <div class="col-4 small">
+                                    <span th:text="|Loại|"></span>
+                                    <span class="ml-1 text-danger">*</span>
+                                </div>
+                                <div class="col-4 small">
+                                    <span th:text="|Đơn giá (VND/người)|"></span>
+                                    <span class="ml-1 text-danger">*</span>
+                                </div>
+                                <div class="col-4 small">
+                                    <span th:text="|Số chỗ tối đa|"></span>
+                                    <span class="ml-1 text-danger">*</span>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-row flex-nowrap justify-content-around mb-1"
+                                 th:each="tourTicket, iStat:${tour.tourTickets}">
+                                <fieldset hidden="hidden">
+                                    <label class="small"
+                                           th:for="|tourTicketId${tourTicket.id}|"> </label>
+                                    <input class="form-control text-center" readonly
+                                           th:field="*{tourTickets[__${iStat.index}__].id}"
+                                           th:id="|tourTicketId${tourTicket.id}|"
+                                           type="number">
+                                </fieldset>
+                                <fieldset class="flex-md-shrink-0">
+                                    <label class="small" hidden=""
+                                           th:for="|tourTicketName${tourTicket.id}|"></label>
+                                    <input class="form-control" readonly
+                                           th:field="*{tourTickets[__${iStat.index}__].name}"
+                                           th:id="|tourTicketName${tourTicket.id}|"
+                                           type="text">
+                                </fieldset>
+                                <fieldset class="">
+                                    <label class="small" hidden="hidden"
+                                           th:for="|tourTicketUnitPrice${iStat.index}|">
+                                    </label>
+                                    <input class="form-control" required
+                                           step="1000"
+                                           th:field="*{tourTickets[__${iStat.index}__].unitPrice}"
+                                           th:id="|tourTicketUnitPrice${iStat.index}|"
+                                           type="number">
+                                    <div class="invalid-feedback" th:text="#{NotEmpty}"></div>
+                                </fieldset>
+                                <fieldset class="">
+                                    <label class="small" hidden="hidden"
+                                           th:for="|tourTicketMaxSlot${tourTicket.id}|"></label>
+                                    <input class="form-control" required
+                                           th:field="*{tourTickets[__${iStat.index}__].maxSlot}"
+                                           th:id="|tourTicketMaxSlot${tourTicket.id}|"
+                                           type="number">
+                                    <div class="invalid-feedback" th:text="#{NotEmpty}"></div>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card card-collapse mb-4">
+                        <a aria-controls="tourDuration" aria-expanded="false"
+                           class="d-block card-header text-decoration-none collapsed" data-toggle="collapse"
+                           href="#tourDuration" role="button">
+                                        <span class=" text-primary font-weight-bold"
+                                              th:text="#{label.tour.duration}"></span>
+                        </a>
+                        <div class="card-body collapse" id="tourDuration">
+                            <div class="d-flex flex-wrap"
+                                 th:each="tourSchedule, iStat:${tour.tourSchedules}">
+                                <fieldset hidden="hidden">
+                                    <label class="small"
+                                           th:for="|tourScheduleId${tourSchedule.id}|"> </label>
+                                    <input class="form-control text-center" readonly
+                                           th:field="*{tourSchedules[__${iStat.index}__].id}"
+                                           th:id="|tourScheduleId${tourSchedule.id}|"
+                                           type="number">
+                                </fieldset>
+                                <fieldset class="form-group col-md-2">
+                                    <label class="small mb-1" th:for="|ordinal${tourSchedule.ordinalDate}|">
+                                        <span th:text="|Ngày thứ|"></span>
+                                    </label>
+                                    <input class="form-control text-center" readonly
+                                           th:field="*{tourSchedules[__${iStat.index}__].ordinalDate}"
+                                           th:id="|ordinal${tourSchedule.ordinalDate}|"
+                                           th:value="${tourSchedule.ordinalDate}"
+                                           type="number">
+                                </fieldset>
+                                <fieldset class="form-group col-md-10">
+                                    <label class="small mb-1"
+                                           th:for="|itinerary${tourSchedule.ordinalDate}|">
+                                        <span th:text="#{label.tour.itinerary}"></span>
+                                        <span class="ml-1 text-danger">*</span>
+                                    </label>
+                                    <input class="form-control"
+                                           required
+                                           th:field="*{tourSchedules[__${iStat.index}__].itinerary}"
+                                           th:id="|itinerary${tourSchedule.ordinalDate}|"
+                                           th:value="${tourSchedule.itinerary}"
+                                           type="text">
+                                    <div class="invalid-feedback" th:text="#{NotEmpty}"></div>
+                                </fieldset>
+                                <fieldset class="form-group col-md-12">
+                                    <label class="small mb-1"
+                                           th:for="|description${tourSchedule.ordinalDate}|">
+                                        <span th:text="'Mô tả hành trình'"></span>
+                                        <span class="ml-1 text-danger">*</span>
+                                    </label>
+                                    <textarea class="form-control"
+                                              required
+                                              rows="5"
+                                              th:field="*{tourSchedules[__${iStat.index}__].description}"
+                                              th:id="|description${tourSchedule.ordinalDate}|"
+                                              th:value="${tourSchedule.description}"
+                                              type="text"></textarea>
+                                    <div class="invalid-feedback" th:text="#{NotEmpty}"></div>
+                                </fieldset>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-around">
+                <div>
+                    <a class="btn btn-outline-secondary" th:href="@{/dashboard/tours/{id}(id=${tour.id})}"
+                       th:text="#{label.undo}"></a>
+                    <button class="btn btn-outline-primary active" th:text="#{label.saveChanges}"
+                            type="submit"></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<th:block layout:fragment="script">
+    <script>
+        let inputUnitPrice = document.querySelector('#inputUnitPrice')
+        let tourTicketFirst = document.querySelector('#tourTicketUnitPrice0')
+        inputUnitPrice.addEventListener('input', () => {
+            tourTicketFirst.childElementCount = inputUnitPrice.value
+        })
+        tourTicketFirst.addEventListener('input', () => {
+            inputUnitPrice.value = tourTicketFirst.value
+        })
+    </script>
+    <script type="text/javascript">
+
+        function readURL(input) {
+            for (let i = 0; i < input.files.length; i++) {
+                if (input.files[i]) {
+                    const reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        const img = $('<div class="col-3 p-1">\n' +
+                            '                                    <img alt="" class="w-100 h-auto rounded"\n' +
+                            '                                         id="dynamic" src=""\n' +
+                            '                                         style="image-rendering: high-quality">\n' +
+                            '                                </div>');
+                        img.children(0).attr('src', e.target.result);
+                        img.appendTo('#listImage');
+                    }
+                    reader.readAsDataURL(input.files[i]);
+                }
+            }
+        }
+
+        $("#images").change(function () {
+            readURL(this);
+        });
+
+    </script>
+</th:block>
+
+</body>
+
+</html>

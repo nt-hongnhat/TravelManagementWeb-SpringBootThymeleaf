@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{layouts/layout-admin}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="|Chỉnh sửa phân quyền|"></title>
+</head>
+<body>
+<h1 class="mt-4" layout:fragment="page-heading" th:text="|Chỉnh sửa phân quyền|"></h1>
+<ol class="breadcrumb" layout:fragment="breadcrumb">
+    <li class="breadcrumb-item"><a th:href="@{/dashboard}" th:text="#{label.home}"></a></li>
+    <li class="breadcrumb-item"><a th:href="@{/dashboard/permissions}" th:text="#{label.permissionManagement}"></a></li>
+    <li aria-current="page" class="breadcrumb-item active" th:text="|Chỉnh sửa phân quyền|"></li>
+</ol>
+<th:block layout:fragment="page-content">
+    <div class="row row-cols-1 justify-content-center">
+        <form class="col-6" method="post" novalidate th:action="@{/dashboard/permissions/save}"
+              th:object="${permission}">
+            <div class="card mb-4">
+                <div class="card-header" th:text="|Thông tin phân quyền|"></div>
+                <div class="card-body">
+                    <div th:if="${param.success}" class="alert alert-success" th:text="${success}"></div>
+                    <div class="row gx-3">
+                        <fieldset class="form-group col-12" hidden="hidden">
+                            <label class="small mb-1" for="inputId">
+                                <span th:text="|Mã phân quyền|"></span>
+                                <span class="text-danger ml-1">*</span>
+                            </label>
+                            <input class="form-control" id="inputId" readonly th:field="*{id}" type="text">
+                        </fieldset>
+                        <fieldset class="form-group col-12">
+                            <label class="small mb-1" for="inputName">
+                                <span th:text="|Tên phân quyền|"></span>
+                                <span class="text-danger ml-1">*</span>
+                            </label>
+                            <input class="form-control" id="inputName" required th:field="*{name}" type="text">
+                        </fieldset>
+                        <fieldset class="form-group col-12">
+                            <label class="small mb-1" for="inputDescription">
+                                <span th:text="|Mô tả|"></span>
+                                <span class="text-danger ml-1">*</span>
+                            </label>
+                            <textarea class="form-control" id="inputDescription" multiple required
+                                      rows="2" th:field="*{description}" type="text"></textarea>
+                        </fieldset>
+                        <div class="form-group col-12">
+                            <button class="btn btn-outline-secondary" th:text="#{label.undo}" type="reset"></button>
+                            <button class="btn btn-primary" th:text="#{label.saveChanges}" type="submit"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</th:block>
+</body>
+</html>

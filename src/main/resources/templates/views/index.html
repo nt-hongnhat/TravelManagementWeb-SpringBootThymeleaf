@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{layouts/layout-user}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Travel Management</title>
+</head>
+<body>
+<th:block layout:fragment="banner">
+    <div class="hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-7">
+                    <div class="intro-wrap">
+                        <h1 class="mb-5">
+                            <span class="d-block">Let's Enjoy Your</span> Trip In <span class="typed-words"></span>
+                        </h1>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <form class="form" method="post" th:action="@{/tours}" th:object="${searchTourDTO}">
+                                    <div class="row mb-2">
+                                        <div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-6">
+                                            <label for="departure">Nơi khởi hành</label>
+                                            <select class="form-control custom-select" id="departure" name="departure"
+                                                    th:field="*{departurePlace}">
+                                                <option th:each="departure:${departurePlaces}"
+                                                        th:text="${departure.name}"
+                                                        th:value="${departure.name}"></option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-6">
+                                            <label for="destination">Nơi đến</label>
+                                            <select class="form-control custom-select" id="destination"
+                                                    name="destination" th:field="*{destinationPlace}">
+                                                <option th:each="province:${provinces}" th:text="${province.getName()}"
+                                                        th:value="${province.getName()}"></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-6">
+                                            <label for="departureDate">Ngày khởi hành</label>
+                                            <input class="form-control" id="departureDate" name="daterange" type="text">
+                                        </div>
+                                        <div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-6">
+                                            <label for="numberPeople">Số người</label>
+                                            <input class="form-control" id="numberPeople" min="1"
+                                                   name="numberPeople" th:field="*{numberPeople}" th:value="1"
+                                                   type="number">
+                                        </div>
+                                    </div>
+                                    <div class="row mb-2 align-items-center">
+                                        <div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-6">
+                                            <button class="btn btn-primary btn-block" type="submit">Tìm kiếm</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="slides">
+                        <img alt="Image" class="img-fluid active" src="" th:src="@{/img/hero-slider-1.jpg}">
+                        <img alt="Image" class="img-fluid" src="" th:src="@{/img/hero-slider-2.jpg}">
+                        <img alt="Image" class="img-fluid" src="" th:src="@{/img/hero-slider-3.jpg}">
+                        <img alt="Image" class="img-fluid" src="" th:src="@{/img/hero-slider-4.jpg}">
+                        <img alt="Image" class="img-fluid" src="" th:src="@{/img/hero-slider-5.jpg}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="content">
+    <!--    <div class="untree_co-section">-->
+    <!--        <div class="container">-->
+    <!--            <div class="row mb-5 justify-content-center">-->
+    <!--                <div class="col-lg-6 text-center">-->
+    <!--                    <h2 class="section-title text-center mb-3">Dịch vụ của chúng tôi</h2>-->
+    <!--                    <p></p>-->
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--            <div class="row align-items-stretch">-->
+    <!--                <div class="col-lg-4 order-lg-1">-->
+    <!--                    <div class="h-100">-->
+    <!--                        <div class="frame h-100">-->
+    <!--                            <div class="feature-img-bg h-100"-->
+    <!--                                 style="background-image: url('/static/img/hero-slider-1.jpg');"></div>-->
+    <!--                        </div>-->
+    <!--                    </div>-->
+    <!--                </div>-->
+
+    <!--                <div class="col-6 col-sm-6 col-lg-4 feature-1-wrap d-md-flex flex-md-column order-lg-1">-->
+
+    <!--                    <div class="feature-1 d-md-flex">-->
+    <!--                        <div class="align-self-center">-->
+    <!--                            <span class="flaticon-house display-4 text-primary"></span>-->
+    <!--                            <h3>Beautiful Condo</h3>-->
+    <!--                            <p class="mb-0">Even the all-powerful Pointing has no control about the blind texts.</p>-->
+    <!--                        </div>-->
+    <!--                    </div>-->
+
+    <!--                    <div class="feature-1 ">-->
+    <!--                        <div class="align-self-center">-->
+    <!--                            <span class="flaticon-restaurant display-4 text-primary"></span>-->
+    <!--                            <h3>Restaurants & Cafe</h3>-->
+    <!--                            <p class="mb-0">Even the all-powerful Pointing has no control about the blind texts.</p>-->
+    <!--                        </div>-->
+    <!--                    </div>-->
+
+    <!--                </div>-->
+
+    <!--                <div class="col-6 col-sm-6 col-lg-4 feature-1-wrap d-md-flex flex-md-column order-lg-3">-->
+
+    <!--                    <div class="feature-1 d-md-flex">-->
+    <!--                        <div class="align-self-center">-->
+    <!--                            <span class="flaticon-mail display-4 text-primary"></span>-->
+    <!--                            <h3>Easy to Connect</h3>-->
+    <!--                            <p class="mb-0">Even the all-powerful Pointing has no control about the blind texts.</p>-->
+    <!--                        </div>-->
+    <!--                    </div>-->
+
+    <!--                    <div class="feature-1 d-md-flex">-->
+    <!--                        <div class="align-self-center">-->
+    <!--                            <span class="flaticon-phone-call display-4 text-primary"></span>-->
+    <!--                            <h3>24/7 Support</h3>-->
+    <!--                            <p class="mb-0">Even the all-powerful Pointing has no control about the blind texts.</p>-->
+    <!--                        </div>-->
+    <!--                    </div>-->
+
+    <!--                </div>-->
+
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
+
+    <div class="untree_co-section count-numbers text-center py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-6 col-sm-6 col-md-6 col-lg-3">
+                    <div class="counter-wrap">
+                        <div class="counter">
+                            <span class="text-center" th:data-number="${countTours}" th:value="${countTours}"></span>
+                        </div>
+                        <span class="caption">Chuyến du lịch</span>
+                    </div>
+                </div>
+                <div class="col-6 col-sm-6 col-md-6 col-lg-3">
+                    <div class="counter-wrap">
+                        <div class="counter">
+                            <span class="text-center" th:data-number="${countTourist}"
+                                  th:value="${countTourist}"></span>
+                        </div>
+                        <span class="caption">Khách du lịch</span>
+                    </div>
+                </div>
+                <div class="col-6 col-sm-6 col-md-6 col-lg-3">
+                    <div class="counter-wrap">
+                        <div class="counter">
+                            <span class="text-center" th:data-number="${countNews}" th:value="${countNews}"></span>
+                        </div>
+                        <span class="caption">Tin tức</span>
+                    </div>
+                </div>
+                <div class="col-6 col-sm-6 col-md-6 col-lg-3">
+                    <div class="counter-wrap">
+                        <div class="counter">
+                            <span class="text-center" th:data-number="${countPlaces}" th:value="${countPlaces}"></span>
+                        </div>
+                        <span class="caption">Địa điểm tham quan</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="untree_co-section" th:each="category:${categories}" th:if="${categories!=null}">
+        <div class="container">
+            <div class="row text-center justify-content-center mb-5 mx-0">
+                <div class="col-lg-8">
+                    <h2 class="section-title text-center" th:text="${category.name}"></h2>
+                    <p th:text="${category.description}"></p>
+                </div>
+            </div>
+
+            <div class="owl-carousel owl-3-slider owl-loading">
+                <th:block th:each="tourGroup:${category.tourGroups}">
+                    <div class="item mx-1 card" th:each="tour:${tourGroup.tours}">
+                        <div class="card-img">
+                            <a class="media-thumb" data-fancybox="gallery" th:href="@{${tour.thumbnail}}">
+                                <div class="media-text">
+                                    <h3 th:text="${tour.name}"></h3>
+                                    <p class="location" th:text="${tour.itinerary}"></p>
+                                </div>
+                                <img alt="Không có hình ảnh" class="img-fluid d-block w-100"
+                                     src="" th:src="@{${tour.thumbnail}}">
+                            </a>
+                        </div>
+                        <div class="card-body pb-0">
+                            <div class="loc mx-0 mb-2">
+                                <span class="icon-room mr-1"></span>
+                                <span th:text="${tour.getDestination()}"></span>
+                            </div>
+                            <h4 class="card-title">
+                                <a class="text-decoration-none text-primary "
+                                   th:href="@{/tours/{id}(id=${tour.getId()})}"
+                                   th:text="${tour.name}"></a>
+                            </h4>
+                            <div class="card-subtitle">
+                                <div class="d-flex align-items-center mb-2"><i class="icon-clock-o mr-1"></i><span
+                                        th:text="${tour.duration}"></span></div>
+                                <div class="d-flex align-items-baseline mb-2"><i class="icon-calendar-o mr-1"></i>
+                                    <div class="flex-wrap">
+                                        <span th:each="departureDate:${tour.departureDates}"
+                                              th:text="|${#temporals.format(departureDate.date, 'dd/MM/yyyy')}; |"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <h5 class="mb-2 loc price ml-auto text-danger font-weight-bolder">
+                                <span class="mr-1"><i class="icon-tag"></i></span>
+                                <span th:text="${#numbers.formatCurrency(tour.getUnitPrice())}"></span>
+                            </h5>
+
+                        </div>
+                        <div class="card-footer bg-transparent p-0">
+                            <div class="d-flex justify-content-center">
+                                <a class="btn rounded-0 btn-block btn-outline-primary" href=""
+                                   th:href="@{/tours/{id}/booking(id=${tour.id})}" th:text="#{label.booking}"></a>
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+    </div>
+
+    <div class="untree_co-section testimonial-section mt-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-7 text-center">
+                    <h2 class="section-title text-center mb-5 mx-0">Ý kiến khách hàng</h2>
+
+                    <div class="owl-single owl-carousel no-nav">
+                        <div class="testimonial mx-auto" th:each="feedback:${feedbacks}">
+                            <figure class="img-wrap">
+                                <img alt="Image" class=""
+                                     height="70px" src="" th:src="@{${feedback.account.avatarUrl}}">
+                            </figure>
+                            <h3 class="name"
+                                th:text="${feedback.getAccount().getLastName()+ ' ' +feedback.getAccount().getFirstName() }"></h3>
+                            <blockquote>
+                                <q th:text="${feedback.getDescription()}">&ldquo;&rdquo;</q>
+                            </blockquote>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--    <div class="untree_co-section testimonial-section mt-5">-->
+    <!--        <div class="container">-->
+    <!--            <div class="row justify-content-center">-->
+    <!--                <div class="col-lg-7 text-center">-->
+    <!--                    <h2 class="section-title text-center mb-5">Địa điểm tham quan</h2>-->
+
+    <!--                    <div class="owl-single owl-carousel no-nav">-->
+    <!--                        <div class="testimonial mx-auto">-->
+    <!--                            <div class="container">-->
+    <!--                                <div class="row">-->
+    <!--                                    <div class="col-6 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0"-->
+    <!--                                         th:each="place, iStat:${places}" th:if="${iStat.index<4}">-->
+    <!--                                        <div class="media-1">-->
+    <!--                                            <a href="#" class="d-block mb-3"><img th:src="${place.getImages()}"-->
+    <!--                                                                                  alt="Image"-->
+    <!--                                                                                  class="img-fluid" src=""></a>-->
+    <!--                                            <div class="d-flex align-items-center loc mb-2">-->
+    <!--                                                <span class="icon-room mr-3"></span>-->
+    <!--                                                <span th:text="${place.getDistrict().getName()}"></span>-->
+    <!--                                            </div>-->
+    <!--                                            <div class="d-flex align-items-center">-->
+    <!--                                                <div>-->
+    <!--                                                    <h3><a href="#" th:text="${place.getName()}"></a></h3>-->
+    <!--                                                    <div class="ml-auto h-25 text-justify"-->
+    <!--                                                         th:text="${place.getDescription().substring(0, 100)+'...'}"></div>-->
+    <!--                                                </div>-->
+    <!--                                            </div>-->
+    <!--                                        </div>-->
+    <!--                                    </div>-->
+    <!--                                </div>-->
+    <!--                            </div>-->
+    <!--                        </div>-->
+    <!--                    </div>-->
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
+    <div class="untree_co-section">
+        <div class="container">
+            <div class="row justify-content-center text-center mb-5">
+                <div class="col-lg-6">
+                    <h2 class="section-title text-center mb-3">Địa điểm tham quan</h2>
+                    <p></p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0" th:each="place, iterStat:${places}"
+                     th:if="${iterStat.index<4}">
+                    <div class="media-1">
+                        <a class="d-block mb-3" href="#"><img alt="Image" class="img-fluid"
+                                                              src="" th:src="${place.getImages()}"></a>
+                        <div class="d-flex align-items-center loc mb-2">
+                            <span class="icon-room mr-3"></span>
+                            <span th:text="${place.getDistrict().getName()}"></span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <h3><a href="#" th:text="${place.getName()}"></a></h3>
+                                <div class="ml-auto h-25 text-justify"
+                                     th:text="${place.getDescription().substring(0, 100)+'...'}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</th:block>
+
+</body>
+</html>

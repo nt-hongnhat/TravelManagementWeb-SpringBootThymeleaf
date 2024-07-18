@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title></title>
+</head>
+<body>
+<footer layout:fragment="sticky-footer" class="sticky-footer bg-white">
+    <div class="container my-auto">
+        <div class="copyright text-center my-auto">
+            <span>Copyright &copy; Travel Website 2022</span>
+        </div>
+    </div>
+</footer>
+<div layout:fragment="site-footer" class="site-footer">
+    <div class="inner first">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-lg-5">
+                    <div class="widget">
+                        <h3 class="heading">Về chúng tôi</h3>
+                        <p class="text-justify">
+                            Ngày nay, chất lượng cuộc sống của con người ngày càng được nâng cao, nhu cầu giải trí của
+                            mọi người trở thành nhu cầu thiết yếu. Xuất phát từ nhu cầu đó, các công ty du lịch xuất
+                            hiện càng nhiều. Tuy nhiên, các công việc còn thực hiện một cách thủ công, còn nhiều khó
+                            khăn, hạn chế trong quá trình quản lý. Bên cạnh đó, Công nghệ Thông tin và mạng Internet
+                            phát triển mạnh mẽ đang tác động tích cực đến mọi mặt đời sống. Nhằm giúp cho việc quản lý
+                            và tổ chức các chương trình du lịch được dễ dàng, thuận tiện, em thực hiện đồ án ngành Công
+                            nghệ thông tin với đề tài “Tên đề tài”.
+                        </p>
+                    </div>
+                    <div class="widget">
+                        <ul class="list-unstyled social">
+                            <li><a href="#"><span class="icon-twitter"></span></a></li>
+                            <li><a href="#"><span class="icon-instagram"></span></a></li>
+                            <li><a href="#"><span class="icon-facebook"></span></a></li>
+                            <li><a href="#"><span class="icon-linkedin"></span></a></li>
+                            <li><a href="#"><span class="icon-dribbble"></span></a></li>
+                            <li><a href="#"><span class="icon-pinterest"></span></a></li>
+                            <li><a href="#"><span class="icon-apple"></span></a></li>
+                            <li><a href="#"><span class="icon-google"></span></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 pl-lg-5">
+                    <div class="widget">
+                        <h3 class="heading">Các trang</h3>
+                        <ul class="links list-unstyled">
+                            <li><a th:href="@{/news}">Tin tức</a></li>
+                            <li><a th:href="@{/about}">Về chúng tôi</a></li>
+                            <li><a th:href="@{/contact}">Liên lạc chúng tôi</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="widget">
+                        <h3 class="heading">Liên lạc chúng tôi</h3>
+                        <ul class="list-unstyled quick-info links">
+                            <li class="email"><a href="#">hongnhat1121@gmail.com</a></li>
+                            <li class="phone"><a href="#">+84 836 479 646</a></li>
+                            <li class="address"><a href="#">49/30/13 Nguyễn Văn Đậu, phường 6, quận Bình Thạnh, thành
+                                                            phố Hồ Chí Minh</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="inner dark">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-8 mb-3 mb-md-0 mx-auto">
+                    <p>Copyright &copy;
+                        <script>
+                            document.write(new Date().getFullYear());
+                        </script>
+                       . All Rights Reserved.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+
+

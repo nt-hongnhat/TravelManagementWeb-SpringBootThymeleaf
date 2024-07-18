@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{layouts/layout-user}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{label.booking}"></title>
+</head>
+<body>
+
+<th:block layout:fragment="banner">
+    <div class="hero hero-inner">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8 mx-auto text-center">
+                    <div class="intro-wrap">
+                        <h1 class="mb-0" th:text="${tour.tourGroup.getName()}"></h1>
+                        <p class="text-white" th:text="${tour.tourGroup.getDescription()}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="content">
+    <div class="untree_co-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-8">
+                    <div class="mb-5">
+                        <div class="owl-carousel owl-single owl-loading">
+                            <div class="item mx-1 card"
+                                 th:each="image:${#strings.listSplit(tour.image, ' ')}"
+                                 th:if="${#strings.isEmpty(tour.image)==false && #strings.equals(null, tour.image)==false}">
+                                <a class="media-thumb" data-fancybox="gallery" th:href="@{${image}}">
+                                    <img alt="Không có hình ảnh" class="img-fluid d-block w-100"
+                                         src="" th:src="@{${image}}">
+                                </a>
+                            </div>
+                            <div class="item mx-1 card"
+                                 th:if="${#strings.isEmpty(tour.image) || #strings.equals(null, tour.image)}">
+                                <a class="media-thumb" data-fancybox="gallery" th:href="@{${tour.thumbnail}}">
+                                    <img alt="Không có hình ảnh" class="img-fluid d-block w-100"
+                                         src="" th:src="@{${tour.thumbnail}}">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4">
+                    <div class="custom-block aos-init aos-animate text-justify" data-aos="fade-up">
+                        <h3 class="section-title" th:text="${tour.getName()}">
+                        </h3>
+                        <div class="row mb-2">
+                            <div class="col-4 font-weight-bold">Mã tour</div>
+                            <div class="col-8" th:text="${tour.getId()}"></div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-4 font-weight-bold">Thời gian</div>
+                            <div class="col-8" th:text="${tour.getDuration()}"></div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-4 font-weight-bold">Giá</div>
+                            <div class="col-8" th:text="${#numbers.formatCurrency(tour.getUnitPrice())}"></div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-4 font-weight-bold">Di chuyển</div>
+                            <div class="col-8" th:text="${tour.getTransfer()}"></div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-4 font-weight-bold">Xuất phát</div>
+                            <div class="col-8" th:text="${tour.getDeparturePlace()}"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center mt-5">
+                <div class="col-lg-10">
+                    <div class="custom-block aos-init aos-animate" data-aos="fade-up">
+                        <h2 class="section-title">
+                            <span><i class="icon-money"></i></span>
+                            <span>Bảng giá tour chi tiết</span>
+                        </h2>
+                        <table class="table table-hover table-responsive text-center">
+                            <thead class="font-weight-bold">
+                            <th class="font-weight-bold align-middle">Loại giá\Độ tuổi</th>
+                            <th class="font-weight-bold" th:each="tourTicket:${tourTickets}"
+                                th:text="${tourTicket.getName()}"></th>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td class="font-weight-bold  align-middle">Đơn giá (trên 1 người)</td>
+                                <td th:each="tourTicket:${tourTickets}"
+                                    th:text="${#numbers.formatCurrency(tourTicket.unitPrice)}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div th:if="${param.error}">
+                        <div class="alert alert-danger" th:text="${errorMessage}"></div>
+                    </div>
+                    <div th:if="${param.success}">
+                        <div class="alert alert-success" th:text="${success}"></div>
+                    </div>
+                    <div class="custom-block aos-init aos-animate" data-aos="fade-up">
+                        <h2 class="section-title">
+                            <span><i class="icon-user"></i></span>
+                            <span>Thông tin đặt tour</span>
+                        </h2>
+                        <form class="contact-form bg-white needs-validation" method="post" novalidate
+                              th:action="@{/tours/{id}/booking(id=${tour.getId()})}" th:object="${booking}">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group col-md-12">
+                                        <label class="text-black" for="lastName"
+                                               th:text="|#{label.lastName} *|"></label>
+                                        <input autofocus class="form-control" id="lastName" required
+                                               th:field="*{customer.lastname}"
+                                               th:value="*{customer.lastname}" type="text">
+                                        <div class="invalid-feedback">Không được bỏ trống</div>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <label class="text-black" for="firstName"
+                                               th:text="|#{label.firstName} *|"></label>
+                                        <input autofocus class="form-control" id="firstName" required
+                                               th:field="*{customer.firstname}"
+                                               th:value="*{customer.firstname}" type="text">
+                                        <div class="invalid-feedback">Không được bỏ trống</div>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <label class="text-black" for="phone" th:text="|#{label.phone} *|"></label>
+                                        <input class="form-control" id="phone" maxlength="10" required
+                                               th:field="*{customer.phone}"
+                                               th:value="*{customer.phone}" type="text">
+                                        <div class="invalid-feedback">Không được bỏ trống</div>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <label class="text-black" for="address"
+                                               th:text="|#{label.address} *|"></label>
+                                        <textarea class="form-control" id="address"
+                                                  th:field="*{customer.address}"
+                                                  th:value="*{customer.address}"></textarea>
+                                    </div>
+                                    <div class="form-group col-lg-12">
+                                        <label class="text-black" for="note">Ghi chú</label>
+                                        <textarea class="form-control" id="note" th:field="*{note}"
+                                                  th:value="*{note}"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group col-lg-12">
+                                        <label class="text-black" for="departureDate">Ngày khởi hành *</label>
+                                        <select class="form-control custom-select" id="departureDate"
+                                                name="departureDate"
+                                                th:field="*{departureDate.id}">
+                                            <option th:each="departureDate:${tour.departureDates}"
+                                                    th:text="${#temporals.format(departureDate.date, 'dd/MM/yyyy')}"
+                                                    th:value="${departureDate.id}"></option>
+                                        </select>
+                                    </div>
+                                    <div class="d-flex flex-wrap flex-row">
+                                        <div class="form-group col-md-12"
+                                             th:each="bookingDetail, iteratStat:*{bookingDetails}">
+                                            <label hidden="hidden">
+                                                <input class="form-control" readonly
+                                                       th:field="*{bookingDetails[__${iteratStat.index}__].tourTicket.id}"
+                                                       th:value="${bookingDetail.tourTicket.id}" type="number">
+                                            </label>
+
+                                            <label th:for="${bookingDetail.tourTicket.id}"
+                                                   th:text="${bookingDetail.tourTicket.name}">
+                                            </label>
+                                            <input class="form-control"
+                                                   th:field="*{bookingDetails[__${iteratStat.index}__].quantity}"
+                                                   th:id="${bookingDetail.tourTicket.id}"
+                                                   th:max="${bookingDetail.tourTicket.maxSlot}"
+                                                   th:min="${iteratStat.index<1}?1:0"
+                                                   th:value="${iteratStat.index<1}?1:0"
+                                                   type="number">
+                                            <label hidden="hidden">
+                                                <input class="form-control" readonly
+                                                       th:field="*{bookingDetails[__${iteratStat.index}__].unitPrice}"
+                                                       th:value="${bookingDetail.unitPrice}" type="number">
+                                            </label>
+                                            <div class="invalid-feedback">Chỉ còn <span
+                                                    th:text="${bookingDetail.tourTicket.maxSlot}"></span> vé
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-12 text-center">
+                                    <div class="col-md-12 mx-auto">
+                                        <button class="btn btn-primary" id="btnBooking"
+                                                th:text="#{label.booking}"
+                                                type="submit"></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <script>
+                                (function () {
+                                    'use strict'
+
+                                    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                                    var forms = document.querySelectorAll('.needs-validation')
+
+                                    // Loop over them and prevent submission
+                                    Array.prototype.slice.call(forms)
+                                        .forEach(function (form) {
+                                            form.addEventListener('submit', function (event) {
+                                                if (!form.checkValidity()) {
+                                                    event.preventDefault()
+                                                    event.stopPropagation()
+                                                }
+
+                                                form.classList.add('was-validated')
+                                            }, false)
+                                        })
+                                })()
+
+                            </script>
+
+                        </form>
+                    </div> <!-- END .custom-block -->
+                </div>
+            </div>
+
+            <div class="row justify-content-center mt-5 section">
+
+                <div class="col-lg-10">
+                    <div class="row mb-5">
+                        <div class="col text-center">
+                            <h2 class="section-title text-center">Tour liên quan</h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="custom-block aos-init" data-aos="fade-up" data-aos-delay="100">
+                            <div class="owl-single owl-carousel no-nav owl-loaded owl-drag">
+                                <div class="owl-stage-outer owl-height" style="height: 187.594px;">
+                                    <div class="owl-stage"
+                                         style="transform: translate3d(-1497px, 0px, 0px); transition: all 0.8s ease 0s; width: 3493px;">
+                                        <div class="owl-item cloned" style="width: 499px;">
+                                            <div class="testimonial mx-auto">
+                                                <figure class="img-wrap">
+                                                    <img alt="Image" class="img-fluid"
+                                                         src="/img/person_3.jpg">
+                                                </figure>
+                                                <h3 class="name">Lukas Devlin</h3>
+                                                <blockquote>
+                                                    <p>“There live the blind texts. Separated they live in
+                                                        Bookmarksgrove right at the coast of the Semantics, a large
+                                                        language ocean.”</p>
+                                                </blockquote>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="owl-nav disabled">
+                                    <div class="owl-prev"><span class="icon-keyboard_backspace"></span></div>
+                                    <div class="owl-next"><span class="icon-keyboard_backspace"></span></div>
+                                </div>
+                                <div class="owl-dots">
+                                    <div class="owl-dot" data-index="0"><span></span></div>
+                                    <div class="owl-dot active" data-index="1"><span></span></div>
+                                    <div class="owl-dot" data-index="2"><span></span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</th:block>
+
+</body>
+</html>
