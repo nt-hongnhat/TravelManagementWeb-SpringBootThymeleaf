@@ -10,14 +10,14 @@ import org.springframework.validation.Errors;
 
 @Component
 public class GlobalValidateImpl implements GlobalValidate {
-	
-	@Override
-	public void validateNotNull(Object object, String table, String field, Errors errors
-	) {
-		if (Objects.isNull(object)) {
-			errors.rejectValue(field,
-					String.format("%s.%s", table, StringUtils.upperCase(ErrorCode.NOT_NULL)),
-					String.format("%s %s", field, DefaultMessage.NULL));
-		}
-	}
+
+  @Override
+  public void validateNotNull(Object object, String table, String field, Errors errors) {
+    if (Objects.isNull(object)) {
+      errors.rejectValue(
+          field,
+          String.format("%s.%s", table, StringUtils.upperCase(ErrorCode.NOT_NULL)),
+          String.format("%s %s", field, DefaultMessage.NULL));
+    }
+  }
 }
