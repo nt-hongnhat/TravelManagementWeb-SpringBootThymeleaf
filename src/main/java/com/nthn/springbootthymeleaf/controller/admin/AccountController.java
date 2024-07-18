@@ -10,6 +10,7 @@ import com.nthn.springbootthymeleaf.service.CloudinaryService;
 import com.nthn.springbootthymeleaf.service.PermissionService;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -35,7 +36,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequiredArgsConstructor
 public class AccountController {
 
-  public static final String ACCOUNT = "account";
+  public static final String ATTRIBUTE_NAME_ACCOUNT = "account";
+
+  public static final String ACCOUNT = ATTRIBUTE_NAME_ACCOUNT;
 
   private final AccountService accountService;
 
@@ -71,9 +74,9 @@ public class AccountController {
   }
 
   @GetMapping("/{id}")
-  public String details(@Validated @NotNull @PathVariable("id") Integer id, Model model) {
+  public String details(@Validated @NotNull @PathVariable Integer id, Model model) {
 
-    model.addAttribute("account", accountService.getAccount(id));
+    model.addAttribute(ATTRIBUTE_NAME_ACCOUNT, accountService.getAccount(id));
     return "views/admin/account/create";
   }
 
@@ -87,40 +90,48 @@ public class AccountController {
   @PostMapping("/save")
   public String save(
       @RequestParam("image") MultipartFile multipartFile,
-      @Validated @ModelAttribute("account") Account account,
+      @Validated @ModelAttribute Account account,
       Model model,
       BindingResult result,
       final RedirectAttributes redirectAttributes,
       HttpServletRequest httpServletRequest)
       throws IOException {
 
-    model.addAttribute("account", account);
+    model.addAttribute(ATTRIBUTE_NAME_ACCOUNT, account);
+
     String path = httpServletRequest.getServletPath().replace("save", "");
-    path += account.getId() == null ? "create" : account.getId();
+    path += Objects.isNull(account.getId()) ? "create" : account.getId();
+
     if (result.hasErrors()) {
       model.addAttribute("permissions", permissionService.getAllPermission());
       redirectAttributes.addFlashAttribute("errorMessage", result.getAllErrors().toString());
-      return "redirect:" + path + "?error";
-    }
-    try {
-      if (multipartFile != null) {
-        Map map = cloudinaryService.upload(multipartFile);
-        account.setAvatarUrl(map.get("url").toString());
-      } else {
-        account.setAvatarUrl(account.getAvatarUrl());
-      }
-      account =
-          account.getId() == null
-              ? accountService.create(account)
-              : accountService.update(account.getId(), account);
-    } catch (Exception exception) {
-      model.addAttribute("permissions", permissionService.getAllPermission());
-      model.addAttribute("errorMessage", "Lỗi" + exception.getMessage());
+
       return "redirect:" + path + "?error";
     }
 
-    redirectAttributes.addFlashAttribute("successMessage", "Tài khoản cập nhật thành công!");
-    redirectAttributes.addFlashAttribute("account", account);
+    try {
+      if (Objects.nonNull(multipartFile)) {
+        account.setAvatarUrl(cloudinaryService.upload(multipartFile).get("url").toString());
+      }
+
+      account =
+          Objects.isNull(account.getId())
+              ? accountService.create(account)
+              : accountService.update(account.getId(), account);
+    } catch (Exception exception) {
+      model.addAllAttributes(
+          Map.of(
+              "permissions",
+              permissionService.getAllPermission(),
+              "errorMessage",
+              "Lỗi" + exception.getMessage()));
+
+      return "redirect:" + path + "?error";
+    }
+
+    redirectAttributes
+        .addFlashAttribute("successMessage", "Tài khoản cập nhật thành công!")
+        .addFlashAttribute(ATTRIBUTE_NAME_ACCOUNT, account);
     return "redirect:" + path + "?success";
   }
 }

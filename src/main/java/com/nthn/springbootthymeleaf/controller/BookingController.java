@@ -45,104 +45,126 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @Transactional
-@PreAuthorize("isAuthenticated()") //Phải đảm bảo là user login để có principal.id
+@PreAuthorize("isAuthenticated()") // Phải đảm bảo là user login để có principal.id
 @RequiredArgsConstructor
 public class BookingController {
-	
-	private final TourService tourService;
-	
-	private final BookingService bookingService;
-	
-	private final TourGroupService tourGroupService;
-	
-	private final ProvinceService provinceService;
-	
-	private final FeedbackService feedbackService;
-	
-	private final PlacesService placesService;
-	
-	private final BookingDetailService bookingDetailService;
-	
-	private final CustomerService customerService;
-	
-	private final AccountService accountService;
-	
-	private final TourTicketService tourTicketService;
-	
-	private final PaypalService paypalService;
-	
-	private final PaymentService paymentService;
-	
-	private final DepartureDateService departureDateService;
-	
-	private Account account;
-	
-	@ModelAttribute
-	public void commonAttributes(@NotNull Model model, Principal principal) {
-		if (Objects.nonNull(principal)) {
-			account = accountService.getAccountByUsername(principal.getName());
-		}
-		
-		model.addAttribute(Map.of(AttributeName.TOUR_GROUPS, this.tourGroupService.getTourGroups(),
-				AttributeName.PROVINCES, this.provinceService.getProvinces(""), AttributeName.FEEDBACKS,
-				this.feedbackService.getFeedbacks(4.0), AttributeName.PLACES,
-				this.placesService.getPlaces(), AttributeName.DURATIONS, this.tourService.getDurations(),
-				AttributeName.CURRENT_USER, account));
-	}
-	
-	@GetMapping("/tours/{id}/booking")
-	public String index(@PathVariable("id") Integer id, Model model) {
-		final Booking booking = new Booking();
-		final Tour tour = tourService.getById(id);
-		final List<TourTicket> tourTickets = tour.getTourTickets();
-		final Customer customer = customerService.getCustomerByAccount(account.getId());
-		booking.setCustomer(Objects.nonNull(customer) ? customer
-						: new Customer().setFirstname(account.getFirstName())
-								.setLastname(account.getLastName())
-								.setAccount(account))
-				.setBookingDetails(tourTickets.stream()
-						.map(tourTicket -> new BookingDetail(booking, tourTicket))
-						.toList());
-		model.addAllAttributes(
-				Map.of(AttributeName.TOUR, tour, AttributeName.BOOKING, booking, AttributeName.TOUR_TICKETS,
-						tourTickets));
-		return "views/booking/booking";
-	}
-	
-	@PostMapping("/tours/{id}/booking")
-	public String booking(@PathVariable("id") Integer id, @ModelAttribute("booking") Booking booking,
-			Model model, BindingResult result, RedirectAttributes redirectAttributes) {
-		
-		final Customer customer = customerService.getCustomerByPhone(booking.getCustomer().getPhone());
-		booking.setCustomer(Objects.nonNull(customer) ? customer
-				: customerService.addCustomer(booking.getCustomer().setAccount(account)));
-		
-		if (result.hasErrors()) {
-			model.addAttribute(AttributeName.BOOKING, booking);
-			redirectAttributes.addFlashAttribute(AttributeName.ERROR_MESSAGE,
-					result.getAllErrors().toString());
-			return "redirect:/tours/{id}/booking?error";
-		}
-		
-		redirectAttributes.addFlashAttribute(AttributeName.SUCCESS_MESSAGE, "Đặt tour thành công!");
-		return "redirect:/booking/" + bookingService.addBooking(booking).getId();
-	}
-	
-	
-	@GetMapping(EndpointConstants.BOOKING)
-	public String payment(@PathVariable Integer id, Model model) {
-		final Booking booking = bookingService.getById(id);
-		
-		model.addAllAttributes(Map.of(AttributeName.BOOKING, booking, AttributeName.PAYMENTS,
-				paymentService.findAll().stream().peek(payment -> {
-					final BigDecimal total = booking.getTotal();
-					if (Objects.equals(payment.getCurrency(), CurrencyConstants.VND)) {
-						payment.setTotal(total.doubleValue());
-					} else if (Objects.equals(payment.getCurrency(), CurrencyConstants.USD)) {
-						payment.setTotal(
-								total.divide(BigDecimal.valueOf(25345), 2, RoundingMode.HALF_UP).doubleValue());
-					}
-				}).toList(), AttributeName.PAYMENT, new Payment()));
-		return ViewPath.BILL;
-	}
+
+  private final AccountService accountService;
+  private final BookingService bookingService;
+  private final CustomerService customerService;
+  private final FeedbackService feedbackService;
+  private final PaymentService paymentService;
+  private final PlacesService placesService;
+  private final ProvinceService provinceService;
+  private final TourGroupService tourGroupService;
+  private final TourService tourService;
+  private final TourTicketService tourTicketService;
+
+  private Account account;
+
+  @PostMapping("/tours/{id}/booking")
+  public String booking(
+      @PathVariable Integer id,
+      @ModelAttribute Booking booking,
+      Model model,
+      BindingResult result,
+      RedirectAttributes redirectAttributes) {
+
+    final Customer customer = customerService.getCustomerByPhone(booking.getCustomer().getPhone());
+    booking.setCustomer(
+        Objects.nonNull(customer)
+            ? customer
+            : customerService.addCustomer(booking.getCustomer().setAccount(account)));
+
+    if (result.hasErrors()) {
+      model.addAttribute(AttributeName.BOOKING, booking);
+      redirectAttributes.addFlashAttribute(
+          AttributeName.ERROR_MESSAGE, result.getAllErrors().toString());
+      return "redirect:/tours/{id}/booking?error";
+    }
+
+    bookingService.save(booking);
+
+    redirectAttributes.addFlashAttribute(AttributeName.SUCCESS_MESSAGE, "Đặt tour thành công!");
+    return "redirect:/booking/" + bookingService.addBooking(booking).getId();
+  }
+
+  @ModelAttribute
+  public void commonAttributes(@NotNull Model model, Principal principal) {
+    if (Objects.nonNull(principal)) {
+      account = accountService.getAccountByUsername(principal.getName());
+    }
+
+    model.addAttribute(
+        Map.of(
+            AttributeName.TOUR_GROUPS,
+            this.tourGroupService.getTourGroups(),
+            AttributeName.PROVINCES,
+            this.provinceService.getProvinces(""),
+            AttributeName.FEEDBACKS,
+            this.feedbackService.getFeedbacks(4.0),
+            AttributeName.PLACES,
+            this.placesService.getPlaces(),
+            AttributeName.DURATIONS,
+            this.tourService.getDurations(),
+            AttributeName.CURRENT_USER,
+            account));
+  }
+
+  @GetMapping("/tours/{id}/booking")
+  public String index(@PathVariable("id") Integer id, Model model) {
+    final Booking booking = new Booking();
+    final Tour tour = tourService.getById(id);
+    final List<TourTicket> tourTickets = tour.getTourTickets();
+    final Customer customer = customerService.getCustomerByAccount(account.getId());
+    booking
+        .setCustomer(
+            Objects.nonNull(customer)
+                ? customer
+                : new Customer()
+                    .setFirstname(account.getFirstName())
+                    .setLastname(account.getLastName())
+                    .setAccount(account))
+        .setBookingDetails(
+            tourTickets.stream()
+                .map(tourTicket -> new BookingDetail(booking, tourTicket))
+                .toList());
+    model.addAllAttributes(
+        Map.of(
+            AttributeName.TOUR,
+            tour,
+            AttributeName.BOOKING,
+            booking,
+            AttributeName.TOUR_TICKETS,
+            tourTickets));
+    return "views/booking/booking";
+  }
+
+  @GetMapping(EndpointConstants.BOOKING)
+  public String payment(@PathVariable Integer id, Model model) {
+    final Booking booking = bookingService.getById(id);
+
+    model.addAllAttributes(
+        Map.of(
+            AttributeName.BOOKING,
+            booking,
+            AttributeName.PAYMENTS,
+            paymentService.findAll().stream()
+                .peek(
+                    payment -> {
+                      final BigDecimal total = booking.getTotal();
+                      if (Objects.equals(payment.getCurrency(), CurrencyConstants.VND)) {
+                        payment.setTotal(total.doubleValue());
+                      } else if (Objects.equals(payment.getCurrency(), CurrencyConstants.USD)) {
+                        payment.setTotal(
+                            total
+                                .divide(BigDecimal.valueOf(25345), 2, RoundingMode.HALF_UP)
+                                .doubleValue());
+                      }
+                    })
+                .toList(),
+            AttributeName.PAYMENT,
+            new Payment()));
+    return ViewPath.BILL;
+  }
 }

@@ -26,65 +26,77 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping(EndpointConstants.DASHBOARD + EndpointConstants.CATEGORIES)
 @RequiredArgsConstructor
 public class CategoryController {
-	
-	private final AccountService accountService;
-	
-	private final CategoryService categoryService;
-	
-	private final ProvinceService provinceService;
-	
-	private final TourGroupService tourGroupService;
-	
-	@ModelAttribute
-	public void commonAttributes(Model model, HttpSession httpSession) {
-		final User currentUser = (User) httpSession.getAttribute(AttributeName.CURRENT_USER);
-		model.addAllAttributes(Map.of(AttributeName.CATEGORIES, this.categoryService.getCategories(),
-				AttributeName.PROVINCES, this.provinceService.getProvinces(), AttributeName.CURRENT_USER,
-				currentUser, AttributeName.AVATAR,
-				accountService.getAccountByUsername(currentUser.getUsername()).getPhotosImagePath()));
-	}
-	
-	@GetMapping
-	public String index(Model model) {
-		model.addAttribute(AttributeName.CATEGORIES, categoryService.getCategories());
-		return "views/admin/categories/list";
-	}
-	
-	@GetMapping("/{id}/create")
-	public String create(Model model, @PathVariable int id) {
-		final Category category = categoryService.getCategoryById(id);
-		
-		model.addAllAttributes(Map.of(AttributeName.CATEGORY, category, AttributeName.TOUR_GROUP,
-				new TourGroup().setCategory(category)));
-		
-		return "views/admin/categories/create";
-	}
-	
-	@PostMapping("/create")
-	public String create(@ModelAttribute("category") Category category, Model model,
-			RedirectAttributes redirectAttributes) {
-		if (Objects.nonNull(categoryService.getCategoryByName(category.getName()))) {
-			if (Objects.nonNull(categoryService.getByLinkStatus(category.getLinkStatic()))) {
-				categoryService.create(category);
-				
-				return "redirect:/dashboard/categories/" + category.getId();
-			} else {
-				redirectAttributes.addFlashAttribute(AttributeName.CATEGORY, category);
-				redirectAttributes.addFlashAttribute("linkError", "Đường dẫn đã tồn tại.");
-				
-				return "redirect:/dashboard/categories/create?error";
-			}
-		}
-		
-		redirectAttributes.addFlashAttribute(AttributeName.CATEGORY, category);
-		redirectAttributes.addFlashAttribute("nameError", "Tên danh mục đã tồn tại.");
-		
-		return "views/admin/categories/create?error";
-	}
-	
-	@GetMapping(EndpointConstants.PATH_VARIABLE_ID)
-	public String edit(@PathVariable Integer id, Model model) {
-		model.addAttribute(AttributeName.CATEGORY, categoryService.getCategoryById(id));
-		return "views/admin/categories/details";
-	}
+
+  private final AccountService accountService;
+  private final CategoryService categoryService;
+  private final ProvinceService provinceService;
+  private final TourGroupService tourGroupService;
+
+  @ModelAttribute
+  public void commonAttributes(Model model, HttpSession httpSession) {
+    final User currentUser = (User) httpSession.getAttribute(AttributeName.CURRENT_USER);
+
+    model.addAllAttributes(
+        Map.of(
+            AttributeName.CATEGORIES,
+            this.categoryService.getCategories(),
+            AttributeName.PROVINCES,
+            this.provinceService.getProvinces(),
+            AttributeName.CURRENT_USER,
+            currentUser,
+            AttributeName.AVATAR,
+            accountService.getAccountByUsername(currentUser.getUsername()).getPhotosImagePath()));
+  }
+
+  @GetMapping("/{id}/create")
+  public String create(Model model, @PathVariable int id) {
+    final Category category = categoryService.getCategoryById(id);
+
+    model.addAllAttributes(
+        Map.of(
+            AttributeName.CATEGORY,
+            category,
+            AttributeName.TOUR_GROUP,
+            new TourGroup().setCategory(category)));
+
+    return "views/admin/categories/create";
+  }
+
+  @PostMapping("/create")
+  public String create(@ModelAttribute Category category, RedirectAttributes redirectAttributes) {
+
+    if (Objects.nonNull(categoryService.getCategoryByName(category.getName()))) {
+      if (Objects.nonNull(categoryService.getByLinkStatus(category.getLinkStatic()))) {
+        categoryService.create(category);
+
+        return "redirect:/dashboard/categories/" + category.getId();
+      } else {
+        redirectAttributes
+            .addFlashAttribute(AttributeName.CATEGORY, category)
+            .addFlashAttribute("linkError", "Đường dẫn đã tồn tại.");
+
+        return "redirect:/dashboard/categories/create?error";
+      }
+    }
+
+    redirectAttributes
+        .addFlashAttribute(AttributeName.CATEGORY, category)
+        .addFlashAttribute("nameError", "Tên danh mục đã tồn tại.");
+
+    return "views/admin/categories/create?error";
+  }
+
+  @GetMapping(EndpointConstants.PATH_VARIABLE_ID)
+  public String edit(@PathVariable Integer id, Model model) {
+
+    model.addAttribute(AttributeName.CATEGORY, categoryService.getCategoryById(id));
+    return "views/admin/categories/details";
+  }
+
+  @GetMapping
+  public String index(Model model) {
+
+    model.addAttribute(AttributeName.CATEGORIES, categoryService.getCategories());
+    return "views/admin/categories/list";
+  }
 }

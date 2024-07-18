@@ -1,8 +1,7 @@
 package com.nthn.springbootthymeleaf.dto;
 
-import lombok.*;
-
 import java.time.LocalDate;
+import lombok.*;
 
 @Data
 @Setter
@@ -13,9 +12,9 @@ public class SearchHistoryDTO {
     
     private LocalDate fromDate;
     
-    private LocalDate toDate;
-    
     private String statusPayment;
+    
+    private LocalDate toDate;
     
     @Override
     public String toString() {

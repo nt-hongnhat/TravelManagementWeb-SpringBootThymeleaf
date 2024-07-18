@@ -11,15 +11,11 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @RequiredArgsConstructor
 public class CloudinaryService {
-	
-	private final Cloudinary cloudinary;
-	
-	@SuppressWarnings("rawtypes")
-	public Map upload(@NotNull MultipartFile file) {
-		try {
-			return this.cloudinary.uploader().upload(file.getBytes(), Map.of());
-		} catch (IOException e) {
-			throw new RuntimeException(ErrorMessage.UPLOAD_IMAGE_FAILED);
-		}
-	}
+
+  private final Cloudinary cloudinary;
+
+  @SuppressWarnings("rawtypes")
+  public Map upload(@NotNull MultipartFile file) throws IOException {
+    return this.cloudinary.uploader().upload(file.getInputStream(), Map.of());
+  }
 }

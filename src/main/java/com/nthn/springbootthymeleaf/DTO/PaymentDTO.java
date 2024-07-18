@@ -15,17 +15,17 @@ import java.math.RoundingMode;
 public class PaymentDTO {
    
     
-    private BigDecimal total;
+    private double amount;
     
     private String currency;
     
-    private String method;
+    private String description;
     
     private String intent;
     
-    private String description;
+    private String method;
     
-    private double amount;
+    private BigDecimal total;
     
     public Double calculateTotal() {
         return total.divide(BigDecimal.valueOf(25345), 2, RoundingMode.HALF_UP).doubleValue();

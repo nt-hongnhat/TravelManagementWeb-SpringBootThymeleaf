@@ -1,35 +1,38 @@
 package com.nthn.springbootthymeleaf.service.impl;
 
+import com.nthn.springbootthymeleaf.DTO.BookingStatisticsResult;
 import com.nthn.springbootthymeleaf.repository.BookingRepository;
 import com.nthn.springbootthymeleaf.service.StatisticService;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.IntStream;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Service
+@RequiredArgsConstructor
 public class StatisticServiceImpl implements StatisticService {
-    @Autowired
-    private BookingRepository bookingRepository;
+  private final BookingRepository bookingRepository;
 
-    @Override
-    public List<Object[]> getRevenueMonthly(int month, int year) {
-        return bookingRepository.getRevenueMonthly(month, year);
-    }
+  @Override
+  public List<BookingStatisticsResult> getRevenueAnnual(int year) {
 
+    return bookingRepository.getRevenueAnnual(year).stream()
+        .map(
+            statisticResults ->
+                new BookingStatisticsResult(
+                    (Integer) statisticResults[0], (BigDecimal) statisticResults[1]))
+        .toList();
+  }
 
-    @Override
-    public List<Object[]> getRevenueAnnual(int year) {
-        return bookingRepository.getRevenueAnnual(year);
-    }
+  @Override
+  public BookingStatisticsResult getRevenueMonthly(int month, int year) {
+    return bookingRepository.getRevenueMonthly(month, year);
+  }
 
-    @Override
-    public List<Object[]> getRevenueMonthlyByYear(int year) {
-        List<Object[]> objects = new ArrayList<>();
-        for (int i = 0; i < 12; i++) {
-            objects.add(bookingRepository.getRevenueMonthly(i, year).get(0));
-        }
-        return objects;
-    }
+  @Override
+  public List<BookingStatisticsResult> getRevenueMonthlyByYear(int year) {
+
+    return IntStream.range(1, 13).mapToObj(month -> getRevenueMonthly(month, year)).toList();
+  }
 }

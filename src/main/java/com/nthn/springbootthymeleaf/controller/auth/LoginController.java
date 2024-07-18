@@ -1,5 +1,6 @@
 package com.nthn.springbootthymeleaf.controller.auth;
 
+import com.nthn.springbootthymeleaf.constants.EndpointConstants;
 import com.nthn.springbootthymeleaf.entity.Account;
 import com.nthn.springbootthymeleaf.service.AccountService;
 import com.nthn.springbootthymeleaf.utils.WebUtils;
@@ -16,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,84 +32,92 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequiredArgsConstructor
 public class LoginController {
-	
-	private final AccountService accountService;
-	
-	private final AccountValidator accountValidator;
-	
-	@InitBinder
-	protected void initBinder(@NotNull WebDataBinder webDataBinder) {
-		final Object target = webDataBinder.getTarget();
-		if (Objects.isNull(target)) {
-			return;
-		}
-		
-		log.info("Target: {}", target);
-		
-		if (Objects.equals(target.getClass(), Account.class)) {
-			webDataBinder.setValidator(accountValidator);
-		}
-	}
-	
-	@GetMapping(Url.LOGIN)
-	public String login() {
-		return "views/auth/login";
-	}
-	
-	@GetMapping(Url.REGISTER)
-	public String register(Model model) {
-		model.addAttribute(Key.ACCOUNT, new Account());
-		return "views/auth/register";
-	}
-	
-	@PostMapping(Url.REGISTER)
-	public String register(@Valid @ModelAttribute(Key.ACCOUNT) Account accountRegistration,
-			BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
-		if (result.hasErrors()) {
-			redirectAttributes.addAllAttributes(
-					Map.of("usernameErrors", result.getFieldErrors(Key.USERNAME), "emailErrors",
-							result.getFieldErrors(Key.EMAIL), Key.ACCOUNT, accountRegistration));
-			model.addAttribute(Key.ACCOUNT, accountRegistration);
-			return "redirect:/register?error";
-		}
-		
-		try {
-			accountService.register(accountRegistration);
-		} catch (Exception exception) {
-			redirectAttributes.addFlashAttribute(Key.ACCOUNT, accountRegistration);
-			model.addAttribute(Key.ACCOUNT, accountRegistration);
-			log.error("Exception: {}", exception.getMessage());
-			return "redirect:/register?error";
-		}
-		redirectAttributes.addFlashAttribute(Key.SUCCESS, "Đăng ký tài khoản thành công!");
-		return "redirect:/register?success";
-	}
-	
-	
-	@PostMapping("/logout")
-	public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
-		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if (Objects.nonNull(auth)) {
-			// TODO: check auth
-			// new SecurityContextLogoutHandler().logout(request, response, auth);
-		}
-		return "redirect:/login?logout";
-	}
-	
-	
-	@GetMapping("/403")
-	public String accessDenied(Model model, Principal principal) {
-		
-		if (principal != null) {
-			User loginUser = (User) ((Authentication) principal).getPrincipal();
-			
-			String userInfo = WebUtils.toString(loginUser);
-			
-			model.addAttribute("userInfo", userInfo);
-			System.out.println(userInfo);
-			String message = "Chào " + principal.getName() + "! Bạn không có quyền truy cập trang này!";
-			model.addAttribute("message", message);
-		}
-		return "views/403";
-	}
+
+  public static final String ATTRIBUTE_NAME_ACCOUNT = "account";
+
+  private final AccountService accountService;
+
+  private final AccountValidator accountValidator;
+
+  @GetMapping("/403")
+  public String accessDenied(Model model, Principal principal) {
+
+    if (Objects.nonNull(principal)) {
+      final User loginUser = (User) ((Authentication) principal).getPrincipal();
+
+      model.addAllAttributes(
+          Map.of(
+              "userInfo",
+              WebUtils.toString(loginUser),
+              "message",
+              String.format("Access Denied for %s", principal.getName())));
+    }
+    return "views/403";
+  }
+
+  @InitBinder
+  protected void initBinder(@NotNull WebDataBinder webDataBinder) {
+    final Object target = webDataBinder.getTarget();
+    if (Objects.isNull(target)) {
+      return;
+    }
+
+    log.info("Target: {}", target);
+
+    if (Objects.equals(target.getClass(), Account.class)) {
+      webDataBinder.setValidator(accountValidator);
+    }
+  }
+
+  @GetMapping(EndpointConstants.LOGIN)
+  public String login() {
+    return "views/auth/login";
+  }
+
+  @PostMapping("/logout")
+  public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
+    final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    if (Objects.nonNull(auth)) {
+      // TODO: check auth
+      new SecurityContextLogoutHandler().logout(request, response, auth);
+    }
+    return "redirect:/login?logout";
+  }
+
+  @GetMapping(EndpointConstants.REGISTER)
+  public String register(Model model) {
+    model.addAttribute(ATTRIBUTE_NAME_ACCOUNT, new Account());
+    return "views/auth/register";
+  }
+
+  @PostMapping(EndpointConstants.REGISTER)
+  public String register(
+      @Valid @ModelAttribute Account accountRegistration,
+      BindingResult result,
+      Model model,
+      final RedirectAttributes redirectAttributes) {
+    if (result.hasErrors()) {
+      redirectAttributes.addAllAttributes(
+          Map.of(
+              "usernameErrors",
+              result.getFieldErrors("username"),
+              "emailErrors",
+              result.getFieldErrors("email"),
+              "account",
+              accountRegistration));
+      model.addAttribute("account", accountRegistration);
+      return "redirect:/register?error";
+    }
+
+    try {
+      accountService.register(accountRegistration);
+    } catch (Exception exception) {
+      redirectAttributes.addFlashAttribute("account", accountRegistration);
+      model.addAttribute("account", accountRegistration);
+      log.error("Exception: {}", exception.getMessage());
+      return "redirect:/register?error";
+    }
+    redirectAttributes.addFlashAttribute("successMessage", "Đăng ký tài khoản thành công!");
+    return "redirect:/register?success";
+  }
 }

@@ -1,9 +1,13 @@
 package com.nthn.springbootthymeleaf.utils;
 
+import com.nthn.springbootthymeleaf.constants.FormatConstants;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicBoolean;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.util.ObjectUtils;
@@ -31,5 +35,10 @@ public class WebUtils {
       builder.append(")");
     }
     return builder.toString();
+  }
+
+  public static @NotNull LocalDate getLocalDate(final String valueDate) {
+
+    return LocalDate.parse(valueDate, DateTimeFormatter.ofPattern(FormatConstants.YYYY_MM_DD));
   }
 }
