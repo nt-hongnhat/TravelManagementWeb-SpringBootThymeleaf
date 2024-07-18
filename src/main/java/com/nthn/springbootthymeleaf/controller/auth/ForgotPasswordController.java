@@ -3,7 +3,6 @@ package com.nthn.springbootthymeleaf.controller.auth;
 import com.nthn.springbootthymeleaf.constants.EndpointConstants;
 import com.nthn.springbootthymeleaf.entity.Account;
 import com.nthn.springbootthymeleaf.service.AccountService;
-import com.nthn.springbootthymeleaf.utils.Utility;
 import java.io.UnsupportedEncodingException;
 import java.util.Objects;
 import javax.mail.MessagingException;
