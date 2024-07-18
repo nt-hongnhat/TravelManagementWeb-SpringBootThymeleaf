@@ -1,8 +1,8 @@
-package com.nthn.springbootthymeleaf.validation.impl;
+package com.nthn.springbootthymeleaf.validator.impl;
 
 import com.nthn.springbootthymeleaf.constants.ValidatorConstants.DefaultMessage;
 import com.nthn.springbootthymeleaf.constants.ValidatorConstants.ErrorCode;
-import com.nthn.springbootthymeleaf.validation.GlobalValidate;
+import com.nthn.springbootthymeleaf.validator.GlobalValidate;
 import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;

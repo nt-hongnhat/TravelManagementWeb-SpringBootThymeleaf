@@ -1,4 +1,4 @@
-package com.nthn.springbootthymeleaf.validation;
+package com.nthn.springbootthymeleaf.validator;
 
 import com.nthn.springbootthymeleaf.constants.ValidatorConstants.Field;
 import com.nthn.springbootthymeleaf.constants.ValidatorConstants.Table;

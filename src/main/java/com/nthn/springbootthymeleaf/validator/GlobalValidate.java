@@ -1,4 +1,4 @@
-package com.nthn.springbootthymeleaf.validation;
+package com.nthn.springbootthymeleaf.validator;
 
 import org.springframework.validation.Errors;
 

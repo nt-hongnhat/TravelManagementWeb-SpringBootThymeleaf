@@ -24,7 +24,7 @@ import com.nthn.springbootthymeleaf.service.TourGroupService;
 import com.nthn.springbootthymeleaf.service.TourScheduleService;
 import com.nthn.springbootthymeleaf.service.TourService;
 import com.nthn.springbootthymeleaf.service.TourTicketService;
-import com.nthn.springbootthymeleaf.validation.TourValidator;
+import com.nthn.springbootthymeleaf.validator.TourValidator;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;

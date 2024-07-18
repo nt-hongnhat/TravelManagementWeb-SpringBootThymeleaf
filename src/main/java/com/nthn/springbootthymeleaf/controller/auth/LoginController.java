@@ -3,7 +3,7 @@ package com.nthn.springbootthymeleaf.controller.auth;
 import com.nthn.springbootthymeleaf.entity.Account;
 import com.nthn.springbootthymeleaf.service.AccountService;
 import com.nthn.springbootthymeleaf.utils.WebUtils;
-import com.nthn.springbootthymeleaf.validation.AccountValidator;
+import com.nthn.springbootthymeleaf.validator.AccountValidator;
 import java.security.Principal;
 import java.util.Map;
 import java.util.Objects;
