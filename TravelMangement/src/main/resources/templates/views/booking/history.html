@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout-user}">
+<html lang="en" layout:decorate="~{layouts/layout-user}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title th:text="#{label.historyBooking}"></title>
     <th:block layout:fragment="style">
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap4.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
-
+        <link href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css" rel="stylesheet">
+        <link href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet">
     </th:block>
 </head>
 <body>
@@ -18,26 +17,6 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-12">
-                    <form class="form" method="get" th:action="@{/history}">
-                        <div class="row mb-2 mx-0">
-                            <div class="col-sm-12 col-md-4 mb-3 mb-lg-0 col-lg-4">
-                                <label for="bookingDate">Thời gian đặt tour</label>
-                                <input type="text" class="form-control" name="daterange" id="bookingDate">
-                            </div>
-                            <div class="col-sm-12 col-md-4 mb-3 mb-lg-0 col-lg-4">
-                                <label for="statusPayment">Tình trạng thanh toán</label>
-                                <select name="statusPayment" id="statusPayment"
-                                        class="form-control custom-select">
-                                    <option value="" th:text="'Chọn trạng thái đơn đặt tour'" selected></option>
-                                    <option value="true" th:text="'Đã thanh toán'"></option>
-                                    <option value="false" th:text="'Chưa thanh toán'"></option>
-                                </select>
-                            </div>
-                            <div class="col-sm-12 col-md-4 mb-3 mb-lg-0 col-lg-4 my-0 py-3">
-                                <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
-                            </div>
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>
@@ -47,23 +26,59 @@
 <th:block layout:fragment="content">
     <div class="untree_co-section py-5">
         <div class="container">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">
-                        <span th:text="'Đã đặt: '"></span>
-                        <span class="text-danger" th:text="${totalItems} + ' chuyến du lịch'"></span>
-                    </h6>
+            <div class="col-12">
+                <form class="" method="get" th:action="@{/history}" th:object="${searchHistory}">
+                    <div class="row mb-2 mx-0 justify-content-between">
+                        <div class="form-group m-auto d-inline-flex ">
+                            <span class="text-nowrap m-auto font-weight-bold text-nowrap">Thời gian khởi hành</span>
+                            <label class="text-nowrap m-auto px-2" for="fromDate">Từ</label>
+                            <input class="form-control m-auto" id="fromDate" name="fromDate"
+                                   th:value="${searchHistory.fromDate}"
+                                   type="date">
+                            <label class="text-nowrap m-auto px-2" for="toDate">Đến</label>
+                            <input class="form-control m-auto" id="toDate" name="toDate"
+                                   th:value="${searchHistory.toDate}"
+                                   type="date">
+                        </div>
+                        <div class="form-group m-auto d-inline-flex">
+                            <label class="text-nowrap m-auto px-2 font-weight-bold" for="statusPayment">Trạng
+                                thái</label>
+                            <select class="form-control custom-select m-auto" id="statusPayment"
+                                    name="statusPayment" th:selected="*{statusPayment}">
+                                <option th:selected="*{statusPayment==null}" th:text="'Tất cả'"
+                                        value=""></option>
+                                <option th:selected="*{statusPayment=='true'}" th:text="'Đã thanh toán'"
+                                        value="true"></option>
+                                <option th:selected="*{statusPayment=='false'}" th:text="'Chưa thanh toán'"
+                                        value="false"></option>
+                            </select>
+                        </div>
+                        <div class="form-group m-auto">
+                            <input class="btn btn-primary form-control" type="submit" value="Tìm kiếm">
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        <div class="container mt-4 mb-4">
+            <div class="card shadow">
+                <div class="card-header  py-3">
+                    <h5 class="m-0 font-weight-bold text-primary">Lịch sử đặt tour</h5>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped table-bordered" id="dataTable" width="100%" cellspacing="0">
-                            <thead>
-                            <tr class="align-middle text-center">
-                                <th th:text="#{label.id}"></th>
-                                <th th:text="'Tên tour'"></th>
-                                <th th:text="'Ngày đặt'"></th>
-                                <th th:text="'Tổng tiền'"></th>
-                                <th th:text="'Trạng thái'"></th>
+                        <table class="table table-borderless table-hover mb-0" id="dataTable">
+                            <thead class="border-bottom">
+                            <tr class="align-middle text-nowrap">
+                                <th class="text-muted text-left py-md-3" th:text="#{label.id}"></th>
+                                <th class="text-muted text-left py-md-3" th:text="'Tên tour'"></th>
+                                <th class="text-muted py-md-3"
+                                    th:text="#{label.bookingDate}"></th>
+                                <th class="text-muted  py-md-3"
+                                    th:text="#{label.departureDate}"></th>
+                                <th class="text-muted text-right py-md-3" th:text="'Tổng tiền'"></th>
+                                <th class="text-muted text-left py-md-3" th:text="'Trạng thái'"></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -71,41 +86,78 @@
                                 <td colspan="5">Không có dữ liệu</td>
                             </tr>
                             <tr class="align-middle" th:each="booking:${bookings}" th:if="${bookings!=null}">
-                                <td th:text="${booking.getId()}"></td>
-                                <td th:text="${booking.getTour().getName()}"></td>
-                                <td class="text-nowrap"
-                                    th:text="${#temporals.format(booking.getBookingDate(), 'dd-MM-yyyy')}"></td>
-                                <td class="text-nowrap" th:text="${#numbers.formatCurrency(booking.getTotal())}"></td>
-                                <td class="text-center">
-                                    <span th:text="${booking.payment==true}?'Đã thanh toán':'Chưa thanh toán'"
-                                          th:class="${booking.payment==false}?'badge badge-success px-2 py-1':'badge badge-secondary px-2 py-1'"></span>
+                                <td class="text-left">
+                                    <a class="text-decoration-none text-primary"
+                                       th:href="@{/booking/{id}(id=${booking.id})}"
+                                       th:text="${booking.getId()}"></a></td>
+                                <td class="text-wrap">
+                                    <a class="text-decoration-none text-primary"
+                                       th:href="@{/booking/{id}(id=${booking.id})}"
+                                       th:text="${booking.getDepartureDate().getTour().name}"></a>
+                                </td>
+                                <td class="text-nowrap">
+                                    <a class="text-decoration-none text-primary"
+                                       th:href="@{/booking/{id}(id=${booking.id})}"
+                                       th:text="${#temporals.format(booking.getBookingDate(), 'dd/MM/yyyy')}"></a>
+                                </td>
+                                <td class="text-nowrap">
+                                    <a class="text-decoration-none text-primary"
+                                       th:href="@{/booking/{id}(id=${booking.id})}"
+                                       th:text="${#temporals.format(booking.getDepartureDate().getDate(), 'dd/MM/yyyy')}"></a>
+                                </td>
+                                <td class="text-right text-nowrap">
+                                    <a class="text-decoration-none text-primary"
+                                       th:href="@{/booking/{id}(id=${booking.id})}"
+                                       th:text="${#numbers.formatCurrency(booking.getTotal())}"></a>
+
+                                </td>
+                                <td class="text-left">
+                                    <a class="text-decoration-none text-primary"
+                                       th:href="@{/booking/{id}(id=${booking.id})}">
+                                        <span th:class="${booking.payment!=null}?'badge badge-success px-2 py-1':'badge badge-secondary px-2 py-1'"
+                                              th:text="${booking.payment!=null}?'Đã thanh toán':'Chưa thanh toán'"></span>
+                                    </a>
                                 </td>
                             </tr>
+                            <script>
+                                let fromDateDOM = document.getElementById("fromDate");
+                                let toDateDOM = document.getElementById("toDate");
+                                let fromDate = fromDateDOM.value;
+                                let toDate = toDateDOM.value;
+                                fromDateDOM.addEventListener("change", () => {
+                                    fromDate = fromDateDOM.value
+                                    toDateDOM.setAttribute("min", fromDate)
+                                })
+                                toDateDOM.addEventListener("change", () => {
+                                    toDate = toDateDOM.value;
+                                    console.log(toDate)
+                                    fromDateDOM.setAttribute("max", toDate)
+
+                                })
+                            </script>
                             </tbody>
                         </table>
                     </div>
-                    <nav th:if="${totalPages > 1}" aria-label="Page navigation example">
+                    <nav aria-label="Page navigation example" th:if="${totalPages > 1}">
                         <ul class="pagination justify-content-center">
                             <li class="page-item" th:if="${currentPage>1}">
-                                <a class="page-link" th:href="@{/booking/history(page=${currentPage}-1)}"
-                                   aria-label="Previous">
+                                <a aria-label="Previous" class="page-link"
+                                   th:href="@{/history(page=${currentPage}-1)}">
                                     <span aria-hidden="true">&laquo;</span>
                                     <span class="sr-only">Trước</span>
                                 </a>
                             </li>
-                            <th:block th:if="${totalPages > 0}" class="pagination"
-                                      th:each="pageNumber : ${pageNumbers}">
+                            <th:block class="pagination" th:each="pageNumber : ${pageNumbers}"
+                                      th:if="${totalPages > 0}">
                                 <li class="page-item">
-                                    <a class="page-link" th:text="${pageNumber}"
-                                       th:classappend="${pageNumber==currentPage}?'active text-black'"
-
-                                       th:href="@{/booking/history(page=${pageNumber})}"></a>
+                                    <a class="page-link" th:classappend="${pageNumber==currentPage}?'active text-black'"
+                                       th:href="@{/history(page=${pageNumber})}"
+                                       th:text="${pageNumber}"></a>
                                 </li>
                             </th:block>
-
                             <li class="page-item" th:if="${currentPage<totalPages}">
-                                <a class="page-link" th:href="@{/booking/history(page=${currentPage}+1)}"
-                                   aria-label="Next">
+                                <a aria-label="Next" class="page-link"
+                                   th:href="@{/history(page=${currentPage}+1)}">
                                     <span aria-hidden="true">&raquo;</span>
                                     <span class="sr-only">Sau</span>
                                 </a>
@@ -127,7 +179,6 @@
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js">
     </script>
-
 </th:block>
 </body>
 </html>

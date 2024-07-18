@@ -2,7 +2,13 @@ package com.nthn.springbootthymeleaf.config;
 
 import com.nthn.springbootthymeleaf.config.handlers.LoginSuccessHandler;
 import com.nthn.springbootthymeleaf.config.handlers.LogoutSuccessHandler;
+import com.nthn.springbootthymeleaf.constants.EndpointConstants;
+import com.nthn.springbootthymeleaf.constants.FormatConstants;
+import com.nthn.springbootthymeleaf.constants.Role;
 import com.nthn.springbootthymeleaf.service.AccountService;
+import javax.sql.DataSource;
+import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,110 +17,77 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
-
-import javax.sql.DataSource;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
-    @Autowired
-    private AccountService accountService;
-
-    @Autowired
-    private DataSource dataSource;
-    @Autowired
-    private LoginSuccessHandler loginSuccessHandler;
-
-    @Autowired
-    public LogoutSuccessHandler logoutSuccessHandler;
-
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService((UserDetailsService) accountService);
-        authenticationProvider.setPasswordEncoder(bCryptPasswordEncoder());
-        return authenticationProvider;
-    }
-
-
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(authenticationProvider());
-    }
-
-
-    // Phân quyền truy cập
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-
-        http.csrf().disable();
-
-        // Các trang không yêu cầu login
-        http.authorizeRequests()
-                .antMatchers("/", "/login", "/logout", "/register", "/tours/**", "/news/**")
-                .permitAll();
-        // Trang /profile yêu cầu phải login với vai trò CUSTOMER, EMPLOYEE hoặc ADMIN.
-        // Nếu chưa login, nó sẽ redirect tới trang /login.
-        http.authorizeRequests()
-                .antMatchers("/profile", "/booking/**", "/comment").authenticated();
-//                .hasAnyRole("CUSTOMER", "EMPLOYEE", "ADMIN");
-
-        // Trang chỉ dành cho ADMIN
-        http.authorizeRequests().antMatchers("/dashboard/**").hasAuthority("ADMIN");
-
-        // Khi người dùng đã login, với vai trò XX.
-        // Nhưng truy cập vào trang yêu cầu vai trò YY,
-        // Ngoại lệ AccessDeniedException sẽ ném ra.
-        http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/403");
-
-        // Cấu hình cho Login Form.
-        http.authorizeRequests().and().formLogin()//
-                // Submit URL của trang login
-                .loginProcessingUrl("/login") // Submit URL
-                .loginPage("/login")
-                .defaultSuccessUrl("/")
-                .failureUrl("/login?error")
-                .successHandler(loginSuccessHandler)
-                .usernameParameter("username")//
-                .passwordParameter("password")
-                // Cấu hình cho Logout Page.
-                .and()
-                .logout()
-                .logoutSuccessHandler(logoutSuccessHandler)
-//                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-//                .invalidateHttpSession(true)
-//                .clearAuthentication(true)
-//                .logoutSuccessUrl("/login?logout")
-                .permitAll();
-
-        // Cấu hình Remember Me.
-        http.authorizeRequests().and() //
-                .rememberMe().tokenRepository(this.persistentTokenRepository()) //
-                .tokenValiditySeconds(24 * 60 * 60); // 24h
-
-    }
-
-    // Token stored in Table (Persistent_Logins)
-//    @Bean
-//    public PersistentTokenRepository persistentTokenRepository() {
-//        JdbcTokenRepositoryImpl db = new JdbcTokenRepositoryImpl();
-//        db.setDataSource(dataSource);
-//        return db;
-//    }
-
-    // Token stored in Memory (Of Web Server).
-    @Bean
-    public PersistentTokenRepository persistentTokenRepository() {
-        return new InMemoryTokenRepositoryImpl();
-    }
+	
+	private final LogoutSuccessHandler logoutSuccessHandler;
+	
+	private final AccountService accountService;
+	
+	private final DataSource dataSource;
+	
+	private final LoginSuccessHandler loginSuccessHandler;
+	
+	@Bean
+	public BCryptPasswordEncoder bCryptPasswordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+	
+	@Bean
+	public DaoAuthenticationProvider authenticationProvider() {
+		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+		authenticationProvider.setUserDetailsService(accountService);
+		authenticationProvider.setPasswordEncoder(bCryptPasswordEncoder());
+		return authenticationProvider;
+	}
+	
+	
+	@Autowired
+	public void configureGlobal(@NotNull AuthenticationManagerBuilder auth) {
+		auth.authenticationProvider(authenticationProvider());
+	}
+	
+	
+	@Override
+	protected void configure(@NotNull HttpSecurity http) throws Exception {
+		http.addFilterBefore(new AuthenticationFilter(), BasicAuthenticationFilter.class)
+				.authorizeRequests()
+				.antMatchers(EndpointConstants.DEFAULT, EndpointConstants.LOGIN, EndpointConstants.LOGOUT,
+						EndpointConstants.REGISTER,
+						"/tours/**", "/news/**")
+				.permitAll().antMatchers("/profile", "/booking/**", "/comment")
+				.hasRole(GlobalConstants.Role.CUSTOMER)
+				.antMatchers(String.format(FormatConstants.ENDPOINT_MATCHES,
+						EndpointConstants.DASHBOARD))
+				.hasRole(Role.ADMIN).anyRequest().authenticated().and().exceptionHandling()
+				.accessDeniedHandler().and().formLogin().loginProcessingUrl(EndpointConstants.LOGIN)
+				.loginPage(EndpointConstants.LOGIN)
+				.defaultSuccessUrl(EndpointConstants.DEFAULT).failureUrl("/login?error")
+				.successHandler(loginSuccessHandler).usernameParameter(GlobalConstants.Key.USERNAME)
+				.passwordParameter(GlobalConstants.Key.PASSWORD).and().logout()
+				.logoutSuccessHandler(logoutSuccessHandler).permitAll().and().rememberMe()
+				.tokenRepository(persistentTokenRepository()).tokenValiditySeconds(24 * 60 * 60);
+	}
+	
+	// Token stored in Table (Persistent_Logins)
+	//    @Bean
+	//    public PersistentTokenRepository persistentTokenRepository() {
+	//        JdbcTokenRepositoryImpl db = new JdbcTokenRepositoryImpl();
+	//        db.setDataSource(dataSource);
+	//        return db;
+	//    }
+	
+	// Token stored in Memory (Of Web Server).
+	@Bean
+	public PersistentTokenRepository persistentTokenRepository() {
+		return new InMemoryTokenRepositoryImpl();
+	}
 }

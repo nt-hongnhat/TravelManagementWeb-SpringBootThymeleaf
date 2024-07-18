@@ -428,8 +428,7 @@ hr {
 
 small,
 .small {
-  font-size: 80%;
-  font-weight: 400;
+  font-size: 0.875em;
 }
 
 mark,
@@ -10789,6 +10788,7 @@ a:focus {
 .btn-icon-split.btn-lg .text, .btn-group-lg > .btn-icon-split.btn .text {
   padding: 0.5rem 1rem;
 }
+.card .card-header{font-weight: 500;}
 
 .card .card-header .dropdown {
   line-height: 1;

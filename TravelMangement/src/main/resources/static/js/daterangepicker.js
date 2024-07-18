@@ -31,7 +31,9 @@
 }(this, function (moment, $) {
     var DateRangePicker = function (element, options, cb) {
 
-        //default settings for options
+        let rangeHtml;
+        let elem;
+//default settings for options
         this.parentEl = 'body';
         this.element = $(element);
         this.startDate = moment().startOf('day');
@@ -155,9 +157,9 @@
 
             if (typeof options.locale.customRangeLabel === 'string') {
                 //Support unicode chars in the custom range name.
-                var elem = document.createElement('textarea');
+                elem = document.createElement('textarea');
                 elem.innerHTML = options.locale.customRangeLabel;
-                var rangeHtml = elem.value;
+                rangeHtml = elem.value;
                 this.locale.customRangeLabel = rangeHtml;
             }
         }
@@ -280,25 +282,25 @@
             this.alwaysShowCalendars = options.alwaysShowCalendars;
 
         // update day names order to firstDay
-        if (this.locale.firstDay != 0) {
-            var iterator = this.locale.firstDay;
+        if (this.locale.firstDay !== 0) {
+            let iterator = this.locale.firstDay;
             while (iterator > 0) {
                 this.locale.daysOfWeek.push(this.locale.daysOfWeek.shift());
                 iterator--;
             }
         }
 
-        var start, end, range;
+        let start, end, range;
 
         //if no start/end dates set, check if an input element contains initial values
         if (typeof options.startDate === 'undefined' && typeof options.endDate === 'undefined') {
             if ($(this.element).is(':text')) {
-                var val = $(this.element).val(),
+                const val = $(this.element).val(),
                     split = val.split(this.locale.separator);
 
                 start = end = null;
 
-                if (split.length == 2) {
+                if (split.length === 2) {
                     start = moment(split[0], this.locale.format);
                     end = moment(split[1], this.locale.format);
                 } else if (this.singleDatePicker && val !== "") {
@@ -343,9 +345,9 @@
                     continue;
 
                 //Support unicode chars in the range names.
-                var elem = document.createElement('textarea');
+                elem = document.createElement('textarea');
                 elem.innerHTML = range;
-                var rangeHtml = elem.value;
+                rangeHtml = elem.value;
 
                 this.ranges[rangeHtml] = [start, end];
             }

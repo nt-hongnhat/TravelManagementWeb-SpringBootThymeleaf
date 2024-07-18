@@ -1,9 +1,10 @@
-package com.nthn.springbootthymeleaf.DTO;
+package com.nthn.springbootthymeleaf.dto;
 
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -13,30 +14,30 @@ import java.util.List;
 @Setter
 @Getter
 public class SearchTourDTO {
-    private String departurePlace;
-    private String destinationPlace;
-    private String rangeDate;
-    private String rangePrice;
-    private Integer fromPrice;
-    private Integer toPrice;
+    private String departurePlace="";
+    private String destinationPlace="";
+    private String rangeDate="";
+    private String rangePrice="";
+    private BigDecimal fromPrice;
+    private BigDecimal toPrice;
     private LocalDate fromDepartureDate;
     private LocalDate toDepartureDate;
     private Integer numberPeople = 1;
 
-    public void convertPrice(String rangePrice) {
+    public void convertPrice() {
         String[] rangePrices;
-        List<Integer> prices = new ArrayList<>();
+        List<BigDecimal> prices = new ArrayList<>();
 
         rangePrices = rangePrice.split("-");
         for (String price : rangePrices) {
-            prices.add(Integer.valueOf(price));
+            prices.add(BigDecimal.valueOf(Long.parseLong(price)));
         }
 
-        this.fromPrice = prices.stream().mapToInt(value -> value).min().orElseThrow();
-        this.toPrice = prices.stream().mapToInt(value -> value).max().orElseThrow();
+        this.fromPrice = prices.stream().min(BigDecimal::compareTo).orElse(BigDecimal.valueOf(0));
+        this.toPrice = prices.stream().max(BigDecimal::compareTo).orElse(BigDecimal.valueOf(0));
     }
 
-    public void convertDate(String rangeDate) {
+    public void convertDate() {
         String[] date;
         date = rangeDate.split("-");
         System.out.println(date[0].trim());

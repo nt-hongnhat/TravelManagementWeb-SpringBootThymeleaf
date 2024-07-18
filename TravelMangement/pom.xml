@@ -11,10 +11,10 @@
     <groupId>com.nthn</groupId>
     <artifactId>spring-boot-thymeleaf</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>TravelMangement</name>
-    <description>TravelMangement</description>
+    <name>TravelManagement</name>
+    <description>TravelManagement</description>
     <properties>
-        <java.version>17</java.version>
+        <java.version>22</java.version>
     </properties>
     <dependencies>
         <dependency>
@@ -62,6 +62,7 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
+            <version>6.3.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -70,7 +71,7 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
-            <version>5.7.3</version>
+            <version>6.3.0</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>
@@ -87,16 +88,16 @@
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-springsecurity5</artifactId>
         </dependency>
-        <!--        <dependency>-->
-        <!--            <groupId>com.cloudinary</groupId>-->
-        <!--            <artifactId>cloudinary-http44</artifactId>-->
-        <!--            <version>1.33.0</version>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>com.cloudinary</groupId>-->
-        <!--            <artifactId>cloudinary-taglib</artifactId>-->
-        <!--            <version>1.33.0</version>-->
-        <!--        </dependency>-->
+        <dependency>
+            <groupId>com.cloudinary</groupId>
+            <artifactId>cloudinary-http44</artifactId>
+            <version>1.33.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.cloudinary</groupId>
+            <artifactId>cloudinary-taglib</artifactId>
+            <version>1.33.0</version>
+        </dependency>
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
@@ -107,11 +108,15 @@
             <artifactId>commons-io</artifactId>
             <version>2.11.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.paypal.sdk/rest-api-sdk -->
         <dependency>
             <groupId>com.paypal.sdk</groupId>
             <artifactId>rest-api-sdk</artifactId>
             <version>1.14.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.paypal.sdk</groupId>
+            <artifactId>paypal-core</artifactId>
+            <version>1.7.2</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven.surefire</groupId>
@@ -128,14 +133,9 @@
             <artifactId>commons-validator</artifactId>
             <version>1.6</version>
         </dependency>
-        <!-- org.apache.httpcomponents -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpcore</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>

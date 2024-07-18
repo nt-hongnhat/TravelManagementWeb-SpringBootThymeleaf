@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JpaBuddyIdeaProjectConfig" newRepositoryParent="org.springframework.data.jpa.repository.JpaRepository">
-    <option name="reLastEntityCreationPackage" value="src/main/java/com/nthn/springbootthymeleaf/model" />
+    <option name="defaultUnitInitialized" value="true" />
+    <option name="reLastEntityCreationPackage" value="src/main/java/com/nthn/springbootthymeleaf/pojo" />
     <option name="renamerInitialized" value="true" />
-    <option name="reverseEngineeringLastDbConnectionId" value="c3e66ded-3286-400d-8cb3-32dc065e9134__traveldb" />
+    <option name="reverseEngineeringLastDbConnectionId" value="2974169c-74c6-4d51-88d5-b4a300df201b__traveldb" />
   </component>
   <component name="JpaPluginProjectSettings" reExcludeTablePrefixes="" reExcludeColumnPrefixes="">
     <option name="entityNameTemplate" />

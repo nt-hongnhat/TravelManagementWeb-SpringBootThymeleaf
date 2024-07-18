@@ -1,11 +1,14 @@
 package com.nthn.springbootthymeleaf.utils;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class WebUtils {
     public static String toString(User user) {
         StringBuilder sb = new StringBuilder();

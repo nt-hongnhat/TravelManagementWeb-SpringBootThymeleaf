@@ -85,11 +85,11 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <div class="modal-body">Chọn "Xoá" bên dưới nếu bạn sẵn sàng xoá <span th:text="${variable}"></span></div>
+            <div class="modal-body text-wrap">Chọn "Xoá" bên dưới nếu bạn sẵn sàng xoá <span class="font-weight-bold" th:text="${variable}"></span></div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Huỷ</button>
                 <a class="btn btn-primary"
-                   th:href="@{/admin/{model}/{id}/delete(model=${model}, id=${id})}">Xoá</a>
+                   th:href="@{/dashboard/{model}/{id}/delete(model=${model}, id=${id})}">Xoá</a>
             </div>
         </div>
     </div>

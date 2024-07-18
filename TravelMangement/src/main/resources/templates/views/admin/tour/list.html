@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout-admin}">
+<html lang="en" layout:decorate="~{layouts/layout-admin}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <title th:text="#{label.tourManagement}"></title>
 </head>
@@ -9,7 +9,7 @@
 
 <ol class="breadcrumb" layout:fragment="breadcrumb">
     <li class="breadcrumb-item"><a href="#" th:text="#{label.home}"></a></li>
-    <li class="breadcrumb-item active" aria-current="page" th:text="#{label.tourManagement}"></li>
+    <li aria-current="page" class="breadcrumb-item active" th:text="#{label.tourManagement}"></li>
 </ol>
 
 <div class="card shadow mb-4" layout:fragment="page-content">
@@ -45,40 +45,40 @@
                 <thead>
                 <tr class="text-wrap text-center">
                     <th class="align-middle" th:text="#{label.id}"></th>
-                    <th class="align-middle" th:text="'Nhóm tour'"></th>
-                    <th class="align-middle" th:text="'Tên chuyến du lịch'"></th>
-                    <th class="align-middle" th:text="'Lịch trình'"></th>
-                    <th class="align-middle" th:text="'Ngày khởi hành'"></th>
-                    <th class="align-middle" th:text="'Số lượng chỗ tối đa'"></th>
-                    <th class="align-middle" th:text="'Số lượng chỗ còn đặt được'"></th>
+                    <th class="align-middle" th:text="#{label.tour.group}"></th>
+                    <th class="align-middle" th:text="#{label.tour.name}"></th>
+                    <th class="align-middle" th:text="#{label.tour.duration}"></th>
+                    <th class="align-middle" th:text="#{label.tour.price}"></th>
+                    <th class="align-middle" th:text="#{label.tour.departure_place}"></th>
+                    <th class="align-middle" th:text="#{label.tour.destination}"></th>
+                    <th class="align-middle" th:text="#{label.max.slot}"></th>
                     <th class="align-middle" th:text="#{label.action}"></th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="tour:${tours}">
-                    <td class="align-middle" th:text="${tour.id}"></td>
+                    <td class="align-middle text-center" th:text="${tour.id}"></td>
                     <td class="align-middle text-nowrap" th:text="${tour.tourGroup.name}"></td>
-                    <td class="align-middle text-wrap w-25" th:text="${tour.name}"></td>
-
+                    <td class="align-middle text-wrap w-30" th:text="${tour.name}"></td>
                     <td class="align-middle text-nowrap" th:text="${tour.duration}"></td>
-                    <td class="align-middle" th:text="${#temporals.format(tour.getDepartureDate(), 'dd/MM/yyyy')}"></td>
-                    <td class="align-middle" th:text="${tour.maxSlot}"></td>
-                    <td class="align-middle" th:text="${tour.getAvailableSlot().intValue()}"></td>
-
+                    <td class="align-middle text-right" th:text="${#numbers.formatCurrency(tour.unitPrice)}"></td>
+                    <td class="align-middle text-center text-nowrap" th:text="${tour.departurePlace}"></td>
+                    <td class="align-middle text-center text-nowrap" th:text="${tour.destination}"></td>
+                    <td class="align-middle text-center text-wrap" th:text="${tour.getAvailableSlot()}"></td>
                     <td class="align-middle text-center text-nowrap">
                         <a class="badge badge-primary px-2 py-1"
-                           th:href="@{${#request.getRequestURL()}+'/'+${tour.id}+'/details'}">
+                           th:href="@{${#request.getRequestURL()}+'/'+${tour.id}}">
                             <i class="fas fa-edit fa-w-3"></i>
                             <span th:text="#{label.edit}"></span>
                         </a>
                         <a class="badge badge-danger px-2 py-1"
-                           th:href="@{{id}/delete(id=${tour.id})}"
-                           data-toggle="modal" data-target="#deleteModal">
+                           data-target="#deleteModal"
+                           data-toggle="modal" th:href="@{{id}/delete(id=${tour.id})}">
                             <i class="fas fa-trash fa-w-3"></i>
                             <span th:text="#{label.delete}"></span>
                         </a>
-                        <div th:replace="~{/fragments/modal::delete('tours', ${tour.id}, ${tour.getName()})} "
-                             id="deleteModal"></div>
+                        <div id="deleteModal"
+                             th:replace="~{/fragments/modal::delete('tours', ${tour.id}, ${tour.getName()})} "></div>
                     </td>
                 </tr>
                 </tbody>

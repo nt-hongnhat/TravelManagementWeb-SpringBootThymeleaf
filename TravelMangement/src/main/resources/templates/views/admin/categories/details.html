@@ -1,10 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" layout:decorate="~{layouts/layout-admin}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title th:text="#{label.categoriesManagement}"></title>
 </head>
 <body>
+<h1 class="mt-4" layout:fragment="page-heading" th:text="${category.name}"></h1>
+<ol class="breadcrumb" layout:fragment="breadcrumb">
+    <li class="breadcrumb-item"><a th:href="@{/dashboard}" th:text="#{label.home}"></a></li>
+    <li class="breadcrumb-item"><a th:href="@{/dashboard/categories}" th:text="#{label.categoriesManagement}"></a></li>
+    <li aria-current="page" class="breadcrumb-item active" th:text="${category.name}"></li>
+</ol>
+<th:block layout:fragment="page-content">
+    <div class="w-100 row">
+        <div class="col-6">
+            <p class="mt-2" th:text="${category.description}"></p>
+            <a class="d-none d-sm-inline-block btn btn-sm btn-outline-primary shadow-sm"
+               th:href="@{/dashboard/categories/{id}/create(id=${category.id})}">
+                <i class="fa fa-plus-square"></i>
+                <span>Chỉnh sửa danh mục</span>
+            </a>
+        </div>
+        <!-- Roitation Utilities -->
+        <div class="col-6">
+
+            <!-- Knowledge base category-->
+            <div class="d-flex flex-row justify-content-end">
+
+                <div class="mb-0  text-nowrap mr-2">
+                    <a class="d-none d-sm-inline-block btn btn-sm btn-outline-primary shadow-sm"
+                       th:href="@{/dashboard/categories/{id}/create(id=${category.id})}">
+                        <i class="fa fa-plus-square"></i>
+                        <span>Thêm nhóm tour</span>
+                    </a>
+                </div>
+                <div class="mb-0  text-nowrap ">
+
+                </div>
+            </div>
+
+            <hr class="mt-2 mb-4">
+            <div class="card shadow mb-4" th:each="tourGroup:${category.getTourGroups()}">
+                <!-- Card Header - Accordion -->
+                <a aria-expanded="true" class="d-block card-header py-3" data-toggle="collapse"
+                   role="button" th:aria-controls="|tourGroup${tourGroup.id}|" th:href="@{|#tourGroup${tourGroup.id}|}">
+                    <h6 class="m-0 font-weight-bold text-primary" th:text="${tourGroup.name}"></h6>
+                </a>
+                <!-- Card Content - Collapse -->
+                <div class="collapse show" th:id="|tourGroup${tourGroup.id}|">
+                    <div class="card-body" th:text="${tourGroup.description}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
 
 </body>
+
 </html>

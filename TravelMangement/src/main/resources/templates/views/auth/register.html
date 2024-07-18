@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
 
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta content="" name="description">
+    <meta content="" name="author">
 
     <title th:text="#{label.register}"></title>
 
@@ -34,11 +34,13 @@
                                 Đăng ký thành công. <a th:href="@{/login}" th:text="'Đăng nhập!'"></a>
                             </div>
                         </div>
-                        <form th:action="@{/register}" th:object="${account}" method="post"
-                              class="user needs-validation" novalidate>
+                        <form class="user needs-validation" method="post" novalidate
+                              th:action="@{/register}" th:object="${account}">
                             <fieldset class="form-group">
                                 <label for="email">Email</label>
-                                <input type="email" class="form-control" id="email" th:value="${account.email}" th:field="${account.email}" autofocus required>
+                                <input autofocus class="form-control" id="email"
+                                       required th:field="*{email}" th:value="${account.getEmail()}==null?'':${account.email}"
+                                       type="email">
                                 <div class="invalid-feedback">Email không được bỏ trống</div>
                                 <div class="text-danger small" th:if="${emailErrors!=null}">
                                     <div th:each="error:${emailErrors}"
@@ -47,8 +49,8 @@
                             </fieldset>
                             <fieldset class="form-group">
                                 <label for="username">Tên đăng nhập</label>
-                                <input type="text" class="form-control" id="username"
-                                       th:value="*{username}" th:field="*{username}" required>
+                                <input class="form-control" id="username" required
+                                       th:field="*{username}" th:value="*{username}" type="text">
                                 <div class="invalid-feedback">Tên đăng nhập không được bỏ trống</div>
                                 <div class="text-danger small" th:if="${usernameErrors!=null}">
                                     <div th:each="error:${usernameErrors}"
@@ -58,8 +60,8 @@
                             <fieldset class="form-group">
                                 <label for="password">Mật khẩu</label>
                                 <div class="input-group">
-                                    <input type="password" class="form-control" id="password" th:field="*{password}"
-                                           required>
+                                    <input class="form-control" id="password" required th:field="*{password}"
+                                           type="password">
                                     <span class="m-auto px-2"><i class="fa fa-eye-slash"
                                                                  onclick="showPassword(this, 'password')"></i></span>
                                     <div class="invalid-feedback">Mật khẩu không được bỏ trống</div>
@@ -68,8 +70,8 @@
                             <fieldset class="form-group">
                                 <label for="confirm">Xác nhận mật khẩu</label>
                                 <div class="input-group">
-                                    <input type="password" class="form-control is-invalid" id="confirm" required
-                                           th:field="*{confirmPassword}">
+                                    <input class="form-control is-invalid" id="confirm" required th:field="*{confirmPassword}"
+                                           type="password">
                                     <span class="m-auto px-2"><i class="fa fa-eye-slash"
                                                                  onclick="showPassword(this, 'confirm')"></i></span>
                                     <div class="invalid-feedback">Mật khẩu không trùng khớp</div>
@@ -77,8 +79,8 @@
 
                             </fieldset>
                             <fieldset class="form-group">
-                                <button type="submit" class="btn btn-primary btn-user btn-block"
-                                        th:text="#{label.register}">
+                                <button class="btn btn-primary btn-user btn-block" th:text="#{label.register}"
+                                        type="submit">
                                 </button>
                             </fieldset>
                         </form>

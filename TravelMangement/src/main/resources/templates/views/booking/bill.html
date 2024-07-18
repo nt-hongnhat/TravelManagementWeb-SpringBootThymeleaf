@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout-user}">
+<html lang="en" layout:decorate="~{layouts/layout-user}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <title th:text="'Chi tiết đặt tour'"></title>
 </head>
@@ -8,16 +8,6 @@
 
 <th:block layout:fragment="banner">
     <div class="hero hero-inner h-25">
-        <!--        <div class="container">-->
-        <!--            <div class="row align-items-center">-->
-        <!--                <div class="col-lg-6 mx-auto text-center">-->
-        <!--                    <div class="intro-wrap">-->
-        <!--                        &lt;!&ndash;                        <h1 class="mb-0" th:text="${tourGroup.getName()}"></h1>&ndash;&gt;-->
-        <!--                        &lt;!&ndash;                        <p class="text-white" th:text="${tourGroup.getDescription()}"></p>&ndash;&gt;-->
-        <!--                    </div>-->
-        <!--                </div>-->
-        <!--            </div>-->
-        <!--        </div>-->
     </div>
 </th:block>
 
@@ -31,19 +21,55 @@
                         <div class="card invoice">
                             <div class="card-header p-4 p-md-5 border-bottom-0 bg-gradient-primary-to-secondary text-black-50">
                                 <div class="row justify-content-between align-items-center">
-                                    <div class="col-12 col-lg-auto mb-5 mb-lg-0 text-center text-lg-start">
-                                        <div class="h2 text-black mb-0">Hoá đơn đặt tour</div>
+                                    <div class="col-xl-6 col-lg-auto text-black text-center text-lg-left">
+                                        <h3 class="text-black mb-0"
+                                            th:text="${booking.customer.lastname + ' ' + booking.getCustomer().getFirstname()}">
+                                        </h3>
+                                        <div class="">
+                                            <div th:text="${booking.customer.phone}"></div>
+                                            <div th:text="${booking.customer.address}"></div>
+                                        </div>
                                     </div>
-                                    <div class="col-12 col-lg-auto text-black text-center text-lg-right">
+                                    <div class="col-xl-6 col-lg-auto text-black text-center text-lg-right">
                                         <!-- Invoice details-->
-                                        <h3 th:text="${booking.getCustomer().getFullname()}"></h3>
+                                        <h3>Hoá đơn đặt tour</h3>
                                         <span th:text="'#'+${booking.getId()}"></span>
                                         <br>
-                                        <span th:text="${#temporals.format(booking.getBookingDate(), 'hh:mm dd/MM/yyyy')}"></span>
+                                        <span th:text="${#temporals.format(booking.getBookingDate(), 'hh:mm:ss dd/MM/yyyy')}"></span>
+                                        <br>
+                                        <span th:if="${booking.payment!=null}" th:text="${booking.payment.name}"></span>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-body">
+                                <div class="table-responsive mb-4">
+                                    <table class="table table-borderless mb-0">
+                                        <thead class="border-bottom">
+                                        <tr class="text-uppercase text-center text-muted text-nowrap">
+                                            <th scope="col" th:text="#{label.tour.id}"></th>
+                                            <th class="" scope="col" th:text="#{label.tour.name}"></th>
+                                            <th class="" scope="col"
+                                                th:text="#{label.departure_date.date}"></th>
+                                            <th class="" scope="col"
+                                                th:text="#{label.tour.departure_place}"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="text-center">
+                                            <td>
+                                                <div class="font-weight-bold"
+                                                     th:text="|#${booking.departureDate.tour.id}|"></div>
+                                            </td>
+                                            <td class="" th:text="${booking.departureDate.tour.name}"></td>
+                                            <td class=""
+                                                th:text="${#temporals.format(booking.departureDate.date, 'dd/MM/yyyy')}"></td>
+                                            <td class=""
+                                                th:text="${booking.departureDate.tour.departurePlace}"></td>
+                                        </tr>
+                                        </tbody>
+
+                                    </table>
+                                </div>
                                 <div class="table-responsive">
                                     <table class="table table-borderless mb-0">
                                         <thead class="border-bottom">
@@ -55,59 +81,57 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr class="border-bottom" th:each="bookingDetail:${bookingDetails}">
+                                        <tr th:each="bookingDetail:${booking.bookingDetails}">
                                             <td>
                                                 <div class="font-weight-bold"
-                                                     th:text="${bookingDetail.getTourTicket().getName()}"></div>
-                                                <div class="small text-muted d-none d-md-block"
-                                                     th:if="${bookingDetail.getTourTicket().getSurcharge()!=null}"
-                                                     th:text="${bookingDetail.getTourTicket().getSurcharge().getName()}">
-                                                </div>
+                                                     th:text="${bookingDetail.tourTicket.name}"></div>
                                             </td>
-                                            <td class="text-center"
-                                                th:text="${bookingDetail.getQuantity()}"></td>
-                                            <td th:if="${bookingDetail.getTourTicket().getSurcharge()==null}"
-                                                class="text-right"
-                                                th:text="${#numbers.formatCurrency(bookingDetail.getUnitPrice())}"></td>
-                                            <td th:if="${bookingDetail.getTourTicket().getSurcharge()!=null}">
-                                                <div class="text-right"
-                                                     th:text="${#numbers.formatCurrency(bookingDetail.getTourTicket().getUnitPrice())}"></div>
-                                                <div class="small text-muted text-right d-none d-md-block"
-                                                     th:text="${#numbers.formatCurrency(bookingDetail.getTourTicket().getSurcharge().getSurcharge())}">
-                                                </div>
-                                            </td>
+                                            <td class="text-center" th:text="${bookingDetail.quantity}"></td>
                                             <td class="text-right"
-                                                th:text="${#numbers.formatCurrency(bookingDetail.getTotal())}"></td>
+                                                th:text="${#numbers.formatCurrency(bookingDetail.unitPrice)}"></td>
+                                            <td class="text-right"
+                                                th:text="${#numbers.formatCurrency(bookingDetail.total)}"></td>
                                         </tr>
-                                        <tr>
-                                            <td class="pb-0" colspan="3">
-                                                <div class="text-uppercase font-weight-bold text-muted">Thành tiền:
-                                                </div>
-                                            </td>
-                                            <td class="text-right pb-0">
-                                                <div class="h5 mb-0 font-weight-bold"
-                                                     th:text="${#numbers.formatCurrency(booking.getTotal())}"></div>
-                                            </td>
-                                        </tr>
-                                        <!--                        &lt;!&ndash; Invoice tax column&ndash;&gt;-->
-                                        <!--                        <tr>-->
-                                        <!--                            <td class="text-end pb-0" colspan="3">-->
-                                        <!--                                <div class="text-uppercase small fw-700 text-muted">Tax (7%):</div>-->
-                                        <!--                            </td>-->
-                                        <!--                            <td class="text-end pb-0">-->
-                                        <!--                                <div class="h5 mb-0 fw-700">$134.75</div>-->
-                                        <!--                            </td>-->
-                                        <!--                        </tr>-->
-                                        <!-- Invoice total-->
-                                        <!--                        <tr>-->
-                                        <!--                            <td class="text-end pb-0" colspan="3">-->
-                                        <!--                                <div class="text-uppercase small fw-700 text-muted">Total Amount Due:</div>-->
-                                        <!--                            </td>-->
-                                        <!--                            <td class="text-end pb-0">-->
-                                        <!--                                <div class="h5 mb-0 fw-700 text-green">$2059.75</div>-->
-                                        <!--                            </td>-->
-                                        <!--                        </tr>-->
+
+                                        <!--                                        &lt;!&ndash; Invoice tax column&ndash;&gt;-->
+                                        <!--                                        <tr>-->
+                                        <!--                                            <td class="text-end pb-0" colspan="3">-->
+                                        <!--                                                <div class="text-uppercase small fw-700 text-muted">Tax (7%):</div>-->
+                                        <!--                                            </td>-->
+                                        <!--                                            <td class="text-end pb-0">-->
+                                        <!--                                                <div class="h5 mb-0 fw-700">$134.75</div>-->
+                                        <!--                                            </td>-->
+                                        <!--                                        </tr>-->
+                                        <!--                                        Invoice total-->
+                                        <!--                                        <tr>-->
+                                        <!--                                            <td class="text-end pb-0" colspan="3">-->
+                                        <!--                                                <div class="text-uppercase small fw-700 text-muted">Total Amount Due:-->
+                                        <!--                                                </div>-->
+                                        <!--                                            </td>-->
+                                        <!--                                            <td class="text-end pb-0">-->
+                                        <!--                                                <div class="h5 mb-0 fw-700 text-green">$2059.75</div>-->
+                                        <!--                                            </td>-->
+                                        <!--                                        </tr>-->
                                         </tbody>
+                                        <tfoot class="border-top">
+                                        <tr>
+                                            <td class="pb-0 text-right">
+                                                <h6 class="text-uppercase font-weight-bold ">Tổng vé:</h6>
+                                            </td>
+                                            <td class="pb-0 text-center">
+                                                <h6 class=" text-uppercase font-weight-bold text-danger"
+                                                    th:text="${booking.quantity}"></h6>
+                                            </td>
+                                            <td class="pb-0 text-right">
+                                                <h6 class="text-uppercase font-weight-bold ">Thành tiền:</h6>
+                                            </td>
+                                            <td class="pb-0 text-right">
+                                                <h6 class=" text-uppercase font-weight-bold text-danger"
+                                                    th:text="${#numbers.formatCurrency(booking.total)}"></h6>
+                                            </td>
+                                        </tr>
+                                        </tfoot>
+
                                     </table>
                                 </div>
                                 <!--                        <div class="row justify-content-end mt-3 mx-auto">-->
@@ -140,15 +164,9 @@
                                         <!-- Invoice - additional notes-->
                                         <div class="small text-muted text-uppercase fw-700 mb-2">Note</div>
                                         <div class="small mb-0">Payment is due 15 days after receipt of this invoice.
-                                                                Please
-                                                                make checks
-                                                                or money orders out to Company Name, and include the
-                                                                invoice
-                                                                number in
-                                                                the memo. We appreciate your business, and hope to be
-                                                                working
-                                                                with you
-                                                                again very soon!
+                                            Please make checks or money orders out to Company Name, and include the
+                                            invoice number in the memo. We appreciate your business, and hope to be
+                                            working with you again very soon!
                                         </div>
                                     </div>
                                 </div>
@@ -160,39 +178,82 @@
                 <div class="col-lg-4">
                     <div class="custom-block aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
                         <h2 class="section-title">Thanh toán</h2>
-                        <div>Chấp nhận các loại thẻ</div>
-                        <div class="icon-cc-paypal">
-                            <i class="w-100 icon-cc-visa" style="color:navy;"></i>
-                            <i class="w-100 icon-cc-amex" style="color:blue;"></i>
-                            <i class="w-100 icon-cc-mastercard" style="color:red;"></i>
-                            <i class="w-100 icon-cc-discover" style="color:orange;"></i>
-                        </div>
+                        <div class="alert alert-success" th:if="${booking.payment!=null}">Thanh toán thành công</div>
+<!--                        <div class="alert alert-success" th:if="${param.paysuccess}">Thanh toán thành công</div>-->
+                        <!--                        <div>Chấp nhận các loại thẻ</div>-->
+                        <!--                        <div class="icon-cc-paypal">-->
+                        <!--                            <i class="w-100 icon-cc-visa" style="color:navy;"></i>-->
+                        <!--                            <i class="w-100 icon-cc-amex" style="color:blue;"></i>-->
+                        <!--                            <i class="w-100 icon-cc-mastercard" style="color:red;"></i>-->
+                        <!--                            <i class="w-100 icon-cc-discover" style="color:orange;"></i>-->
+                        <!--                        </div>-->
                     </div>
-                    <form class="contact-form bg-white" method="post" th:action="@{/bill/{id}/pay(id=${booking.id})}">
-                        <div class="form-group">
-                            <label for="price">Tổng tiền</label>
-                            <input class="form-control" type="text" name="price" id="price"
-                                   th:value="${booking.getTotal()}">
-                        </div>
-                        <div class="form-group">
-                            <label class="text-black" for="currency">Đơn vị tiền</label>
-                            <input class="form-control" type="text" name="currency" id="currency">
-                        </div>
-                        <div class="form-group">
-                            <label class="text-black" for="method">Phương thức thanh toán</label>
-                            <input type="text" class="form-control" id="method">
-                        </div>
-                        <div class="form-group">
-                            <label class="text-black" for="intent">Intent</label>
-                            <input type="text" class="form-control" id="intent" value="sale">
-                        </div>
-                        <div class="form-group">
-                            <label class="text-black" for="description">Nội dung thanh toán</label>
-                            <textarea name="description" class="form-control" id="description" cols="30"
-                                      rows="5"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Tiếp tục để kiểm tra</button>
-                    </form>
+                    <th:block th:if="${booking.payment==null}">
+                        <form class="contact-form bg-white" method="post"
+                              th:action="@{/booking/{id}(id=${booking.id})}"
+                              th:object="${payment}">
+                            <div class="form-group">
+                                <label class="text-black" for="method">Phương thức thanh toán</label>
+                                <select class="form-control custom-select" id="method" name="method"
+                                        th:field="*{method}">
+                                    <option selected th:each="payment:${payments}" th:text="${payment.name}"
+                                            th:value="${payment.method}"></option>
+                                </select>
+                            </div>
+                            <div th:class="payment" th:each="payment:${payments}" th:id="${payment.method}">
+                                <div class="form-group">
+                                    <label for="price" th:text="|Tổng tiền (${payment.currency})|"></label>
+                                    <input class="form-control" id="price" name="price" readonly
+                                           th:value="${payment.currency}=='VND'?${#numbers.formatCurrency(payment.total)}:|$ ${payment.total}|"
+                                           type="text">
+                                </div>
+                                <!--                                <div class="form-group">-->
+                                <!--                                    <label for="totalUSD">Tổng tiền (USD)</label>-->
+                                <!--                                    <input class="form-control" id="totalUSD" readonly-->
+                                <!--                                           th:value="${#numbers.formatCurrency(payment.total)}" type="text">-->
+                                <!--                                </div>-->
+                                <div class="form-group">
+                                    <label class="text-black" for="currency">Đơn vị tiền</label>
+                                    <input class="form-control" id="currency" name="currency" readonly
+                                           th:value="${payment.currency}"
+                                           type="text">
+                                </div>
+                                <div class="form-group">
+                                    <label class="text-black" for="intent">Intent</label>
+                                    <input class="form-control" id="intent" name="currency" readonly
+                                           th:value="${payment.intent}"
+                                           type="text">
+                                    <!--                                    <select class="form-control custom-select" id="intent" name="intent"-->
+                                    <!--                                            th:field="*{intent}">-->
+                                    <!--                                        <option selected th:each="payment:${payments}" th:text="${payment.intent}"-->
+                                    <!--                                                th:value="${payment.intent}"></option>-->
+                                    <!--                                    </select>-->
+                                </div>
+                            </div>
+
+                            <script>
+                                let selectMethod = document.querySelector("#method");
+                                console.log(selectMethod);
+                                let payments = document.querySelectorAll(".payment")
+                                console.log(payments)
+                                let method = selectMethod.value
+                                console.log(method);
+
+                                payments.forEach(value => {
+                                    value.hidden = value.id !== method;
+                                })
+                                selectMethod.addEventListener("change", () => {
+                                    method = selectMethod.value
+                                    console.log(method);
+
+                                    payments.forEach(value => {
+                                        value.hidden = value.id !== method;
+                                    })
+                                })
+                            </script>
+                            <button class="btn btn-primary" type="submit">Thanh toán</button>
+                        </form>
+                    </th:block>
                 </div>
             </div>
         </div>
